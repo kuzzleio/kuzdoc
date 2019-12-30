@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "vetur.format.defaultFormatter.ts": "prettier",
+  "vetur.format.enable": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
