@@ -38,6 +38,7 @@ USAGE
 * [`kdoc repo:build`](#kdoc-repobuild)
 * [`kdoc repo:cloudfront`](#kdoc-repocloudfront)
 * [`kdoc repo:deploy`](#kdoc-repodeploy)
+* [`kdoc repo:install`](#kdoc-repoinstall)
 * [`kdoc repo:serve`](#kdoc-reposerve)
 
 ## `kdoc framework:install`
@@ -162,6 +163,23 @@ OPTIONS
 ```
 
 _See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/deploy.ts)_
+
+## `kdoc repo:install`
+
+Installs a sub-repo to a given destination
+
+```
+USAGE
+  $ kdoc repo:install
+
+OPTIONS
+  -b, --branch=stable|dev          [default: stable] The branch type to checkout
+  -d, --destination=destination    [default: .repos] The path where the repositories will be installed
+  -h, --help                       show CLI help
+  -r, --repositories=repositories  The list of repositories to install
+```
+
+_See code: [src/commands/repo/install.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/install.ts)_
 
 ## `kdoc repo:serve`
 
