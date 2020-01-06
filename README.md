@@ -8,15 +8,14 @@ The CLI that helps build the Kuzzle Docs
 [![License](https://img.shields.io/npm/l/kdoc.svg)](https://github.com/kuzzleio/kdoc/blob/master/package.json)
 
 <!-- toc -->
-
-- [Usage](#usage)
-- [Commands](#commands)
-  <!-- tocstop -->
+* [kdoc](#kdoc)
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g kdoc
 $ kdoc COMMAND
@@ -28,20 +27,18 @@ USAGE
   $ kdoc COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`kdoc framework:install`](#kdoc-frameworkinstall)
-- [`kdoc framework:link`](#kdoc-frameworklink)
-- [`kdoc help [COMMAND]`](#kdoc-help-command)
-- [`kdoc repo:build`](#kdoc-repobuild)
-- [`kdoc repo:deploy`](#kdoc-repodeploy-file)
-- [`kdoc repo:cloudfront`](#kdoc-repocloudfront-file)
-- [`kdoc repo:serve`](#kdoc-reposerve-file)
+* [`kdoc framework:install`](#kdoc-frameworkinstall)
+* [`kdoc framework:link`](#kdoc-frameworklink)
+* [`kdoc help [COMMAND]`](#kdoc-help-command)
+* [`kdoc repo:build`](#kdoc-repobuild)
+* [`kdoc repo:cloudfront`](#kdoc-repocloudfront)
+* [`kdoc repo:deploy`](#kdoc-repodeploy)
+* [`kdoc repo:serve`](#kdoc-reposerve)
 
 ## `kdoc framework:install`
 
@@ -131,10 +128,13 @@ USAGE
   $ kdoc repo:cloudfront
 
 OPTIONS
-  -h, --help       show CLI help
-  -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
-                                 /sdk/js/6/) - env: $DEPLOY_PATH
-  --cloudfront_distribution_id   (required) The Cloudfront distribution ID where the invalidation will be created
+  -c, --cloudfront_distribution_id=cloudfront_distribution_id  (required) The Cloudfront distribution ID where the
+                                                               invalidation will be created
+
+  -d, --deploy_path=deploy_path                                (required) The path where the local version of the docs
+                                                               will be deployed (e.g. /sdk/js/6/) - env: $DEPLOY_PATH
+
+  -h, --help                                                   show CLI help
 ```
 
 _See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/cloudfront.ts)_
@@ -148,13 +148,17 @@ USAGE
   $ kdoc repo:deploy
 
 OPTIONS
-  -h, --help       show CLI help
   -b, --base_root=base_root      [default: doc/] The local root of the docs
+
   -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
                                  /sdk/js/6/) - env: $DEPLOY_PATH
-  --s3_bucket                    (required) The ID of the S3 bucket to deploy the docs to
+
+  -h, --help                     show CLI help
+
   -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
                                  (e.g. 6/) - env: $DOC_VERSION
+
+  --s3_bucket=s3_bucket          (required) The ID of the S3 bucket to deploy the docs to
 ```
 
 _See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/deploy.ts)_
@@ -168,15 +172,18 @@ USAGE
   $ kdoc repo:serve
 
 OPTIONS
-  -h, --help       show CLI help
   -b, --base_root=base_root      [default: doc/] The local root of the docs
+
   -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
                                  /sdk/js/6/) - env: $DEPLOY_PATH
-  -p, --port                     The port to open to the static file server
+
+  -h, --help                     show CLI help
+
+  -p, --port=port                [default: 3000] The port to open to the static file server
+
   -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
 _See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/serve.ts)_
-
 <!-- commandsstop -->
