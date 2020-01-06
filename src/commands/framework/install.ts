@@ -20,7 +20,7 @@ export default class FrameworkInstall extends Command {
       char: 'd',
       description: 'The path where the framework should be installed',
       default: defaultDestination
-    }),
+    })
   }
 
   async run() {
@@ -56,13 +56,6 @@ export default class FrameworkInstall extends Command {
                   cwd: path.join(flags.destination, fwDirName)
                 })
             }
-            // {
-            //   title: 'Linking local docs into framework (for dead links checking)',
-            //   task: async () => {
-            //     // await execa('rm', ['-rf', `framework/src${flags.deployPath}`])
-            //     // await execa('ln', ['-s', ``])
-            //   }
-            // }
           ])
         }
       }
