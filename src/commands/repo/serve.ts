@@ -19,6 +19,7 @@ export default class RepoServe extends Command {
       description:
         'The path where the local version of the docs will be deployed (e.g. /sdk/js/6/) - env: $DEPLOY_PATH',
       default: process.env.DEPLOY_PATH,
+      parse: input => (input.endsWith('/') ? input : `${input}/`),
       required: true
     }),
     base_root: flags.string({

@@ -1,7 +1,28 @@
 import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
-import { fwDirName } from '../../constants'
+import { fwDirName, docPathInRepo } from '../../constants'
 import execa = require('execa')
+
+export const buildRepo = (
+  baseRoot: string,
+  docVersion: string,
+  deployPath: string,
+  repoName?: string
+) => {
+  return execa(
+    `$(npm --prefix ${fwDirName} bin)/vuepress`,
+    ['build', '--no-cache', docVersion],
+    {
+      shell: true,
+      cwd: baseRoot,
+      env: {
+        REPO_NAME: repoName,
+        SITE_BASE: deployPath, // TODO rename to DEPLOY_PATH
+        DOC_DIR: docVersion // TODO rename to LOCAL_PATH
+      }
+    }
+  )
+}
 
 export default class RepoBuild extends Command {
   static description = 'describe the command here'
@@ -17,6 +38,7 @@ export default class RepoBuild extends Command {
       description:
         'The path where the local version of the docs will be deployed (e.g. /sdk/js/6/) - env: $DEPLOY_PATH',
       default: process.env.DEPLOY_PATH,
+      parse: input => (input.endsWith('/') ? input : `${input}/`),
       required: true
     }),
     doc_version: flags.string({
@@ -29,7 +51,7 @@ export default class RepoBuild extends Command {
     base_root: flags.string({
       char: 'b',
       description: 'The local root of the docs',
-      default: 'doc/'
+      default: docPathInRepo
     })
   }
 
@@ -38,22 +60,16 @@ export default class RepoBuild extends Command {
 
     cli.action.start(`Building version ${flags.doc_version}`)
 
-    const vuepress = execa(
-      `$(npm --prefix ${fwDirName} bin)/vuepress`,
-      ['build', '--no-cache', flags.doc_version],
-      {
-        shell: true,
-        cwd: flags.base_root,
-        env: {
-          REPO_NAME: flags.repo_name,
-          SITE_BASE: flags.deploy_path, // TODO rename to DEPLOY_PATH
-          DOC_DIR: flags.doc_version // TODO rename to LOCAL_PATH
-        }
-      }
+    const buildTask = buildRepo(
+      flags.base_root,
+      flags.doc_version,
+      flags.deploy_path,
+      flags.repo_name
     )
-    vuepress.stderr.pipe(process.stderr)
-    vuepress.stdout.pipe(process.stdout)
-    await vuepress
+
+    buildTask.stderr.pipe(process.stderr)
+    buildTask.stdout.pipe(process.stdout)
+    await buildTask
     cli.action.stop()
   }
 }

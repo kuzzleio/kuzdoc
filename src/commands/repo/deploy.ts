@@ -2,6 +2,27 @@ import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
 import execa = require('execa')
 
+export const deploy = (
+  baseRoot: string,
+  docVersion: string,
+  deployPath: string,
+  s3BucketId: string
+) =>
+  execa(
+    'aws',
+    [
+      's3',
+      'sync',
+      `${docVersion}/.vuepress/dist`,
+      `s3://${s3BucketId}${deployPath}`,
+      '--delete'
+    ],
+    {
+      shell: true,
+      cwd: baseRoot
+    }
+  )
+
 export default class RepoDeploy extends Command {
   static description = 'Deploy the docs to the AWS S3 bucket'
 
@@ -37,23 +58,15 @@ export default class RepoDeploy extends Command {
 
     cli.action.start(`Deploying version ${flags.doc_version}`)
 
-    const vuepress = execa(
-      'aws',
-      [
-        's3',
-        'sync',
-        `${flags.doc_version}/.vuepress/dist`,
-        `s3://${flags.s3_bucket}${flags.deploy_path}`,
-        '--delete'
-      ],
-      {
-        shell: true,
-        cwd: flags.base_root
-      }
+    const deployTask = deploy(
+      flags.base_root,
+      flags.doc_version,
+      flags.deploy_path,
+      flags.s3_bucket
     )
-    vuepress.stderr.pipe(process.stderr)
-    vuepress.stdout.pipe(process.stdout)
-    await vuepress
+    deployTask.stderr.pipe(process.stderr)
+    deployTask.stdout.pipe(process.stdout)
+    await deployTask
 
     cli.action.stop()
   }

@@ -2,6 +2,25 @@ import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
 import execa = require('execa')
 
+export const invalidateCloudfront = (
+  deployPath: string,
+  cloudfrontDistributionId: string
+) =>
+  execa(
+    'aws',
+    [
+      'cloudfront',
+      'create-invalidation',
+      '--distribution-id',
+      cloudfrontDistributionId,
+      '--paths',
+      deployPath
+    ],
+    {
+      shell: true
+    }
+  )
+
 export default class RepoCloudfront extends Command {
   static description = 'Invalidate the Cloudfront cache for the current docs'
 
@@ -29,23 +48,14 @@ export default class RepoCloudfront extends Command {
       `Invalidating Cloudfront cache for path ${flags.deploy_path}`
     )
 
-    const vuepress = execa(
-      'aws',
-      [
-        'cloudfront',
-        'create-invalidation',
-        '--distribution-id',
-        flags.cloudfront_distribution_id,
-        '--paths',
-        flags.deploy_path
-      ],
-      {
-        shell: true
-      }
+    const cloudfrontTask = invalidateCloudfront(
+      flags.deploy_path,
+      flags.cloudfront_distribution_id
     )
-    vuepress.stderr.pipe(process.stderr)
-    vuepress.stdout.pipe(process.stdout)
-    await vuepress
+
+    cloudfrontTask.stderr.pipe(process.stderr)
+    cloudfrontTask.stdout.pipe(process.stdout)
+    await cloudfrontTask
 
     cli.action.stop()
   }

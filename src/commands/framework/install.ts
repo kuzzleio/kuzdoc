@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import Listr from 'listr'
 
-import { fwDirName, defaultDestination, fwRepo } from '../../constants'
+import { fwDirName, docPathInRepo, fwRepo } from '../../constants'
 
 export default class FrameworkInstall extends Command {
   static description = 'Install the documentation framework inside a repo'
@@ -19,7 +19,7 @@ export default class FrameworkInstall extends Command {
     destination: flags.string({
       char: 'd',
       description: 'The path where the framework should be installed',
-      default: defaultDestination
+      default: docPathInRepo
     })
   }
 

@@ -35,10 +35,13 @@ USAGE
 * [`kdoc framework:install`](#kdoc-frameworkinstall)
 * [`kdoc framework:link`](#kdoc-frameworklink)
 * [`kdoc help [COMMAND]`](#kdoc-help-command)
+* [`kdoc iterate-repos:build`](#kdoc-iterate-reposbuild)
+* [`kdoc iterate-repos:cloudfront`](#kdoc-iterate-reposcloudfront)
+* [`kdoc iterate-repos:deploy`](#kdoc-iterate-reposdeploy)
+* [`kdoc iterate-repos:install`](#kdoc-iterate-reposinstall)
 * [`kdoc repo:build`](#kdoc-repobuild)
 * [`kdoc repo:cloudfront`](#kdoc-repocloudfront)
 * [`kdoc repo:deploy`](#kdoc-repodeploy)
-* [`kdoc repo:install`](#kdoc-repoinstall)
 * [`kdoc repo:serve`](#kdoc-reposerve)
 
 ## `kdoc framework:install`
@@ -95,6 +98,80 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
+
+## `kdoc iterate-repos:build`
+
+Build a list of repositories
+
+```
+USAGE
+  $ kdoc iterate-repos:build
+
+OPTIONS
+  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed
+  -h, --help                       show CLI help
+  -r, --repositories=repositories  The list of repositories to build
+```
+
+_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/build.ts)_
+
+## `kdoc iterate-repos:cloudfront`
+
+Invalidates the Cloudfront cache of a list of repositories
+
+```
+USAGE
+  $ kdoc iterate-repos:cloudfront
+
+OPTIONS
+  -c, --cloudfront_distribution_id=cloudfront_distribution_id  (required) The Cloudfront distribution ID where the
+                                                               invalidation will be created
+
+  -d, --repos_path=repos_path                                  [default: .repos] The path where the repositories are
+                                                               installed
+
+  -h, --help                                                   show CLI help
+
+  -r, --repositories=repositories                              The list of repositories to deploy
+```
+
+_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/cloudfront.ts)_
+
+## `kdoc iterate-repos:deploy`
+
+Deploy a list of sub-repositories (or all) to an S3 bucket
+
+```
+USAGE
+  $ kdoc iterate-repos:deploy
+
+OPTIONS
+  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed
+  -h, --help                       show CLI help
+  -r, --repositories=repositories  The list of repositories to deploy
+  --s3_bucket=s3_bucket            (required) The ID of the S3 bucket to deploy the docs to
+```
+
+_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/deploy.ts)_
+
+## `kdoc iterate-repos:install`
+
+Install a list of sub-repositories (or all) to a given destination
+
+```
+USAGE
+  $ kdoc iterate-repos:install
+
+OPTIONS
+  -b, --branch=stable|dev          [default: stable] The branch type to checkout
+  -d, --repos_path=repos_path      [default: .repos] The path where the repositories will be installed
+  -h, --help                       show CLI help
+  -r, --repositories=repositories  The list of repositories to install
+  --framework_path=framework_path  [default: .] The path to the framework
+  --link_framework                 Whether to link the doc framework to the repositories or not
+```
+
+_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/install.ts)_
 
 ## `kdoc repo:build`
 
@@ -163,23 +240,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/deploy.ts)_
-
-## `kdoc repo:install`
-
-Installs a sub-repo to a given destination
-
-```
-USAGE
-  $ kdoc repo:install
-
-OPTIONS
-  -b, --branch=stable|dev          [default: stable] The branch type to checkout
-  -d, --destination=destination    [default: .repos] The path where the repositories will be installed
-  -h, --help                       show CLI help
-  -r, --repositories=repositories  The list of repositories to install
-```
-
-_See code: [src/commands/repo/install.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/install.ts)_
 
 ## `kdoc repo:serve`
 
