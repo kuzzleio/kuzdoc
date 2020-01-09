@@ -15,7 +15,7 @@ export const getRepositories = async (
   repositoryNames: Array<string> = []
 ): Promise<Array<Repo>> => {
   const reposResponse = await axios.get(
-    'https://raw.githubusercontent.com/kuzzleio/documentation/master/.repos/repositories.yml'
+    'https://raw.githubusercontent.com/kuzzleio/documentation/develop/.repos/repositories.yml'
   )
 
   const YMLRepos: Array<Repo> = YAML.parse(reposResponse.data)
