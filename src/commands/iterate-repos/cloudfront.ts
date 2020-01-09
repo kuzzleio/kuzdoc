@@ -48,7 +48,7 @@ export default class ReposBuild extends Command {
               title: repo.name,
               task: () =>
                 invalidateCloudfront(
-                  repo.base_url,
+                  repo.deploy_path,
                   flags.cloudfront_distribution_id
                 )
             }))
