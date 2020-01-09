@@ -35,31 +35,28 @@ export default class FrameworkLink extends Command {
 
   async run() {
     const { flags } = this.parse(FrameworkLink)
+    const fwPath = path
+      .join(flags.base_root, fwDirName, 'src')
+      .replace(/\/$/, '')
+    const deployPath = path.join(fwPath, flags.deploy_path).replace(/\/$/, '')
+    const docPathRelativeToFw = path
+      .relative(
+        path.join(deployPath, '..'),
+        path.join(flags.base_root, flags.doc_version)
+      )
+      .replace(/\/$/, '')
 
-    if (
-      !fs.existsSync(path.resolve(path.join(flags.base_root, fwDirName, 'src')))
-    ) {
-      throw new Error(`Framework not found in ${fwDirName}/src`)
+    this.debug(`fwPath=${fwPath}`)
+    this.debug(`deployPath=${deployPath}`)
+    this.debug(`docPathRelativeToFw=${docPathRelativeToFw}`)
+
+    if (!fs.existsSync(fwPath)) {
+      throw new Error(`Framework not found in ${fwPath}`)
     }
 
     cli.action.start('Linking local docs into framework')
-    await execa('rm', ['-rf', `${fwDirName}/src${flags.deploy_path}`], {
-      cwd: flags.base_root
-    })
-    await execa(
-      'ln',
-      [
-        '-s',
-        path.relative(
-          path.join(flags.base_root, fwDirName, 'src', flags.deploy_path, '..'),
-          path.join(flags.base_root, flags.doc_version)
-        ),
-        `${fwDirName}/src${flags.deploy_path}`
-      ],
-      {
-        cwd: flags.base_root
-      }
-    )
+    await execa('rm', ['-rf', `${deployPath}`], {})
+    await execa('ln', ['-s', docPathRelativeToFw, deployPath], {})
     cli.action.stop('Done!')
   }
 }
