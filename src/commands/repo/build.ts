@@ -25,7 +25,7 @@ export const buildRepo = (
 }
 
 export default class RepoBuild extends Command {
-  static description = 'describe the command here'
+  static description = 'Build the documentation for the current repository'
 
   static flags = {
     help: flags.help({ char: 'h' }),

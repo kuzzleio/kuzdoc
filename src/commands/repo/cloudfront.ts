@@ -22,7 +22,8 @@ export const invalidateCloudfront = (
   )
 
 export default class RepoCloudfront extends Command {
-  static description = 'Invalidate the Cloudfront cache for the current docs'
+  static description =
+    'Invalidate the Cloudfront docs cache for the current repository'
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -36,8 +37,9 @@ export default class RepoCloudfront extends Command {
     cloudfront_distribution_id: flags.string({
       char: 'c',
       description:
-        'The Cloudfront distribution ID where the invalidation will be created',
-      required: true
+        'The Cloudfront distribution ID where the invalidation will be created - env: $CLOUDFRONT_DISTRIBUTION_ID',
+      required: true,
+      default: process.env.CLOUDFRONT_DISTRIBUTION_ID
     })
   }
 

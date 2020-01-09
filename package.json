@@ -1,12 +1,12 @@
 {
-  "name": "kdoc",
+  "name": "kuzdoc",
   "description": "The CLI that helps build the Kuzzle Docs",
   "version": "0.0.0",
   "author": "Luca Marchesini @xbill82",
   "bin": {
-    "kdoc": "./bin/run"
+    "kuzdoc": "./bin/run"
   },
-  "bugs": "https://github.com/kuzzleio/kdoc/issues",
+  "bugs": "https://github.com/kuzzleio/kuzzle-documentation-cli/issues",
   "dependencies": {
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
@@ -41,7 +41,7 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/kuzzleio/kdoc",
+  "homepage": "https://github.com/kuzzleio/kuzzle-documentation-cli",
   "keywords": [
     "oclif"
   ],
@@ -49,12 +49,12 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "kdoc",
+    "bin": "kuzdoc",
     "plugins": [
       "@oclif/plugin-help"
     ]
   },
-  "repository": "kuzzleio/kdoc",
+  "repository": "kuzzleio/kuzzle-documentation-cli",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",

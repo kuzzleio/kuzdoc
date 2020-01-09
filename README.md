@@ -1,6 +1,8 @@
-# kdoc
+# kuzdoc
 
-The CLI that helps build the Kuzzle Docs
+The CLI that helps build the Kuzzle Docs.
+
+This is an internal tool used by the Kuzzle team to build the documentation of all the Kuzzle.io projects.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/kdoc.svg)](https://npmjs.org/package/kdoc)
@@ -8,49 +10,53 @@ The CLI that helps build the Kuzzle Docs
 [![License](https://img.shields.io/npm/l/kdoc.svg)](https://github.com/kuzzleio/kdoc/blob/master/package.json)
 
 <!-- toc -->
-* [kdoc](#kdoc)
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+
+- [kdoc](#kdoc)
+- [Usage](#usage)
+- [Commands](#commands)
+  <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
-$ npm install -g kdoc
-$ kdoc COMMAND
+$ npm install -g kuzdoc
+$ kuzdoc COMMAND
 running command...
-$ kdoc (-v|--version|version)
-kdoc/0.0.0 linux-x64 node-v10.12.0
-$ kdoc --help [COMMAND]
+$ kuzdoc (-v|--version|version)
+kuzdoc/0.0.0 linux-x64 node-v10.12.0
+$ kuzdoc --help [COMMAND]
 USAGE
-  $ kdoc COMMAND
+  $ kuzdoc COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`kdoc framework:install`](#kdoc-frameworkinstall)
-* [`kdoc framework:link`](#kdoc-frameworklink)
-* [`kdoc help [COMMAND]`](#kdoc-help-command)
-* [`kdoc iterate-repos:build`](#kdoc-iterate-reposbuild)
-* [`kdoc iterate-repos:cloudfront`](#kdoc-iterate-reposcloudfront)
-* [`kdoc iterate-repos:deploy`](#kdoc-iterate-reposdeploy)
-* [`kdoc iterate-repos:install`](#kdoc-iterate-reposinstall)
-* [`kdoc repo:build`](#kdoc-repobuild)
-* [`kdoc repo:cloudfront`](#kdoc-repocloudfront)
-* [`kdoc repo:deploy`](#kdoc-repodeploy)
-* [`kdoc repo:serve`](#kdoc-reposerve)
 
-## `kdoc framework:install`
+- [`kuzdoc framework:install`](#kuzdoc-frameworkinstall)
+- [`kuzdoc framework:link`](#kuzdoc-frameworklink)
+- [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
+- [`kuzdoc iterate-repos:build`](#kuzdoc-iterate-reposbuild)
+- [`kuzdoc iterate-repos:cloudfront`](#kuzdoc-iterate-reposcloudfront)
+- [`kuzdoc iterate-repos:deploy`](#kuzdoc-iterate-reposdeploy)
+- [`kuzdoc iterate-repos:install`](#kuzdoc-iterate-reposinstall)
+- [`kuzdoc repo:build`](#kuzdoc-repobuild)
+- [`kuzdoc repo:cloudfront`](#kuzdoc-repocloudfront)
+- [`kuzdoc repo:deploy`](#kuzdoc-repodeploy)
+- [`kuzdoc repo:serve`](#kuzdoc-reposerve)
+
+## `kuzdoc framework:install`
 
 Install the documentation framework inside a repo
 
 ```
 USAGE
-  $ kdoc framework:install
+  $ kuzdoc framework:install
 
 OPTIONS
   -b, --branch=branch            The framework branch that should be checked out
@@ -58,15 +64,15 @@ OPTIONS
   -h, --help                     show CLI help
 ```
 
-_See code: [src/commands/framework/install.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/framework/install.ts)_
+_See code: [src/commands/framework/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/framework/install.ts)_
 
-## `kdoc framework:link`
+## `kuzdoc framework:link`
 
 Links a local version of the docs to the installed framework
 
 ```
 USAGE
-  $ kdoc framework:link
+  $ kuzdoc framework:link
 
 OPTIONS
   -b, --base_root=base_root      [default: doc/] The local root of the docs
@@ -80,15 +86,15 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/framework/link.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/framework/link.ts)_
+_See code: [src/commands/framework/link.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/framework/link.ts)_
 
-## `kdoc help [COMMAND]`
+## `kuzdoc help [COMMAND]`
 
-display help for kdoc
+display help for kuzdoc
 
 ```
 USAGE
-  $ kdoc help [COMMAND]
+  $ kuzdoc help [COMMAND]
 
 ARGUMENTS
   COMMAND  command to show help for
@@ -99,13 +105,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
-## `kdoc iterate-repos:build`
+## `kuzdoc iterate-repos:build`
 
 Build a list of repositories
 
 ```
 USAGE
-  $ kdoc iterate-repos:build
+  $ kuzdoc iterate-repos:build
 
 OPTIONS
   -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed
@@ -113,15 +119,15 @@ OPTIONS
   -r, --repositories=repositories  The list of repositories to build
 ```
 
-_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/build.ts)_
+_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/build.ts)_
 
-## `kdoc iterate-repos:cloudfront`
+## `kuzdoc iterate-repos:cloudfront`
 
 Invalidates the Cloudfront cache of a list of repositories
 
 ```
 USAGE
-  $ kdoc iterate-repos:cloudfront
+  $ kuzdoc iterate-repos:cloudfront
 
 OPTIONS
   -c, --cloudfront_distribution_id=cloudfront_distribution_id  (required) The Cloudfront distribution ID where the
@@ -135,15 +141,15 @@ OPTIONS
   -r, --repositories=repositories                              The list of repositories to deploy
 ```
 
-_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/cloudfront.ts)_
+_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/cloudfront.ts)_
 
-## `kdoc iterate-repos:deploy`
+## `kuzdoc iterate-repos:deploy`
 
 Deploy a list of sub-repositories (or all) to an S3 bucket
 
 ```
 USAGE
-  $ kdoc iterate-repos:deploy
+  $ kuzdoc iterate-repos:deploy
 
 OPTIONS
   -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed
@@ -152,15 +158,15 @@ OPTIONS
   --s3_bucket=s3_bucket            (required) The ID of the S3 bucket to deploy the docs to
 ```
 
-_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/deploy.ts)_
+_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/deploy.ts)_
 
-## `kdoc iterate-repos:install`
+## `kuzdoc iterate-repos:install`
 
 Install a list of sub-repositories (or all) to a given destination
 
 ```
 USAGE
-  $ kdoc iterate-repos:install
+  $ kuzdoc iterate-repos:install
 
 OPTIONS
   -b, --branch=stable|dev          [default: stable] The branch type to checkout
@@ -171,15 +177,15 @@ OPTIONS
   --link_framework                 Whether to link the doc framework to the repositories or not
 ```
 
-_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/iterate-repos/install.ts)_
+_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/install.ts)_
 
-## `kdoc repo:build`
+## `kuzdoc repo:build`
 
-describe the command here
+Build the documentation for the current repository
 
 ```
 USAGE
-  $ kdoc repo:build
+  $ kuzdoc repo:build
 
 OPTIONS
   -b, --base_root=base_root      [default: doc/] The local root of the docs
@@ -195,19 +201,20 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/repo/build.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/build.ts)_
+_See code: [src/commands/repo/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/build.ts)_
 
-## `kdoc repo:cloudfront`
+## `kuzdoc repo:cloudfront`
 
-Invalidate the Cloudfront cache for the current docs
+Invalidate the Cloudfront docs cache for the current repository
 
 ```
 USAGE
-  $ kdoc repo:cloudfront
+  $ kuzdoc repo:cloudfront
 
 OPTIONS
   -c, --cloudfront_distribution_id=cloudfront_distribution_id  (required) The Cloudfront distribution ID where the
-                                                               invalidation will be created
+                                                               invalidation will be created - env:
+                                                               $CLOUDFRONT_DISTRIBUTION_ID
 
   -d, --deploy_path=deploy_path                                (required) The path where the local version of the docs
                                                                will be deployed (e.g. /sdk/js/6/) - env: $DEPLOY_PATH
@@ -215,15 +222,15 @@ OPTIONS
   -h, --help                                                   show CLI help
 ```
 
-_See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/cloudfront.ts)_
+_See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/cloudfront.ts)_
 
-## `kdoc repo:deploy`
+## `kuzdoc repo:deploy`
 
-Deploy the docs to the AWS S3 bucket
+Deploy the docs of the current repository to the AWS S3 bucket
 
 ```
 USAGE
-  $ kdoc repo:deploy
+  $ kuzdoc repo:deploy
 
 OPTIONS
   -b, --base_root=base_root      [default: doc/] The local root of the docs
@@ -236,18 +243,18 @@ OPTIONS
   -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
                                  (e.g. 6/) - env: $DOC_VERSION
 
-  --s3_bucket=s3_bucket          (required) The ID of the S3 bucket to deploy the docs to
+  --s3_bucket=s3_bucket          (required) The ID of the S3 bucket to deploy the docs to  - env: $S3_BUCKET
 ```
 
-_See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/deploy.ts)_
+_See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/deploy.ts)_
 
-## `kdoc repo:serve`
+## `kuzdoc repo:serve`
 
-Serve the doc build via a local static http server
+Serve the docs build of the current repository via a local static http server
 
 ```
 USAGE
-  $ kdoc repo:serve
+  $ kuzdoc repo:serve
 
 OPTIONS
   -b, --base_root=base_root      [default: doc/] The local root of the docs
@@ -263,5 +270,6 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kdoc/blob/v0.0.0/src/commands/repo/serve.ts)_
+_See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/serve.ts)_
+
 <!-- commandsstop -->

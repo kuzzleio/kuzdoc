@@ -24,7 +24,8 @@ export const deploy = (
   )
 
 export default class RepoDeploy extends Command {
-  static description = 'Deploy the docs to the AWS S3 bucket'
+  static description =
+    'Deploy the docs of the current repository to the AWS S3 bucket'
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -43,8 +44,10 @@ export default class RepoDeploy extends Command {
       required: true
     }),
     s3_bucket: flags.string({
-      description: 'The ID of the S3 bucket to deploy the docs to',
-      required: true
+      description:
+        'The ID of the S3 bucket to deploy the docs to  - env: $S3_BUCKET',
+      required: true,
+      default: process.env.S3_BUCKET
     }),
     base_root: flags.string({
       char: 'b',

@@ -3,7 +3,8 @@ import express from 'express'
 import path from 'path'
 
 export default class RepoServe extends Command {
-  static description = 'Serve the doc build via a local static http server'
+  static description =
+    'Serve the docs build of the current repository via a local static http server'
 
   static flags = {
     help: flags.help({ char: 'h' }),
