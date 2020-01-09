@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/0.0.0 linux-x64 node-v10.12.0
+kuzdoc/1.0.0 linux-x64 node-v10.12.0
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -60,7 +60,7 @@ OPTIONS
   -h, --help                     show CLI help
 ```
 
-_See code: [src/commands/framework/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/framework/install.ts)_
+_See code: [src/commands/framework/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/framework/install.ts)_
 
 ## `kuzdoc framework:link`
 
@@ -82,7 +82,7 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/framework/link.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/framework/link.ts)_
+_See code: [src/commands/framework/link.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/framework/link.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -110,12 +110,12 @@ USAGE
   $ kuzdoc iterate-repos:build
 
 OPTIONS
-  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed
+  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed - env: $REPOS_PATH
   -h, --help                       show CLI help
-  -r, --repositories=repositories  The list of repositories to build
+  -r, --repositories=repositories  The list of repositories to build - env: $REPOSITORIES
 ```
 
-_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/build.ts)_
+_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/iterate-repos/build.ts)_
 
 ## `kuzdoc iterate-repos:cloudfront`
 
@@ -130,14 +130,14 @@ OPTIONS
                                                                invalidation will be created
 
   -d, --repos_path=repos_path                                  [default: .repos] The path where the repositories are
-                                                               installed
+                                                               installed - env: $REPOS_PATH
 
   -h, --help                                                   show CLI help
 
-  -r, --repositories=repositories                              The list of repositories to deploy
+  -r, --repositories=repositories                              The list of repositories to deploy - env: $REPOSITORIES
 ```
 
-_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/cloudfront.ts)_
+_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/iterate-repos/cloudfront.ts)_
 
 ## `kuzdoc iterate-repos:deploy`
 
@@ -148,13 +148,13 @@ USAGE
   $ kuzdoc iterate-repos:deploy
 
 OPTIONS
-  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed
+  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed - env: $REPOS_PATH
   -h, --help                       show CLI help
-  -r, --repositories=repositories  The list of repositories to deploy
+  -r, --repositories=repositories  The list of repositories to deploy - env: $REPOSITORIES
   --s3_bucket=s3_bucket            (required) The ID of the S3 bucket to deploy the docs to
 ```
 
-_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/deploy.ts)_
+_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/iterate-repos/deploy.ts)_
 
 ## `kuzdoc iterate-repos:install`
 
@@ -165,15 +165,21 @@ USAGE
   $ kuzdoc iterate-repos:install
 
 OPTIONS
-  -b, --branch=stable|dev          [default: stable] The branch type to checkout
-  -d, --repos_path=repos_path      [default: .repos] The path where the repositories will be installed
+  -b, --branch=stable|dev          [default: stable] The branch type to checkout - env: $BRANCH
+
+  -d, --repos_path=repos_path      [default: .repos] The path where the repositories will be installed - env:
+                                   $REPOS_PATH
+
   -h, --help                       show CLI help
-  -r, --repositories=repositories  The list of repositories to install
+
+  -r, --repositories=repositories  The list of repositories to install - env: $REPOSITORIES
+
   --framework_path=framework_path  [default: .] The path to the framework
+
   --link_framework                 Whether to link the doc framework to the repositories or not
 ```
 
-_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/iterate-repos/install.ts)_
+_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/iterate-repos/install.ts)_
 
 ## `kuzdoc repo:build`
 
@@ -197,7 +203,7 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/repo/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/build.ts)_
+_See code: [src/commands/repo/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/repo/build.ts)_
 
 ## `kuzdoc repo:cloudfront`
 
@@ -218,7 +224,7 @@ OPTIONS
   -h, --help                                                   show CLI help
 ```
 
-_See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/cloudfront.ts)_
+_See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/repo/cloudfront.ts)_
 
 ## `kuzdoc repo:deploy`
 
@@ -242,7 +248,7 @@ OPTIONS
   --s3_bucket=s3_bucket          (required) The ID of the S3 bucket to deploy the docs to  - env: $S3_BUCKET
 ```
 
-_See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/deploy.ts)_
+_See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/repo/deploy.ts)_
 
 ## `kuzdoc repo:serve`
 
@@ -266,5 +272,5 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/serve.ts)_
+_See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.0.0/src/commands/repo/serve.ts)_
 <!-- commandsstop -->
