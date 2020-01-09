@@ -41,7 +41,7 @@ export default class ReposBuild extends Command {
 
     const tasks = new Listr([
       {
-        title: `Building repositories into ${flags.repos_path}`,
+        title: `Deploying repositories into ${flags.repos_path} to S3`,
         task: () =>
           new Listr(
             selectedRepos.map(repo => ({

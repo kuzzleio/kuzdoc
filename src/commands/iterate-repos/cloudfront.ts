@@ -24,8 +24,9 @@ export default class ReposBuild extends Command {
     cloudfront_distribution_id: flags.string({
       char: 'c',
       description:
-        'The Cloudfront distribution ID where the invalidation will be created',
-      required: true
+        'The Cloudfront distribution ID where the invalidation will be created - env: $CLOUDFRONT_DISTRIBUTION_ID',
+      required: true,
+      default: process.env.CLOUDFRONT_DISTRIBUTION_ID
     })
   }
 
@@ -40,7 +41,7 @@ export default class ReposBuild extends Command {
 
     const tasks = new Listr([
       {
-        title: `Building repositories into ${flags.repos_path}`,
+        title: `Invalidating Cloudfront cache for repositories into ${flags.repos_path}`,
         task: () =>
           new Listr(
             selectedRepos.map(repo => ({
