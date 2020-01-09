@@ -48,7 +48,7 @@ export default class RepoBuild extends Command {
       default: process.env.DOC_VERSION,
       required: true
     }),
-    base_root: flags.string({
+    doc_root: flags.string({
       char: 'b',
       description: 'The local root of the docs',
       default: docPathInRepo
@@ -61,7 +61,7 @@ export default class RepoBuild extends Command {
     cli.action.start(`Building version ${flags.doc_version}`)
 
     const buildTask = buildRepo(
-      flags.base_root,
+      flags.doc_root,
       flags.doc_version,
       flags.deploy_path,
       flags.repo_name

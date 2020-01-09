@@ -2,13 +2,13 @@ import axios from 'axios'
 import YAML from 'yaml'
 
 export interface Repo {
-  local_path: string
-  name: string
   url: string
+  doc_version: string
   stable: string
   dev: string
-  destination: string
-  base_url: string
+  name: string
+  deploy_path: string
+  doc_root?: string
 }
 
 export const getRepositories = async (

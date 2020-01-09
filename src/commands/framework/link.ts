@@ -4,7 +4,7 @@ import execa from 'execa'
 import fs from 'fs'
 import path from 'path'
 
-import { fwDirName } from '../../constants'
+import { fwDirName, docPathInRepo } from '../../constants'
 
 export default class FrameworkLink extends Command {
   static description =
@@ -29,7 +29,7 @@ export default class FrameworkLink extends Command {
     base_root: flags.string({
       char: 'b',
       description: 'The local root of the docs',
-      default: 'doc/'
+      default: docPathInRepo
     })
   }
 

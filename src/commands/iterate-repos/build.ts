@@ -3,7 +3,7 @@ import cli from 'cli-ux'
 import { buildRepo } from '../repo/build'
 import { getRepositories } from '../../common'
 import Listr from 'listr'
-import { join, basename } from 'path'
+import { join } from 'path'
 import { docPathInRepo } from '../../constants'
 
 export default class ReposBuild extends Command {
@@ -43,8 +43,8 @@ export default class ReposBuild extends Command {
               task: () =>
                 buildRepo(
                   join(flags.repos_path, repo.name, docPathInRepo),
-                  basename(repo.local_path), // WARNING UGLI ACK
-                  repo.base_url,
+                  repo.doc_version,
+                  repo.deploy_path,
                   repo.name
                 )
             }))
