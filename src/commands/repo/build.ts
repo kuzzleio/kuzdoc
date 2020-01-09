@@ -17,7 +17,7 @@ export const buildRepo = (
       cwd: baseRoot,
       env: {
         REPO_NAME: repoName,
-        SITE_BASE: deployPath, // TODO rename to DEPLOY_PATH
+        SITE_BASE: deployPath.endsWith('/') ? deployPath : `${deployPath}/`, // TODO rename to DEPLOY_PATH
         DOC_DIR: docVersion // TODO rename to LOCAL_PATH
       }
     }
@@ -38,7 +38,6 @@ export default class RepoBuild extends Command {
       description:
         'The path where the local version of the docs will be deployed (e.g. /sdk/js/6/) - env: $DEPLOY_PATH',
       default: process.env.DEPLOY_PATH,
-      parse: input => (input.endsWith('/') ? input : `${input}/`),
       required: true
     }),
     doc_version: flags.string({
