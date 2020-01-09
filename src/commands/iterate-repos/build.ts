@@ -13,12 +13,14 @@ export default class ReposBuild extends Command {
     help: flags.help({ char: 'h' }),
     repositories: flags.string({
       char: 'r',
-      description: 'The list of repositories to build'
+      description: 'The list of repositories to build - env: $REPOSITORIES',
+      default: process.env.REPOSITORIES
     }),
     repos_path: flags.string({
       char: 'd',
-      description: 'The path where the repositories are installed',
-      default: '.repos'
+      description:
+        'The path where the repositories are installed - env: $REPOS_PATH',
+      default: process.env.REPOS_PATH || '.repos'
     })
   }
 

@@ -15,18 +15,20 @@ export default class ReposInstall extends Command {
     help: flags.help({ char: 'h' }),
     repositories: flags.string({
       char: 'r',
-      description: 'The list of repositories to install'
+      description: 'The list of repositories to install - env: $REPOSITORIES',
+      default: process.env.REPOSITORIES
     }),
     repos_path: flags.string({
       char: 'd',
-      description: 'The path where the repositories will be installed',
-      default: '.repos'
+      description:
+        'The path where the repositories will be installed - env: $REPOS_PATH',
+      default: process.env.REPOS_PATH || '.repos'
     }),
     branch: flags.string({
       char: 'b',
-      description: 'The branch type to checkout',
+      description: 'The branch type to checkout - env: $BRANCH',
       options: ['stable', 'dev'],
-      default: 'stable'
+      default: process.env.BRANCH || 'stable'
     }),
     link_framework: flags.boolean({
       description:
@@ -55,7 +57,9 @@ export default class ReposInstall extends Command {
         task: () =>
           new Listr(
             selectedRepos.map(repo => ({
-              title: repo.name,
+              title: `${repo.name} (${
+                flags.branch === 'dev' ? repo.dev : repo.stable
+              })`,
               task: () =>
                 this.cloneRepository(repo, flags.branch, flags.repos_path)
             }))

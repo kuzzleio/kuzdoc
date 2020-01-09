@@ -12,12 +12,14 @@ export default class ReposBuild extends Command {
     help: flags.help({ char: 'h' }),
     repositories: flags.string({
       char: 'r',
-      description: 'The list of repositories to deploy'
+      description: 'The list of repositories to deploy - env: $REPOSITORIES',
+      default: process.env.REPOSITORIES
     }),
     repos_path: flags.string({
       char: 'd',
-      description: 'The path where the repositories are installed',
-      default: '.repos'
+      description:
+        'The path where the repositories are installed - env: $REPOS_PATH',
+      default: process.env.REPOS_PATH || '.repos'
     }),
     cloudfront_distribution_id: flags.string({
       char: 'c',

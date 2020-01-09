@@ -14,16 +14,19 @@ export default class ReposBuild extends Command {
     help: flags.help({ char: 'h' }),
     repositories: flags.string({
       char: 'r',
-      description: 'The list of repositories to deploy'
+      description: 'The list of repositories to deploy - env: $REPOSITORIES',
+      default: process.env.REPOSITORIES
     }),
     repos_path: flags.string({
       char: 'd',
-      description: 'The path where the repositories are installed',
-      default: '.repos'
+      description:
+        'The path where the repositories are installed - env: $REPOS_PATH',
+      default: process.env.REPOS_PATH || '.repos'
     }),
     s3_bucket: flags.string({
       description: 'The ID of the S3 bucket to deploy the docs to',
-      required: true
+      required: true,
+      default: process.env.S3_BUCKET
     })
   }
 
