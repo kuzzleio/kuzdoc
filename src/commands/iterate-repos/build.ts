@@ -42,7 +42,11 @@ export default class ReposBuild extends Command {
               title: repo.name,
               task: () =>
                 buildRepo(
-                  join(flags.repos_path, repo.name, docPathInRepo),
+                  join(
+                    flags.repos_path,
+                    repo.name,
+                    repo.doc_root || docPathInRepo
+                  ),
                   repo.doc_version,
                   repo.deploy_path,
                   repo.name

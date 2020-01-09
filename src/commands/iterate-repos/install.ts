@@ -112,10 +112,15 @@ export default class ReposInstall extends Command {
     return execa('ln', [
       '-s',
       path.relative(
-        path.join(destination, repo.name, docPathInRepo),
+        path.join(destination, repo.name, repo.doc_root || docPathInRepo),
         frameworkPath
       ),
-      path.join(destination, repo.name, docPathInRepo, fwDirName)
+      path.join(
+        destination,
+        repo.name,
+        repo.doc_root || docPathInRepo,
+        fwDirName
+      )
     ])
   }
 }
