@@ -14,7 +14,7 @@ export default class FrameworkInstall extends Command {
     branch: flags.string({
       char: 'b',
       description: 'The framework branch that should be checked out',
-      default: process.env.FRAMEWORK_BRANCH
+      default: process.env.FRAMEWORK_BRANCH || 'master'
     }),
     destination: flags.string({
       char: 'd',
