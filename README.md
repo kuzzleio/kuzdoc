@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/1.1.6 linux-x64 node-v10.12.0
+kuzdoc/1.2.0 linux-x64 node-v10.12.0
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -44,7 +44,7 @@ USAGE
 * [`kuzdoc repo:build`](#kuzdoc-repobuild)
 * [`kuzdoc repo:cloudfront`](#kuzdoc-repocloudfront)
 * [`kuzdoc repo:deploy`](#kuzdoc-repodeploy)
-* [`kuzdoc repo:dev [FILE]`](#kuzdoc-repodev-file)
+* [`kuzdoc repo:dev`](#kuzdoc-repodev)
 * [`kuzdoc repo:serve`](#kuzdoc-reposerve)
 
 ## `kuzdoc framework:install`
@@ -61,7 +61,7 @@ OPTIONS
   -h, --help                     show CLI help
 ```
 
-_See code: [src/commands/framework/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/framework/install.ts)_
+_See code: [src/commands/framework/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/framework/install.ts)_
 
 ## `kuzdoc framework:link`
 
@@ -83,7 +83,7 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/framework/link.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/framework/link.ts)_
+_See code: [src/commands/framework/link.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/framework/link.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -116,7 +116,7 @@ OPTIONS
   -r, --repositories=repositories  The list of repositories to build - env: $REPOSITORIES
 ```
 
-_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/iterate-repos/build.ts)_
+_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/iterate-repos/build.ts)_
 
 ## `kuzdoc iterate-repos:cloudfront`
 
@@ -139,7 +139,7 @@ OPTIONS
   -r, --repositories=repositories                              The list of repositories to deploy - env: $REPOSITORIES
 ```
 
-_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/iterate-repos/cloudfront.ts)_
+_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/iterate-repos/cloudfront.ts)_
 
 ## `kuzdoc iterate-repos:deploy`
 
@@ -156,7 +156,7 @@ OPTIONS
   --s3_bucket=s3_bucket            (required) The ID of the S3 bucket to deploy the docs to
 ```
 
-_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/iterate-repos/deploy.ts)_
+_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/iterate-repos/deploy.ts)_
 
 ## `kuzdoc iterate-repos:install`
 
@@ -181,7 +181,7 @@ OPTIONS
   --link_framework                 Whether to link the doc framework to the repositories or not
 ```
 
-_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/iterate-repos/install.ts)_
+_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/iterate-repos/install.ts)_
 
 ## `kuzdoc repo:build`
 
@@ -205,7 +205,7 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/repo/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/repo/build.ts)_
+_See code: [src/commands/repo/build.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/repo/build.ts)_
 
 ## `kuzdoc repo:cloudfront`
 
@@ -226,7 +226,7 @@ OPTIONS
   -h, --help                                                   show CLI help
 ```
 
-_See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/repo/cloudfront.ts)_
+_See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/repo/cloudfront.ts)_
 
 ## `kuzdoc repo:deploy`
 
@@ -250,23 +250,31 @@ OPTIONS
   --s3_bucket=s3_bucket          (required) The ID of the S3 bucket to deploy the docs to  - env: $S3_BUCKET
 ```
 
-_See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/repo/deploy.ts)_
+_See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/repo/deploy.ts)_
 
-## `kuzdoc repo:dev [FILE]`
+## `kuzdoc repo:dev`
 
-describe the command here
+Build the documentation for the current repository
 
 ```
 USAGE
-  $ kuzdoc repo:dev [FILE]
+  $ kuzdoc repo:dev
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -b, --doc_root=doc_root        [default: doc/] The local root of the docs
+
+  -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
+                                 /sdk/js/6/) - env: $DEPLOY_PATH
+
+  -h, --help                     show CLI help
+
+  -n, --repo_name=repo_name      The name of the repo (used by Algolia)
+
+  -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
+                                 (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/repo/dev.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/repo/dev.ts)_
+_See code: [src/commands/repo/dev.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/repo/dev.ts)_
 
 ## `kuzdoc repo:serve`
 
@@ -290,5 +298,5 @@ OPTIONS
                                  (e.g. 6/) - env: $DOC_VERSION
 ```
 
-_See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/repo/serve.ts)_
+_See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.2.0/src/commands/repo/serve.ts)_
 <!-- commandsstop -->
