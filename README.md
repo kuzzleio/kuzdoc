@@ -10,16 +10,14 @@ This is an internal tool used by the Kuzzle team to build the documentation of a
 [![License](https://img.shields.io/npm/l/kdoc.svg)](https://github.com/kuzzleio/kdoc/blob/master/package.json)
 
 <!-- toc -->
-
-- [kdoc](#kdoc)
-- [Usage](#usage)
-- [Commands](#commands)
-  <!-- tocstop -->
+* [kuzdoc](#kuzdoc)
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g kuzdoc
 $ kuzdoc COMMAND
@@ -31,24 +29,22 @@ USAGE
   $ kuzdoc COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`kuzdoc framework:install`](#kuzdoc-frameworkinstall)
-- [`kuzdoc framework:link`](#kuzdoc-frameworklink)
-- [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
-- [`kuzdoc iterate-repos:build`](#kuzdoc-iterate-reposbuild)
-- [`kuzdoc iterate-repos:cloudfront`](#kuzdoc-iterate-reposcloudfront)
-- [`kuzdoc iterate-repos:deploy`](#kuzdoc-iterate-reposdeploy)
-- [`kuzdoc iterate-repos:install`](#kuzdoc-iterate-reposinstall)
-- [`kuzdoc repo:build`](#kuzdoc-repobuild)
-- [`kuzdoc repo:cloudfront`](#kuzdoc-repocloudfront)
-- [`kuzdoc repo:deploy`](#kuzdoc-repodeploy)
-- [`kuzdoc repo:serve`](#kuzdoc-reposerve)
+* [`kuzdoc framework:install`](#kuzdoc-frameworkinstall)
+* [`kuzdoc framework:link`](#kuzdoc-frameworklink)
+* [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
+* [`kuzdoc iterate-repos:build`](#kuzdoc-iterate-reposbuild)
+* [`kuzdoc iterate-repos:cloudfront`](#kuzdoc-iterate-reposcloudfront)
+* [`kuzdoc iterate-repos:deploy`](#kuzdoc-iterate-reposdeploy)
+* [`kuzdoc iterate-repos:install`](#kuzdoc-iterate-reposinstall)
+* [`kuzdoc repo:build`](#kuzdoc-repobuild)
+* [`kuzdoc repo:cloudfront`](#kuzdoc-repocloudfront)
+* [`kuzdoc repo:deploy`](#kuzdoc-repodeploy)
+* [`kuzdoc repo:serve`](#kuzdoc-reposerve)
 
 ## `kuzdoc framework:install`
 
@@ -271,5 +267,4 @@ OPTIONS
 ```
 
 _See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v0.0.0/src/commands/repo/serve.ts)_
-
 <!-- commandsstop -->
