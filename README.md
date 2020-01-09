@@ -44,6 +44,7 @@ USAGE
 * [`kuzdoc repo:build`](#kuzdoc-repobuild)
 * [`kuzdoc repo:cloudfront`](#kuzdoc-repocloudfront)
 * [`kuzdoc repo:deploy`](#kuzdoc-repodeploy)
+* [`kuzdoc repo:dev [FILE]`](#kuzdoc-repodev-file)
 * [`kuzdoc repo:serve`](#kuzdoc-reposerve)
 
 ## `kuzdoc framework:install`
@@ -250,6 +251,22 @@ OPTIONS
 ```
 
 _See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/repo/deploy.ts)_
+
+## `kuzdoc repo:dev [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ kuzdoc repo:dev [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/repo/dev.ts](https://github.com/kuzzleio/kuzzle-documentation-cli/blob/v1.1.6/src/commands/repo/dev.ts)_
 
 ## `kuzdoc repo:serve`
 
