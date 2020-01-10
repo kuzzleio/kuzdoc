@@ -28,7 +28,7 @@ export default class ReposInstall extends Command {
       char: 'b',
       description: 'The branch type to checkout - env: $BRANCH',
       options: ['stable', 'dev'],
-      default: process.env.BRANCH || 'stable'
+      default: process.env.BRANCH
     }),
     link_framework: flags.boolean({
       description:
@@ -43,6 +43,7 @@ export default class ReposInstall extends Command {
 
   async run() {
     const { flags } = this.parse(ReposInstall)
+    const resolvedBranch = flags.branch || (await this.resolveBranch())
 
     cli.action.start('Fetching repository list')
 
@@ -58,10 +59,10 @@ export default class ReposInstall extends Command {
           new Listr(
             selectedRepos.map(repo => ({
               title: `${repo.name} (${
-                flags.branch === 'dev' ? repo.dev : repo.stable
+                resolvedBranch === 'dev' ? repo.dev : repo.stable
               })`,
               task: () =>
-                this.cloneRepository(repo, flags.branch, flags.repos_path)
+                this.cloneRepository(repo, resolvedBranch, flags.repos_path)
             }))
           )
       }
@@ -122,5 +123,13 @@ export default class ReposInstall extends Command {
         fwDirName
       )
     ])
+  }
+
+  async resolveBranch() {
+    const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
+    if (stdout.match(/^master|\d+-stable$/)) {
+      return 'stable'
+    }
+    return 'dev'
   }
 }
