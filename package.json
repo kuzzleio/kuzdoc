@@ -2,11 +2,11 @@
   "name": "kuzdoc",
   "description": "The CLI that helps build the Kuzzle Docs",
   "version": "1.2.2",
-  "author": "Luca Marchesini @xbill82",
+  "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kuzdoc": "./bin/run"
   },
-  "bugs": "https://github.com/kuzzleio/kuzzle-documentation-cli/issues",
+  "bugs": "https://github.com/kuzzleio/kuzdoc/issues",
   "dependencies": {
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
@@ -41,7 +41,7 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/kuzzleio/kuzzle-documentation-cli",
+  "homepage": "https://github.com/kuzzleio/kuzdoc",
   "keywords": [
     "oclif"
   ],
@@ -54,7 +54,7 @@
       "@oclif/plugin-help"
     ]
   },
-  "repository": "kuzzleio/kuzzle-documentation-cli",
+  "repository": "kuzzleio/kuzdoc",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
