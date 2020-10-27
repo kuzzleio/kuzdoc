@@ -183,6 +183,10 @@ export default class FrameworkLocalDeploy extends Command {
         })))
     })
 
-    return tasks.run()
+    await tasks.run()
+
+    this.log('* Documentation successfully deployed!')
+    this.log('  You can view it by running the following command\n')
+    this.log(`  http-server ${deployDir}`)
   }
 }
