@@ -112,7 +112,6 @@ export default class FrameworkLocalDeploy extends Command {
     const tasks = new Listr([{
       title: 'Installing framework dependencies',
       task: () => execa('npm', ['ci']),
-      skip: () => true
     }])
 
     tasks.add({
