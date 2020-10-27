@@ -1,5 +1,4 @@
 import { Command, flags } from '@oclif/command'
-import cli from 'cli-ux'
 import { buildRepo } from '../repo/build'
 import { getRepositories } from '../../common'
 import Listr from 'listr'
@@ -26,12 +25,14 @@ export default class ReposBuild extends Command {
 
   async run() {
     const { flags } = this.parse(ReposBuild)
-    cli.action.start('Fetching repository list')
 
     const selectedRepos = await getRepositories(
       flags.repositories ? flags.repositories.split(',') : []
     )
-    cli.action.stop(`Found ${selectedRepos.length} repos`)
+
+    if (selectedRepos.length === 0) {
+      return this.log('No repository selected.')
+    }
 
     const tasks = new Listr([
       {
