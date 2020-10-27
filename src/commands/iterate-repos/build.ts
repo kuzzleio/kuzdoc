@@ -1,9 +1,34 @@
 import { Command, flags } from '@oclif/command'
 import { buildRepo } from '../repo/build'
-import { getRepositories } from '../../common'
+import { getRepositories, Repo } from '../../common'
 import Listr from 'listr'
 import { join } from 'path'
 import { docPathInRepo } from '../../constants'
+
+export const buildRepos = (repos: Repo[], path = './repos') => {
+  return [
+    {
+      title: `Building repositories into ${path}`,
+      task: () =>
+        new Listr(
+          repos.map(repo => ({
+            title: repo.name,
+            task: () =>
+              buildRepo(
+                join(
+                  path,
+                  repo.name,
+                  repo.doc_root || docPathInRepo
+                ),
+                repo.doc_version,
+                repo.deploy_path,
+                repo.name
+              )
+          }))
+        )
+    }
+  ]
+}
 
 export default class ReposBuild extends Command {
   static description = 'Build a list of repositories'
@@ -34,29 +59,7 @@ export default class ReposBuild extends Command {
       return this.log('No repository selected.')
     }
 
-    const tasks = new Listr([
-      {
-        title: `Building repositories into ${flags.repos_path}`,
-        task: () =>
-          new Listr(
-            selectedRepos.map(repo => ({
-              title: repo.name,
-              task: () =>
-                buildRepo(
-                  join(
-                    flags.repos_path,
-                    repo.name,
-                    repo.doc_root || docPathInRepo
-                  ),
-                  repo.doc_version,
-                  repo.deploy_path,
-                  repo.name
-                )
-            }))
-          )
-      }
-    ])
-
-    await tasks.run()
+    const tasks = new Listr(buildRepos(selectedRepos, flags.repos_path))
+    return tasks.run()
   }
 }
