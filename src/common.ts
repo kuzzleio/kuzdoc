@@ -14,8 +14,10 @@ export interface Repo {
   doc_root?: string
 }
 
-export const resolveBranch = async () => {
-  const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
+export const resolveBranch = async (cwd: string) => {
+  const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
+    cwd
+  })
   if (stdout.match(/^master|\d+-stable$/)) {
     return 'stable'
   }

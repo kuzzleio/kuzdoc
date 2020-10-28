@@ -14,12 +14,14 @@ async function copyFrameworkToRepo(
   destination: string,
   frameworkPath: string
 ) {
+  // Create $TARGET/framework
   await execa('mkdir', [path.join(
     destination,
     repo.name,
     repo.doc_root || docPathInRepo,
     fwDirName
   )])
+  // Copy package.json in $TARGET/framework
   await execa('cp', [
     '-r',
     path.join('package.json'),
@@ -30,6 +32,7 @@ async function copyFrameworkToRepo(
       fwDirName
     )
   ])
+  // Create $TARGET/framework/src
   await execa('mkdir', [path.join(
     destination,
     repo.name,
@@ -37,9 +40,10 @@ async function copyFrameworkToRepo(
     fwDirName,
     'src'
   )])
+  // Copy the .vuepress dir in $TARGET/framework/src
   await execa('cp', [
     '-r',
-    path.join('src', '.vuepress'),
+    path.join(frameworkPath, 'src', '.vuepress'),
     path.join(
       destination,
       repo.name,
@@ -57,6 +61,8 @@ async function copyFrameworkToRepo(
     repoDocPath,
     fwNodeModPath
   )
+  // Symlink framework/node_modules to $TARGET/framework
+  // (to avoid copying it too many times)
   await execa('ln', [
     '-s',
     relPath,
@@ -100,27 +106,35 @@ export default class FrameworkLocalDeploy extends Command {
     const { flags } = this.parse(FrameworkLocalDeploy)
     const reposPath = path.join(flags.destination, 'kuzzle-repos')
     const deployDir = path.join(flags.destination, 'kuzzle-documentation')
-    const resolvedBranch = flags.branch || (await resolveBranch())
+
+    try {
+      const fwPackageJson = require(
+        path.join(process.cwd(), flags.frameworkPath, 'package.json')
+      )
+      if (fwPackageJson.name !== 'kuzzleio-documentation') {
+        return this.log(`It seems the path for the framework (${flags.frameworkPath}) is wrong (the name of the repo is ${fwPackageJson.name})`)
+      }
+    } catch (error) {
+      return this.log(`It seems the path for the framework (${flags.frameworkPath}) is wrong (no package.json found)`)
+    }
+
     const selectedRepos = await getRepositories(
       flags.repositories ? flags.repositories.split(',') : []
     )
+
+    const resolvedBranch = flags.branch || (await resolveBranch(flags.frameworkPath))
 
     if (selectedRepos.length === 0) {
       return this.log('No repository selected.')
     }
 
     const tasks = new Listr([{
-      title: 'Installing framework dependencies',
-      task: () => execa('npm', ['ci']),
-    }])
-
-    tasks.add({
       title: 'Cleaning-up temporary files',
       task: async () => {
         await execa('rm', ['-rf', reposPath])
         await execa('rm', ['-rf', deployDir])
       }
-    })
+    }])
 
     tasks.add(installRepos(selectedRepos, resolvedBranch, reposPath))
 
@@ -144,7 +158,9 @@ export default class FrameworkLocalDeploy extends Command {
 
     tasks.add({
       title: 'Building framework',
-      task: () => execa('npm', ['run', 'build'])
+      task: () => execa('npm', ['run', 'build'], {
+        cwd: flags.frameworkPath
+      })
     })
 
     tasks.add({
@@ -184,8 +200,8 @@ export default class FrameworkLocalDeploy extends Command {
 
     await tasks.run()
 
-    this.log('* Documentation successfully deployed!')
-    this.log('  You can view it by running the following command\n')
+    this.log('\n* Documentation successfully deployed!\n')
+    this.log('  You can view it by running the following command')
     this.log(`  http-server ${deployDir}`)
   }
 }

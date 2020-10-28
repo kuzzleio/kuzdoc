@@ -45,7 +45,7 @@ async function linkFrameworkToRepo(
 export const installRepos = (selectedRepos: Repo[], branch: string, reposPath = '.repos', linkFramework = false, frameworkPath = '.') => {
   const tasks = [
     {
-      title: `Cloning repositories into ${reposPath}`,
+      title: `Cloning repositories (${branch}) into ${reposPath}`,
       task: () =>
         new Listr(
           selectedRepos.map(repo => ({
