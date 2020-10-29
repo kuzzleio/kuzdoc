@@ -1,5 +1,4 @@
 import { Command, flags } from '@oclif/command'
-import cli from 'cli-ux'
 import execa from 'execa'
 import Listr from 'listr'
 import path from 'path'
@@ -45,12 +44,13 @@ export default class ReposInstall extends Command {
     const { flags } = this.parse(ReposInstall)
     const resolvedBranch = flags.branch || (await this.resolveBranch())
 
-    cli.action.start('Fetching repository list')
-
-    const selectedRepos = await getRepositories(
+   const selectedRepos = await getRepositories(
       flags.repositories ? flags.repositories.split(',') : []
     )
-    cli.action.stop(`Found ${selectedRepos.length} repos`)
+
+    if (selectedRepos.length === 0) {
+      return this.log('No repository selected.')
+    }
 
     const tasks = new Listr([
       {

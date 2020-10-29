@@ -1,4 +1,6 @@
 import axios from 'axios'
+import cli from 'cli-ux'
+import inquirer from 'inquirer'
 import YAML from 'yaml'
 
 export interface Repo {
@@ -14,14 +16,25 @@ export interface Repo {
 export const getRepositories = async (
   repositoryNames: Array<string> = []
 ): Promise<Array<Repo>> => {
+  cli.action.start('Fetching repository list')
   const reposResponse = await axios.get(
     'https://raw.githubusercontent.com/kuzzleio/documentation/develop/.repos/repositories.yml'
   )
 
   const YMLRepos: Array<Repo> = YAML.parse(reposResponse.data)
-  const selectedRepos = YMLRepos.filter(
-    repo => repositoryNames.length === 0 || repositoryNames.includes(repo.name)
-  )
-
-  return selectedRepos
+  cli.action.stop(`Found ${YMLRepos.length} repos`)
+  if (repositoryNames.length === 0) {
+    const answers = await inquirer.prompt([{
+      type: 'checkbox',
+      message: 'Select the repositories you want',
+      name: 'repos',
+      pageSize: 15,
+      loop: false,
+      choices: YMLRepos.map(r => ({ name: r.name }))
+    }])
+    repositoryNames = answers.repos
+  }
+  return YMLRepos.filter(
+      repo => repositoryNames.includes(repo.name)
+    )
 }
