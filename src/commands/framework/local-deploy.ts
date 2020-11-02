@@ -106,16 +106,15 @@ export default class FrameworkLocalDeploy extends Command {
     const { flags } = this.parse(FrameworkLocalDeploy)
     const reposPath = path.join(flags.destination, 'kuzzle-repos')
     const deployDir = path.join(flags.destination, 'kuzzle-documentation')
-
+    const fwPackageJsonPath = path.isAbsolute(flags.frameworkPath) ? path.join(flags.frameworkPath, 'package.json') :
+      path.join(process.cwd(), flags.frameworkPath, 'package.json')
     try {
-      const fwPackageJson = require(
-        path.join(process.cwd(), flags.frameworkPath, 'package.json')
-      )
+      const fwPackageJson = require(fwPackageJsonPath)
       if (fwPackageJson.name !== 'kuzzleio-documentation') {
-        return this.log(`It seems the path for the framework (${flags.frameworkPath}) is wrong (the name of the repo is ${fwPackageJson.name})`)
+        return this.log(`It seems the path for the framework (${fwPackageJsonPath}) is wrong (the name of the repo is ${fwPackageJson.name})`)
       }
     } catch (error) {
-      return this.log(`It seems the path for the framework (${flags.frameworkPath}) is wrong (no package.json found)`)
+      return this.log(`It seems the path for the framework (${fwPackageJsonPath}) is wrong (no package.json found)`)
     }
 
     const selectedRepos = await getRepositories(
