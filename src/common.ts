@@ -1,5 +1,6 @@
 import axios from 'axios'
 import cli from 'cli-ux'
+import execa from 'execa'
 import inquirer from 'inquirer'
 import YAML from 'yaml'
 
@@ -11,6 +12,16 @@ export interface Repo {
   name: string
   deploy_path: string
   doc_root?: string
+}
+
+export const resolveBranch = async (cwd: string) => {
+  const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
+    cwd
+  })
+  if (stdout.match(/^master|\d+-stable$/)) {
+    return 'stable'
+  }
+  return 'dev'
 }
 
 export const getRepositories = async (
@@ -35,6 +46,6 @@ export const getRepositories = async (
     repositoryNames = answers.repos
   }
   return YMLRepos.filter(
-      repo => repositoryNames.includes(repo.name)
-    )
+    repo => repositoryNames.includes(repo.name)
+  )
 }
