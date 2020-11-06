@@ -116,7 +116,7 @@ export default class ReposInstall extends Command {
 
   async run() {
     const { flags } = this.parse(ReposInstall)
-    const resolvedBranch = flags.branch || (await resolveBranch())
+    const resolvedBranch = flags.branch || (await resolveBranch(flags.framework_path))
 
     const selectedRepos = await getRepositories(
       flags.repositories ? flags.repositories.split(',') : []
