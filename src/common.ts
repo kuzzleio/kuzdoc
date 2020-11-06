@@ -1,7 +1,7 @@
 import axios from 'axios'
 import cli from 'cli-ux'
 import execa from 'execa'
-import inquirer from 'inquirer'
+// import inquirer from 'inquirer'
 import YAML from 'yaml'
 
 export interface Repo {
@@ -15,13 +15,17 @@ export interface Repo {
 }
 
 export const resolveBranch = async (cwd: string) => {
-  const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
-    cwd
-  })
-  if (stdout.match(/^master|\d+-stable$/)) {
+  try {
+    const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
+      cwd
+    })
+    if (stdout.match(/^master|\d+-stable$/)) {
+      return 'stable'
+    }
+    return 'dev'
+  } catch (error) {
     return 'stable'
   }
-  return 'dev'
 }
 
 export const getRepositories = async (
@@ -34,17 +38,27 @@ export const getRepositories = async (
 
   const YMLRepos: Array<Repo> = YAML.parse(reposResponse.data)
   cli.action.stop(`Found ${YMLRepos.length} repos`)
+
+  // if (repositoryNames.length === 0) {
+  //   const answers = await inquirer.prompt([{
+  //     type: 'checkbox',
+  //     message: 'Select the repositories you want',
+  //     name: 'repos',
+  //     pageSize: 15,
+  //     loop: false,
+  //     choices: YMLRepos.map(r => ({ name: r.name }))
+  //   }])
+  //   repositoryNames = answers.repos
+  // }
+
+  // if (repositoryNames.length === 1 && repositoryNames[0] === 'all') {
+  //   return YMLRepos
+  // }
+
   if (repositoryNames.length === 0) {
-    const answers = await inquirer.prompt([{
-      type: 'checkbox',
-      message: 'Select the repositories you want',
-      name: 'repos',
-      pageSize: 15,
-      loop: false,
-      choices: YMLRepos.map(r => ({ name: r.name }))
-    }])
-    repositoryNames = answers.repos
+    return YMLRepos
   }
+
   return YMLRepos.filter(
     repo => repositoryNames.includes(repo.name)
   )
