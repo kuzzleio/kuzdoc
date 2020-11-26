@@ -3,7 +3,7 @@ import execa from 'execa'
 import Listr from 'listr'
 import path from 'path'
 
-import { getRepositories, Repo, resolveBranch } from '../../common'
+import { getRepositories, Repo, resolveRepoBranch } from '../../common'
 import { fwDirName, docPathInRepo } from '../../constants'
 
 import { installRepos } from '../iterate-repos/install'
@@ -121,7 +121,7 @@ export default class FrameworkLocalDeploy extends Command {
       flags.repositories ? flags.repositories.split(',') : []
     )
 
-    const resolvedBranch = flags.branch || (await resolveBranch(flags.frameworkPath))
+    const resolvedBranch = flags.branch || (await resolveRepoBranch(flags.frameworkPath))
 
     if (selectedRepos.length === 0) {
       return this.log('No repository selected.')

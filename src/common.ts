@@ -14,15 +14,15 @@ export interface Repo {
   doc_root?: string
 }
 
-export const resolveBranch = async (cwd: string) => {
+export const resolveRepoBranch = async (cwd: string) => {
   try {
     const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
       cwd
     })
-    if (stdout.match(/^master|\d+-stable$/)) {
-      return 'stable'
+    if (stdout.match(/^develop$/)) {
+      return 'dev'
     }
-    return 'dev'
+    return 'stable'
   } catch (error) {
     return 'stable'
   }

@@ -4,7 +4,7 @@ import path from 'path'
 import Listr from 'listr'
 
 import { fwDirName, docPathInRepo } from '../../constants'
-import { getRepositories, Repo, resolveBranch } from '../../common'
+import { getRepositories, Repo, resolveRepoBranch } from '../../common'
 
 async function cloneRepository(repo: Repo, branch: string, destination: string) {
   // this.debug(`${repo.url}#${branch === 'dev' ? repo.dev : repo.stable}`)
@@ -116,7 +116,7 @@ export default class ReposInstall extends Command {
 
   async run() {
     const { flags } = this.parse(ReposInstall)
-    const resolvedBranch = flags.branch || (await resolveBranch(flags.framework_path))
+    const resolvedBranch = flags.branch || (await resolveRepoBranch(flags.framework_path))
 
     const selectedRepos = await getRepositories(
       flags.repositories ? flags.repositories.split(',') : []

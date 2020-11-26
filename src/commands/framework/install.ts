@@ -25,7 +25,7 @@ export default class FrameworkInstall extends Command {
 
   async run() {
     const { flags } = this.parse(FrameworkInstall)
-    const branch = flags.branch || (await this.resolveBranch())
+    const branch = flags.branch || (await this.resolveFrameworkBranch())
 
     if (!fs.existsSync(path.resolve(flags.destination))) {
       throw new Error(`Destination path ${flags.destination} does not exist`)
@@ -63,11 +63,15 @@ export default class FrameworkInstall extends Command {
     tasks.run()
   }
 
-  async resolveBranch() {
-    const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
-    if (stdout.match(/^master|\d+-stable$/)) {
+  async resolveFrameworkBranch() {
+    try {
+      const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
+      if (stdout.match(/^\d+-dev$/)) {
+        return 'develop'
+      }
+      return 'master'
+    } catch (error) {
       return 'master'
     }
-    return 'develop'
   }
 }
