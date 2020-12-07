@@ -38,6 +38,7 @@ USAGE
 * [`kuzdoc framework:link`](#kuzdoc-frameworklink)
 * [`kuzdoc framework:local-deploy`](#kuzdoc-frameworklocal-deploy)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
+* [`kuzdoc iterate-repo:execute [FILE]`](#kuzdoc-iterate-repoexecute-file)
 * [`kuzdoc iterate-repos:build`](#kuzdoc-iterate-reposbuild)
 * [`kuzdoc iterate-repos:cloudfront`](#kuzdoc-iterate-reposcloudfront)
 * [`kuzdoc iterate-repos:deploy`](#kuzdoc-iterate-reposdeploy)
@@ -120,6 +121,22 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
+
+## `kuzdoc iterate-repo:execute [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ kuzdoc iterate-repo:execute [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/iterate-repo/execute.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.4.2/src/commands/iterate-repo/execute.ts)_
 
 ## `kuzdoc iterate-repos:build`
 
