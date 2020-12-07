@@ -20,7 +20,17 @@ export const execCommandInRepo = (repos: Repo[], command: string, reposPath = '.
 }
 
 export default class IterateRepoExecute extends Command {
-  static description = 'execute a command or shell script upon a set of repos'
+  static description = `execute a command or shell script upon a set of repos (missing repos will not be installed)
+
+EXAMPLES
+
+$ kuzdoc iterate-repos:execute "echo I haz never been here > iwazhere"
+
+Executes two inline commands upon the list of repos.
+
+$ kuzdoc iterate-repos:execute /tmp/my-test-script
+
+Executes a shell script upon the list of repos`
 
   static flags = {
     help: flags.help({ char: 'h' }),
