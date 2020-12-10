@@ -12,7 +12,14 @@ export const execCommandInRepo = (repos: Repo[], command: string, reposPath = '.
         title: repo.name,
         task: () => execa(command, {
           shell: true,
-          cwd: path.join(reposPath, repo.name)
+          cwd: path.join(reposPath, repo.name),
+          env: {
+            REPO_NAME: repo.name,
+            DEPLOY_PATH: repo.deploy_path,
+            REPO_DOC_ROOT: repo.doc_root,
+            REPO_DOC_VERSION: repo.doc_version,
+            REPO_BRANCH_TYPE: repo.dev ? 'dev' : 'stable'
+          }
         })
       }))
     )
