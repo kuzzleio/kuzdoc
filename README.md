@@ -41,6 +41,7 @@ USAGE
 * [`kuzdoc iterate-repos:build`](#kuzdoc-iterate-reposbuild)
 * [`kuzdoc iterate-repos:cloudfront`](#kuzdoc-iterate-reposcloudfront)
 * [`kuzdoc iterate-repos:deploy`](#kuzdoc-iterate-reposdeploy)
+* [`kuzdoc iterate-repos:execute COMMAND`](#kuzdoc-iterate-reposexecute-command)
 * [`kuzdoc iterate-repos:install`](#kuzdoc-iterate-reposinstall)
 * [`kuzdoc repo:build`](#kuzdoc-repobuild)
 * [`kuzdoc repo:cloudfront`](#kuzdoc-repocloudfront)
@@ -176,6 +177,36 @@ OPTIONS
 ```
 
 _See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.4.2/src/commands/iterate-repos/deploy.ts)_
+
+## `kuzdoc iterate-repos:execute COMMAND`
+
+execute a command or shell script upon a set of repos (missing repos will not be installed)
+
+```
+USAGE
+  $ kuzdoc iterate-repos:execute COMMAND
+
+ARGUMENTS
+  COMMAND  the command or script to execute
+
+OPTIONS
+  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed - env: $REPOS_PATH
+  -h, --help                       show CLI help
+  -r, --repositories=repositories  The list of repositories to build - env: $REPOSITORIES
+
+DESCRIPTION
+  EXAMPLES
+
+  $ kuzdoc iterate-repos:execute "echo I haz never been here > iwazhere"
+
+  Executes two inline commands upon the list of repos.
+
+  $ kuzdoc iterate-repos:execute /tmp/my-test-script
+
+  Executes a shell script upon the list of repos
+```
+
+_See code: [src/commands/iterate-repos/execute.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.4.2/src/commands/iterate-repos/execute.ts)_
 
 ## `kuzdoc iterate-repos:install`
 
