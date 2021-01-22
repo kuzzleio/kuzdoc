@@ -55,8 +55,8 @@ export default class RepoCloudfront extends Command {
       flags.cloudfront_distribution_id
     )
 
-    cloudfrontTask.stderr.pipe(process.stderr)
-    cloudfrontTask.stdout.pipe(process.stdout)
+    cloudfrontTask.stderr?.pipe(process.stderr)
+    cloudfrontTask.stdout?.pipe(process.stdout)
     await cloudfrontTask
 
     cli.action.stop()
