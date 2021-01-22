@@ -67,8 +67,8 @@ export default class RepoDeploy extends Command {
       flags.deploy_path,
       flags.s3_bucket
     )
-    deployTask.stderr.pipe(process.stderr)
-    deployTask.stdout.pipe(process.stdout)
+    deployTask.stderr?.pipe(process.stderr)
+    deployTask.stdout?.pipe(process.stdout)
     await deployTask
 
     cli.action.stop()

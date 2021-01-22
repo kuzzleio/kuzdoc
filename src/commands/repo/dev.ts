@@ -63,8 +63,8 @@ export default class RepoBuild extends Command {
       flags.repo_name
     )
 
-    buildTask.stderr.pipe(process.stderr)
-    buildTask.stdout.pipe(process.stdout)
+    buildTask.stderr?.pipe(process.stderr)
+    buildTask.stdout?.pipe(process.stdout)
     await buildTask
   }
 }
