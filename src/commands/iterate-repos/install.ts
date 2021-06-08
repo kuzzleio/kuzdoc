@@ -4,15 +4,15 @@ import path from 'path'
 import Listr from 'listr'
 
 import { fwDirName, docPathInRepo } from '../../constants'
-import { getRepositories, Repo, resolveRepoBranch } from '../../common'
+import { getRepositories, Product, resolveRepoBranch } from '../../common'
 
-async function cloneRepository(repo: Repo, branch: string, destination: string) {
+async function cloneRepository(repo: Product, branch: string, destination: string) {
   // this.debug(`${repo.url}#${branch === 'dev' ? repo.dev : repo.stable}`)
 
   return execa('git', [
     'clone',
     '--branch',
-    branch === 'dev' ? repo.dev : repo.stable,
+    branch === 'dev' ? repo.devBranch : repo.stableBranch,
     '--depth',
     '10',
     '--single-branch',
@@ -22,34 +22,34 @@ async function cloneRepository(repo: Repo, branch: string, destination: string) 
 }
 
 async function linkFrameworkToRepo(
-  repo: Repo,
+  repo: Product,
   destination: string,
   frameworkPath: string
 ) {
   return execa('ln', [
     '-s',
     path.relative(
-      path.join(destination, repo.name, repo.doc_root || docPathInRepo),
+      path.join(destination, repo.name, repo.docRoot || docPathInRepo),
       frameworkPath
     ),
     path.join(
       destination,
       repo.name,
-      repo.doc_root || docPathInRepo,
+      repo.docRoot || docPathInRepo,
       fwDirName
     )
   ])
 }
 
 // eslint-disable-next-line max-params
-export const installRepos = (selectedRepos: Repo[], branch: string, reposPath = '.repos', linkFramework = false, frameworkPath = '.') => {
+export const installRepos = (selectedRepos: Product[], branch: string, reposPath = '.repos', linkFramework = false, frameworkPath = '.') => {
   const tasks = [
     {
       title: `Cloning repositories (${branch}) into ${reposPath}`,
       task: () =>
         new Listr(
           selectedRepos.map(repo => ({
-            title: `${repo.name} (${branch === 'dev' ? repo.dev : repo.stable
+            title: `${repo.name} (${branch === 'dev' ? repo.devBranch : repo.stableBranch
               })`,
             task: () =>
               cloneRepository(repo, branch, reposPath)

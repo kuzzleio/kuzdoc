@@ -1,7 +1,7 @@
 {
   "name": "kuzdoc",
   "description": "The CLI that helps build the Kuzzle Docs",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kuzdoc": "./bin/run"

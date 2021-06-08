@@ -1,11 +1,11 @@
 import { Command, flags } from '@oclif/command'
 import { buildRepo } from '../repo/build'
-import { getRepositories, Repo } from '../../common'
+import { getRepositories, Product } from '../../common'
 import Listr from 'listr'
 import { join } from 'path'
 import { docPathInRepo } from '../../constants'
 
-export const buildRepos = (repos: Repo[], path = './repos') => {
+export const buildRepos = (repos: Product[], path = './repos') => {
   return [
     {
       title: `Building repositories into ${path}`,
@@ -18,10 +18,10 @@ export const buildRepos = (repos: Repo[], path = './repos') => {
                 join(
                   path,
                   repo.name,
-                  repo.doc_root || docPathInRepo
+                  repo.docRoot || docPathInRepo
                 ),
-                repo.doc_version,
-                repo.deploy_path,
+                repo.version,
+                repo.deployPath,
                 repo.name
               )
           }))

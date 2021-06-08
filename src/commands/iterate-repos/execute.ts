@@ -1,10 +1,10 @@
 import { Command, flags } from '@oclif/command'
-import { getRepositories, Repo } from '../../common'
+import { getRepositories, Product } from '../../common'
 import Listr from 'listr'
 import execa = require('execa')
 import path from 'path'
 
-export const execCommandInRepo = (repos: Repo[], command: string, reposPath = './repos') => {
+export const execCommandInRepo = (repos: Product[], command: string, reposPath = './repos') => {
   return [{
     title: `Executing command in repositories into ${reposPath}`,
     task: () => new Listr(
@@ -15,10 +15,10 @@ export const execCommandInRepo = (repos: Repo[], command: string, reposPath = '.
           cwd: path.join(reposPath, repo.name),
           env: {
             REPO_NAME: repo.name,
-            DEPLOY_PATH: repo.deploy_path,
-            REPO_DOC_ROOT: repo.doc_root,
-            REPO_DOC_VERSION: repo.doc_version,
-            REPO_BRANCH_TYPE: repo.dev ? 'dev' : 'stable'
+            DEPLOY_PATH: repo.deployPath,
+            REPO_DOC_ROOT: repo.docRoot,
+            REPO_DOC_VERSION: `${repo.version}`,
+            REPO_BRANCH_TYPE: repo.devBranch ? 'dev' : 'stable'
           }
         })
       }))
