@@ -1,11 +1,12 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import { deploy } from '../repo/deploy'
 import { getRepositories } from '../../common'
 import Listr from 'listr'
 import { join } from 'path'
 import { docPathInRepo } from '../../constants'
 
-export default class ReposBuild extends Command {
+export default class ReposBuild extends BaseCommand {
   static description =
     'Deploy a list of sub-repositories (or all) to an S3 bucket'
 
@@ -30,6 +31,7 @@ export default class ReposBuild extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(ReposBuild)
     const selectedRepos = await getRepositories(
       flags.repositories ? flags.repositories.split(',') : []

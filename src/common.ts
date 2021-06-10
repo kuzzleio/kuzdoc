@@ -1,7 +1,14 @@
+import { Command } from '@oclif/command'
 import axios from 'axios'
 import cli from 'cli-ux'
 import execa from 'execa'
 import YAML from 'yaml'
+
+export abstract class BaseCommand extends Command {
+  public printVersion() {
+    this.log(`kuzdoc v${this.config.version}`)
+  }
+}
 
 export interface RawRepo {
   url: string

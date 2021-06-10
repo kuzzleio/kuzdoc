@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import cli from 'cli-ux'
 import { fwDirName, docPathInRepo } from '../../constants'
 import execa = require('execa')
@@ -24,7 +25,7 @@ export const buildRepo = (
   )
 }
 
-export default class RepoBuild extends Command {
+export default class RepoBuild extends BaseCommand {
   static description = 'Build the documentation for the current repository'
 
   static flags = {
@@ -55,6 +56,7 @@ export default class RepoBuild extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(RepoBuild)
 
     cli.action.start(`Building version ${flags.doc_version}`)

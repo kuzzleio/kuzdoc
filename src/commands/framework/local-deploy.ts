@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import execa from 'execa'
 import Listr from 'listr'
 import path from 'path'
@@ -72,7 +73,7 @@ async function copyFrameworkToRepo(
   })
 }
 
-export default class FrameworkLocalDeploy extends Command {
+export default class FrameworkLocalDeploy extends BaseCommand {
   static description = 'Creates a local deployment of the docs'
 
   static flags = {
@@ -103,6 +104,7 @@ export default class FrameworkLocalDeploy extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(FrameworkLocalDeploy)
     const reposPath = path.join(flags.destination, 'kuzzle-repos')
     const deployDir = path.join(flags.destination, 'kuzzle-documentation')

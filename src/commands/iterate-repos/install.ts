@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import execa from 'execa'
 import path from 'path'
 import Listr from 'listr'
@@ -80,7 +81,7 @@ export const installRepos = (selectedRepos: Repo[], branch: string, reposPath = 
   return tasks
 }
 
-export default class ReposInstall extends Command {
+export default class ReposInstall extends BaseCommand {
   static description =
     'Install a list of sub-repositories (or all) to a given destination'
 
@@ -115,6 +116,7 @@ export default class ReposInstall extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(ReposInstall)
     const resolvedBranch = flags.branch || (await resolveRepoBranch(flags.framework_path))
 

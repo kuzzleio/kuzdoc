@@ -1,8 +1,9 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import express from 'express'
 import path from 'path'
 
-export default class RepoServe extends Command {
+export default class RepoServe extends BaseCommand {
   static description =
     'Serve the docs build of the current repository via a local static http server'
 
@@ -36,6 +37,7 @@ export default class RepoServe extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(RepoServe)
     const app = express()
     const files = path.resolve(

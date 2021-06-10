@@ -1,9 +1,10 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import { invalidateCloudfront } from '../repo/cloudfront'
 import { getRepositories } from '../../common'
 import Listr from 'listr'
 
-export default class ReposBuild extends Command {
+export default class ReposBuild extends BaseCommand {
   static description =
     'Invalidates the Cloudfront cache of a list of repositories'
 
@@ -30,6 +31,7 @@ export default class ReposBuild extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(ReposBuild)
     const selectedRepos = await getRepositories(
       flags.repositories ? flags.repositories.split(',') : []

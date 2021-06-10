@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import { buildRepo } from '../repo/build'
 import { getRepositories, Repo } from '../../common'
 import Listr from 'listr'
@@ -30,7 +31,7 @@ export const buildRepos = (repos: Repo[], path = './repos') => {
   ]
 }
 
-export default class ReposBuild extends Command {
+export default class ReposBuild extends BaseCommand {
   static description = 'Build a list of repositories'
 
   static flags = {
@@ -49,6 +50,7 @@ export default class ReposBuild extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(ReposBuild)
 
     const selectedRepos = await getRepositories(
