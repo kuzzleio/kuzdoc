@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import execa from 'execa'
 import path from 'path'
 import Listr from 'listr'
@@ -12,7 +13,7 @@ async function cloneRepository(repo: Repo, branch: string, destination: string) 
   return execa('git', [
     'clone',
     '--branch',
-    branch === 'dev' ? repo.dev : repo.stable,
+    branch === 'dev' ? repo.devBranch : repo.stableBranch,
     '--depth',
     '10',
     '--single-branch',
@@ -29,13 +30,13 @@ async function linkFrameworkToRepo(
   return execa('ln', [
     '-s',
     path.relative(
-      path.join(destination, repo.name, repo.doc_root || docPathInRepo),
+      path.join(destination, repo.name, repo.docRoot || docPathInRepo),
       frameworkPath
     ),
     path.join(
       destination,
       repo.name,
-      repo.doc_root || docPathInRepo,
+      repo.docRoot || docPathInRepo,
       fwDirName
     )
   ])
@@ -49,7 +50,7 @@ export const installRepos = (selectedRepos: Repo[], branch: string, reposPath = 
       task: () =>
         new Listr(
           selectedRepos.map(repo => ({
-            title: `${repo.name} (${branch === 'dev' ? repo.dev : repo.stable
+            title: `${repo.name} (${branch === 'dev' ? repo.devBranch : repo.stableBranch
               })`,
             task: () =>
               cloneRepository(repo, branch, reposPath)
@@ -80,7 +81,7 @@ export const installRepos = (selectedRepos: Repo[], branch: string, reposPath = 
   return tasks
 }
 
-export default class ReposInstall extends Command {
+export default class ReposInstall extends BaseCommand {
   static description =
     'Install a list of sub-repositories (or all) to a given destination'
 
@@ -115,6 +116,7 @@ export default class ReposInstall extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(ReposInstall)
     const resolvedBranch = flags.branch || (await resolveRepoBranch(flags.framework_path))
 

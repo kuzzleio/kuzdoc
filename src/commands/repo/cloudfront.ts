@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import cli from 'cli-ux'
 import execa = require('execa')
 
@@ -21,7 +22,7 @@ export const invalidateCloudfront = (
     }
   )
 
-export default class RepoCloudfront extends Command {
+export default class RepoCloudfront extends BaseCommand {
   static description =
     'Invalidate the Cloudfront docs cache for the current repository'
 
@@ -44,6 +45,7 @@ export default class RepoCloudfront extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(RepoCloudfront)
 
     cli.action.start(

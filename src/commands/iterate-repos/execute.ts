@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import { getRepositories, Repo } from '../../common'
 import Listr from 'listr'
 import execa = require('execa')
@@ -15,10 +16,10 @@ export const execCommandInRepo = (repos: Repo[], command: string, reposPath = '.
           cwd: path.join(reposPath, repo.name),
           env: {
             REPO_NAME: repo.name,
-            DEPLOY_PATH: repo.deploy_path,
-            REPO_DOC_ROOT: repo.doc_root,
-            REPO_DOC_VERSION: repo.doc_version,
-            REPO_BRANCH_TYPE: repo.dev ? 'dev' : 'stable'
+            DEPLOY_PATH: repo.deployPath,
+            REPO_DOC_ROOT: repo.docRoot,
+            REPO_DOC_VERSION: `${repo.version}`,
+            REPO_BRANCH_TYPE: repo.devBranch ? 'dev' : 'stable'
           }
         })
       }))
@@ -26,7 +27,7 @@ export const execCommandInRepo = (repos: Repo[], command: string, reposPath = '.
   }]
 }
 
-export default class IterateRepoExecute extends Command {
+export default class IterateRepoExecute extends BaseCommand {
   static description = `execute a command or shell script upon a set of repos (missing repos will not be installed)
 
 EXAMPLES
@@ -61,6 +62,7 @@ Executes a shell script upon the list of repos`
   }]
 
   async run() {
+    this.printVersion()
     const { args, flags } = this.parse(IterateRepoExecute)
 
     const selectedRepos = await getRepositories(

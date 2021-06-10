@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import cli from 'cli-ux'
 import execa = require('execa')
 
@@ -23,7 +24,7 @@ export const deploy = (
     }
   )
 
-export default class RepoDeploy extends Command {
+export default class RepoDeploy extends BaseCommand {
   static description =
     'Deploy the docs of the current repository to the AWS S3 bucket'
 
@@ -57,6 +58,7 @@ export default class RepoDeploy extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(RepoDeploy)
 
     cli.action.start(`Deploying version ${flags.doc_version}`)

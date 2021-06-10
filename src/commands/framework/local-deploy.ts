@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import execa from 'execa'
 import Listr from 'listr'
 import path from 'path'
@@ -18,7 +19,7 @@ async function copyFrameworkToRepo(
   await execa('mkdir', [path.join(
     destination,
     repo.name,
-    repo.doc_root || docPathInRepo,
+    repo.docRoot || docPathInRepo,
     fwDirName
   )])
   // Copy package.json in $TARGET/framework
@@ -28,7 +29,7 @@ async function copyFrameworkToRepo(
     path.join(
       destination,
       repo.name,
-      repo.doc_root || docPathInRepo,
+      repo.docRoot || docPathInRepo,
       fwDirName
     )
   ])
@@ -36,7 +37,7 @@ async function copyFrameworkToRepo(
   await execa('mkdir', [path.join(
     destination,
     repo.name,
-    repo.doc_root || docPathInRepo,
+    repo.docRoot || docPathInRepo,
     fwDirName,
     'src'
   )])
@@ -47,7 +48,7 @@ async function copyFrameworkToRepo(
     path.join(
       destination,
       repo.name,
-      repo.doc_root || docPathInRepo,
+      repo.docRoot || docPathInRepo,
       fwDirName,
       'src'
     )
@@ -55,7 +56,7 @@ async function copyFrameworkToRepo(
   // DISCLAIMER - this is a dirty hack.
   // I've put 'inside' at the end to have the right computation
   // of the relative path.
-  const repoDocPath = path.join(destination, repo.name, repo.doc_root || docPathInRepo, fwDirName, 'inside')
+  const repoDocPath = path.join(destination, repo.name, repo.docRoot || docPathInRepo, fwDirName, 'inside')
   const fwNodeModPath = path.join(frameworkPath, 'node_modules', '.')
   const relPath = path.relative(
     repoDocPath,
@@ -68,11 +69,11 @@ async function copyFrameworkToRepo(
     relPath,
     '.'
   ], {
-    cwd: path.join(destination, repo.name, repo.doc_root || docPathInRepo, fwDirName)
+    cwd: path.join(destination, repo.name, repo.docRoot || docPathInRepo, fwDirName)
   })
 }
 
-export default class FrameworkLocalDeploy extends Command {
+export default class FrameworkLocalDeploy extends BaseCommand {
   static description = 'Creates a local deployment of the docs'
 
   static flags = {
@@ -103,6 +104,7 @@ export default class FrameworkLocalDeploy extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(FrameworkLocalDeploy)
     const reposPath = path.join(flags.destination, 'kuzzle-repos')
     const deployDir = path.join(flags.destination, 'kuzzle-documentation')
@@ -184,12 +186,12 @@ export default class FrameworkLocalDeploy extends Command {
         selectedRepos.map(repo => ({
           title: repo.name,
           task: async () => {
-            await execa('mkdir', ['-p', path.join(deployDir, repo.deploy_path)])
+            await execa('mkdir', ['-p', path.join(deployDir, repo.deployPath)])
             await execa('cp', [
               '-r',
-              path.join(reposPath, repo.name, repo.doc_root || docPathInRepo,
+              path.join(reposPath, repo.name, repo.docRoot || docPathInRepo,
                 fwDirName, 'src', '.vuepress', 'dist', '*'),
-              path.join(deployDir, repo.deploy_path)
+              path.join(deployDir, repo.deployPath)
             ], {
               shell: true
             })

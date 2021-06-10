@@ -1,30 +1,31 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import cli from 'cli-ux'
 import { fwDirName, docPathInRepo } from '../../constants'
 import execa = require('execa')
 
 export const buildRepo = (
   baseRoot: string,
-  docVersion: string,
+  docVersion: number,
   deployPath: string,
   repoName?: string
 ) => {
   return execa(
     `$(npm --prefix ${fwDirName} bin)/vuepress`,
-    ['build', '--no-cache', docVersion],
+    ['build', '--no-cache', `${docVersion}`],
     {
       shell: true,
       cwd: baseRoot,
       env: {
         REPO_NAME: repoName,
         SITE_BASE: deployPath.endsWith('/') ? deployPath : `${deployPath}/`, // TODO rename to DEPLOY_PATH
-        DOC_DIR: docVersion // TODO rename to LOCAL_PATH
+        DOC_DIR: `${docVersion}` // TODO rename to LOCAL_PATH
       }
     }
   )
 }
 
-export default class RepoBuild extends Command {
+export default class RepoBuild extends BaseCommand {
   static description = 'Build the documentation for the current repository'
 
   static flags = {
@@ -55,13 +56,14 @@ export default class RepoBuild extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(RepoBuild)
 
     cli.action.start(`Building version ${flags.doc_version}`)
 
     const buildTask = buildRepo(
       flags.doc_root,
-      flags.doc_version,
+      parseInt(flags.doc_version, 10),
       flags.deploy_path,
       flags.repo_name
     )

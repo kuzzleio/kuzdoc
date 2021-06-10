@@ -1,4 +1,5 @@
-import { Command, flags } from '@oclif/command'
+import { flags } from '@oclif/command'
+import { BaseCommand } from '../../common'
 import cli from 'cli-ux'
 import execa from 'execa'
 import fs from 'fs'
@@ -6,7 +7,7 @@ import path from 'path'
 
 import { fwDirName, docPathInRepo } from '../../constants'
 
-export default class FrameworkLink extends Command {
+export default class FrameworkLink extends BaseCommand {
   static description =
     'Links a local version of the docs to the installed framework'
 
@@ -34,6 +35,7 @@ export default class FrameworkLink extends Command {
   }
 
   async run() {
+    this.printVersion()
     const { flags } = this.parse(FrameworkLink)
     const fwPath = path
       .join(flags.base_root, fwDirName, 'src')
