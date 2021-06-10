@@ -51,10 +51,10 @@ export default class ReposBuild extends Command {
                   join(
                     flags.repos_path,
                     repo.name,
-                    repo.doc_root || docPathInRepo
+                    repo.docRoot || docPathInRepo
                   ),
-                  repo.doc_version,
-                  repo.deploy_path,
+                  `${repo.version}`,
+                  repo.deployPath,
                   flags.s3_bucket
                 )
             }))
