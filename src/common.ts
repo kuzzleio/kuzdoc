@@ -109,9 +109,6 @@ export class Repo {
   get url(): string {
     if (this.repoName) {
       if (this.isPrivate) {
-        if (process.env.ACCESS_TOKEN_CI) {
-          return `https://\${ACCESS_TOKEN_CI}:x-oauth-basic@github.com/${this.repoName}.git`
-        }
         return `git@github.com:kuzzleio/${this.repoName}.git`
       }
       return `https://github.com/kuzzleio/${this.repoName}.git`
