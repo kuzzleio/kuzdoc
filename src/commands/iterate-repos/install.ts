@@ -4,9 +4,9 @@ import path from 'path'
 import Listr from 'listr'
 
 import { fwDirName, docPathInRepo } from '../../constants'
-import { getRepositories, Product, resolveRepoBranch } from '../../common'
+import { getRepositories, Repo, resolveRepoBranch } from '../../common'
 
-async function cloneRepository(repo: Product, branch: string, destination: string) {
+async function cloneRepository(repo: Repo, branch: string, destination: string) {
   // this.debug(`${repo.url}#${branch === 'dev' ? repo.dev : repo.stable}`)
 
   return execa('git', [
@@ -22,7 +22,7 @@ async function cloneRepository(repo: Product, branch: string, destination: strin
 }
 
 async function linkFrameworkToRepo(
-  repo: Product,
+  repo: Repo,
   destination: string,
   frameworkPath: string
 ) {
@@ -42,7 +42,7 @@ async function linkFrameworkToRepo(
 }
 
 // eslint-disable-next-line max-params
-export const installRepos = (selectedRepos: Product[], branch: string, reposPath = '.repos', linkFramework = false, frameworkPath = '.') => {
+export const installRepos = (selectedRepos: Repo[], branch: string, reposPath = '.repos', linkFramework = false, frameworkPath = '.') => {
   const tasks = [
     {
       title: `Cloning repositories (${branch}) into ${reposPath}`,

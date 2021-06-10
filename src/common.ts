@@ -3,7 +3,7 @@ import cli from 'cli-ux'
 import execa from 'execa'
 import YAML from 'yaml'
 
-export interface Repo {
+export interface RawRepo {
   url: string
   doc_version: string
   stable: string
@@ -15,7 +15,7 @@ export interface Repo {
   private?: boolean
 }
 
-export class Product {
+export class Repo {
   /**
      * The name of the repository (used to build the URL)
      */
@@ -72,7 +72,7 @@ export class Product {
    * @param r The definition object
    */
   constructor(
-    r: Repo
+    r: RawRepo
   ) {
     if (!r.url && !r.repo_name) {
       throw new Error('Repository definition must specify at least "url" or "repos_name"')
@@ -138,8 +138,8 @@ export class Product {
   }
 }
 
-const parseYMLRepos = (YMLRepos: Array<any>): Product[] => {
-  return YMLRepos.map(r => new Product(r))
+const parseYMLRepos = (YMLRepos: Array<any>): Repo[] => {
+  return YMLRepos.map(r => new Repo(r))
 }
 
 export const resolveRepoBranch = async (cwd: string) => {
@@ -158,7 +158,7 @@ export const resolveRepoBranch = async (cwd: string) => {
 
 export const getRepositories = async (
   repositoryNames: Array<string> = []
-): Promise<Array<Product>> => {
+): Promise<Array<Repo>> => {
   cli.action.start('Fetching repository list')
   const reposResponse = await axios.get(
     'https://raw.githubusercontent.com/kuzzleio/documentation/develop/.repos/repositories.yml'

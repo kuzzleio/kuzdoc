@@ -3,14 +3,14 @@ import execa from 'execa'
 import Listr from 'listr'
 import path from 'path'
 
-import { getRepositories, Product, resolveRepoBranch } from '../../common'
+import { getRepositories, Repo, resolveRepoBranch } from '../../common'
 import { fwDirName, docPathInRepo } from '../../constants'
 
 import { installRepos } from '../iterate-repos/install'
 import { buildRepos } from '../iterate-repos/build'
 
 async function copyFrameworkToRepo(
-  repo: Product,
+  repo: Repo,
   destination: string,
   frameworkPath: string
 ) {
