@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import path, { join } from 'path'
+import { join } from 'path'
 import execa from 'execa'
 import YAML from 'yaml'
 import inquirer from 'inquirer'
@@ -36,6 +36,13 @@ export class Repo {
    * The name of the dev branch
    */
   devBranch: string
+
+  /**
+   * A branch explicitly set, overriding dev and stable branch.
+   *
+   * @see this.resolveBranch
+   */
+  customBranch?: string
 
   /**
    * The path the docs of the current repo will be deployed to, within the
@@ -126,6 +133,9 @@ export class Repo {
   }
 
   resolveBranch(stage: string): string {
+    if (this.customBranch) {
+      return this.customBranch
+    }
     return stage === 'dev' ? this.devBranch : this.stableBranch
   }
 
@@ -144,7 +154,7 @@ const parseYMLRepos = (YMLRepos: Array<any>): Repo[] => {
   return YMLRepos.map(r => new Repo(r))
 }
 
-export const resolveRepoBranch = async (cwd: string) => {
+export const resolveStage = async (cwd: string) => {
   try {
     const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
       cwd

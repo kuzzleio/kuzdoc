@@ -1,8 +1,8 @@
 import { flags } from '@oclif/command'
 import { BaseCommand } from '../lib/base-command'
-import { fetchRepoList, promptRepo, filterRepoList, resolveRepoBranch } from '../lib/repo'
+import { fetchRepoList, promptRepo, filterRepoList, resolveStage } from '../lib/repo'
 import { assertIsFrameworkRoot, Stage } from '../lib/framework'
-import { cloneAndLinkRepos, installLocalRepository, repoExists } from '../lib/install'
+import { cloneAndLinkRepos, installLocalRepository } from '../lib/install'
 import path from 'path'
 
 const ENV_REPO = 'KUZDOC_REPO'
@@ -64,7 +64,7 @@ Environment variable: $${ENV_LOCAL_PATH}`,
     }
 
     const { flags } = this.parse(Install)
-    const stage: Stage = flags.stage as Stage || await resolveRepoBranch(process.cwd())
+    const stage: Stage = flags.stage as Stage || await resolveStage(process.cwd())
     const interactive = !flags.repo
     const repositoriesYML = fetchRepoList()
     let selectedRepo = []
@@ -77,24 +77,29 @@ Environment variable: $${ENV_LOCAL_PATH}`,
 
     const repoList = flags.repo === VALUE_ALL_REPOS ? repositoriesYML : filterRepoList(repositoriesYML, selectedRepo)
 
-    if (repoList.length > 1) {
+    if (repoList.length === 1) {
+      this.log(`Install single repo: ${repoList}`)
+      if (flags.localPath) {
+        const absoluteLocalPath = path.join(process.cwd(), flags.localPath)
+        return installLocalRepository(absoluteLocalPath, repoList[0]).run()
+      }
+      if (flags.repoBranch) {
+        repoList[0].customBranch = flags.repoBranch
+      }
+    } else {
       if (flags.repoBranch) {
         throw new Error('ABORT: cannot use --repoBranch flag with multiple repos')
       }
       if (flags.localPath) {
         throw new Error('ABORT: cannot use --localPath flag with multiple repos')
       }
-      await cloneAndLinkRepos(repoList, stage)
-    } else {
-      this.log(`Install single repo: ${repoList}`)
-      if (flags.localPath) {
-        const absoluteLocalPath = path.join(process.cwd(), flags.localPath)
-        return installLocalRepository(absoluteLocalPath, repoList[0])
-      }
-
-      if (flags.repoBranch) {
-
-      }
     }
+
+    const task = await cloneAndLinkRepos(repoList, stage)
+    await task.run()
+
+    this.log('\n  ✅ All done!')
+    this.log('  You can export or prepend your further operations with the following environment variable:\n')
+    this.log(`   ${ENV_REPO}=${repoList.map(r => r.name).join(',')}\n`)
   }
 }

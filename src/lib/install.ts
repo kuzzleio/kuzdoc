@@ -1,6 +1,5 @@
 import path from 'path'
 import { existsSync, symlinkSync, unlinkSync } from 'fs'
-import cli from 'cli-ux'
 import execa from 'execa'
 import Listr from 'listr'
 import { Repo } from './repo'
@@ -12,35 +11,34 @@ export function repoExists(repoName: string, destination: string) {
 }
 
 export function installLocalRepository(localRepoPath: string, repo: Repo, destination = '.repos', frameworkPath = process.cwd()) {
-  cli.action.start(`Verifying repo ${repo.name} is not already installed...`)
-  if (repoExists(repo.name, destination)) {
-    cli.action.stop(`Repo ${repo.name} is already installed.`)
-    return
-  }
-  cli.action.stop(`Repo ${repo.name} is not installed.`)
-
-  cli.action.start(`Symlinking ${localRepoPath} in ${destination}...`)
-  symlinkSync(destination, path.join(
-    localRepoPath
-  )
-  )
-  cli.action.stop('Done.')
-
-  cli.action.start(`Symlinking framework in ${localRepoPath}...`)
-  symlinkSync(
-    path.join(
-      frameworkPath,
-      'src',
-      '.vuepress'
-    ),
-    path.join(
-      localRepoPath,
-      repo.docRoot || docPathInRepo,
-      `${repo.version}`,
-      '.vuepress'
+  return new Listr([{
+    title: `Verify repo ${repo.name} is not already installed`,
+    task: () => {
+      if (repoExists(repo.name, destination)) {
+        throw new Error(`Repo ${repo.name} is already installed.`)
+      }
+    }
+  }, {
+    title: `Symlinking ${localRepoPath} in ${destination}...`,
+    task: () => symlinkSync(destination, path.join(
+      localRepoPath
+    ))
+  }, {
+    title: `Symlinking framework in ${localRepoPath}...`,
+    task: () => symlinkSync(
+      path.join(
+        frameworkPath,
+        'src',
+        '.vuepress'
+      ),
+      path.join(
+        localRepoPath,
+        repo.docRoot || docPathInRepo,
+        `${repo.version}`,
+        '.vuepress'
+      )
     )
-  )
-  cli.action.stop('Done.')
+  }])
 }
 
 export async function cloneRepository(url: string, branch: string, destination: string) {
@@ -85,7 +83,7 @@ export async function linkFrameworkToRepo(
 }
 
 export async function cloneAndLinkRepos(repoList: Repo[], stage: Stage) {
-  const tasks = new Listr(
+  return new Listr(
     repoList.map(repo => ({
       skip: () => {
         if (repoExists(repo.name, reposPathInFw)) {
@@ -100,7 +98,6 @@ export async function cloneAndLinkRepos(repoList: Repo[], stage: Stage) {
         title: 'Link repo',
         task: () => linkFrameworkToRepo(repo)
       }])
-    }))
+    }), { concurrent: 5 })
   )
-  await tasks.run()
 }
