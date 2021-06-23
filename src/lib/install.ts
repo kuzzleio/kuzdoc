@@ -1,12 +1,49 @@
+import path from 'path'
+import { existsSync, symlinkSync, unlinkSync } from 'fs'
+import cli from 'cli-ux'
 import execa from 'execa'
 import Listr from 'listr'
-import path from 'path'
 import { Repo } from './repo'
 import { docPathInRepo, reposPathInFw } from '../constants'
 import { Stage } from './framework'
-import { existsSync, symlinkSync, unlinkSync } from 'fs'
 
-export async function cloneRepository(repo: Repo, branch: string, destination: string) {
+export function repoExists(repoName: string, destination: string) {
+  return existsSync(path.join(destination, repoName))
+}
+
+export function installLocalRepository(localRepoPath: string, repo: Repo, destination = '.repos', frameworkPath = process.cwd()) {
+  cli.action.start(`Verifying repo ${repo.name} is not already installed...`)
+  if (repoExists(repo.name, destination)) {
+    cli.action.stop(`Repo ${repo.name} is already installed.`)
+    return
+  }
+  cli.action.stop(`Repo ${repo.name} is not installed.`)
+
+  cli.action.start(`Symlinking ${localRepoPath} in ${destination}...`)
+  symlinkSync(destination, path.join(
+    localRepoPath
+  )
+  )
+  cli.action.stop('Done.')
+
+  cli.action.start(`Symlinking framework in ${localRepoPath}...`)
+  symlinkSync(
+    path.join(
+      frameworkPath,
+      'src',
+      '.vuepress'
+    ),
+    path.join(
+      localRepoPath,
+      repo.docRoot || docPathInRepo,
+      `${repo.version}`,
+      '.vuepress'
+    )
+  )
+  cli.action.stop('Done.')
+}
+
+export async function cloneRepository(url: string, branch: string, destination: string) {
   // this.debug(`${repo.url}#${branch === 'dev' ? repo.dev : repo.stable}`)
   return execa('git', [
     'clone',
@@ -15,8 +52,8 @@ export async function cloneRepository(repo: Repo, branch: string, destination: s
     '--depth',
     '10',
     '--single-branch',
-    repo.url,
-    path.join(destination, repo.name)
+    url,
+    destination
   ])
 }
 
@@ -47,22 +84,18 @@ export async function linkFrameworkToRepo(
   )
 }
 
-export function repoExists(repo: Repo, destination: string) {
-  return existsSync(path.join(destination, repo.name))
-}
-
 export async function cloneAndLinkRepos(repoList: Repo[], stage: Stage) {
   const tasks = new Listr(
     repoList.map(repo => ({
       skip: () => {
-        if (repoExists(repo, reposPathInFw)) {
+        if (repoExists(repo.name, reposPathInFw)) {
           return 'Repo is already installed'
         }
       },
-      title: `Install ${repo.name} (${repo.getBranchByStage(stage)})`,
+      title: `Install ${repo.name} (${repo.resolveBranch(stage)})`,
       task: () => new Listr([{
         title: 'Clone repo',
-        task: () => cloneRepository(repo, repo.getBranchByStage(stage), reposPathInFw)
+        task: () => cloneRepository(repo.url, repo.resolveBranch(stage), path.join(reposPathInFw, repo.name))
       }, {
         title: 'Link repo',
         task: () => linkFrameworkToRepo(repo)

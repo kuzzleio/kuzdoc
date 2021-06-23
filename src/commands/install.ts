@@ -2,7 +2,8 @@ import { flags } from '@oclif/command'
 import { BaseCommand } from '../lib/base-command'
 import { fetchRepoList, promptRepo, filterRepoList, resolveRepoBranch } from '../lib/repo'
 import { assertIsFrameworkRoot, Stage } from '../lib/framework'
-import { cloneAndLinkRepos } from '../lib/install'
+import { cloneAndLinkRepos, installLocalRepository, repoExists } from '../lib/install'
+import path from 'path'
 
 const ENV_REPO = 'KUZDOC_REPO'
 const ENV_REPO_BRANCH = 'KUZDOC_REPO_BRANCH'
@@ -46,7 +47,7 @@ Environment variable: $${ENV_STAGE}`,
     }),
     localPath: flags.string({
       description: `Installs the repo from a local path instead of cloning it from Github. Handy for testing locally developed features.
-This option is valid if only 1 repo is specified.
+This option is valid if only 1 repo is specified. Overrides --repoBranch.
 
 Environment variable: $${ENV_LOCAL_PATH}`,
       default: process.env[ENV_LOCAL_PATH]
@@ -83,12 +84,17 @@ Environment variable: $${ENV_LOCAL_PATH}`,
       if (flags.localPath) {
         throw new Error('ABORT: cannot use --localPath flag with multiple repos')
       }
-      // TODO install multiple repos
-      // this.log(`Install multiple repos: ${repoList.join(', ')}`)
       await cloneAndLinkRepos(repoList, stage)
     } else {
-      // TODO install single repo with flags
       this.log(`Install single repo: ${repoList}`)
+      if (flags.localPath) {
+        const absoluteLocalPath = path.join(process.cwd(), flags.localPath)
+        return installLocalRepository(absoluteLocalPath, repoList[0])
+      }
+
+      if (flags.repoBranch) {
+
+      }
     }
   }
 }

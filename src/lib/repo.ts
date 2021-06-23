@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { join } from 'path'
+import path, { join } from 'path'
 import execa from 'execa'
 import YAML from 'yaml'
 import inquirer from 'inquirer'
@@ -125,7 +125,7 @@ export class Repo {
     throw new Error('Malformed Repo. No repoName nor legacyName specified.')
   }
 
-  getBranchByStage(stage: string): string {
+  resolveBranch(stage: string): string {
     return stage === 'dev' ? this.devBranch : this.stableBranch
   }
 
