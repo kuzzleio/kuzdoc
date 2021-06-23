@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import { invalidateCloudfront } from '../repo/cloudfront'
-import { getRepositories } from '../../common'
+import { getRepositories } from '../common'
 import Listr from 'listr'
 
 export default class ReposBuild extends BaseCommand {

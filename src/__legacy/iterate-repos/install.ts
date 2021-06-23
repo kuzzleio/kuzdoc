@@ -1,11 +1,11 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import execa from 'execa'
 import path from 'path'
 import Listr from 'listr'
 
-import { fwDirName, docPathInRepo } from '../../constants'
-import { getRepositories, Repo, resolveRepoBranch } from '../../common'
+import { fwDirName, docPathInRepo } from '../../lib/constants'
+import { getRepositories, Repo, resolveRepoBranch } from '../common'
 
 async function cloneRepository(repo: Repo, branch: string, destination: string) {
   // this.debug(`${repo.url}#${branch === 'dev' ? repo.dev : repo.stable}`)

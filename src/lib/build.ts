@@ -1,5 +1,5 @@
 import execa from 'execa'
-import { fwDirName } from '../constants'
+import { fwDirName } from './constants'
 
 export const buildRepo = (
   baseRoot: string,

@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import cli from 'cli-ux'
 import execa = require('execa')
 

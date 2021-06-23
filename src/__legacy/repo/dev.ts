@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
-import { fwDirName, docPathInRepo } from '../../constants'
+import { BaseCommand } from '../common'
+import { fwDirName, docPathInRepo } from '../../lib/constants'
 import execa = require('execa')
 
 export const startDevServer = (

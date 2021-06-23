@@ -1,11 +1,11 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import execa from 'execa'
 import fs from 'fs'
 import path from 'path'
 import Listr from 'listr'
 
-import { fwDirName, docPathInRepo, fwRepo } from '../../constants'
+import { fwDirName, docPathInRepo, fwRepo } from '../../lib/constants'
 
 export default class FrameworkInstall extends BaseCommand {
   static description = 'Install the documentation framework inside a repo'

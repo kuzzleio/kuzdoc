@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
-import { getRepositories, Repo } from '../../common'
+import { BaseCommand } from '../common'
+import { getRepositories, Repo } from '../common'
 import Listr from 'listr'
 import execa = require('execa')
 import path from 'path'

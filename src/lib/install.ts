@@ -3,7 +3,7 @@ import { existsSync, symlinkSync, unlinkSync } from 'fs'
 import execa from 'execa'
 import Listr from 'listr'
 import { Repo } from './repo'
-import { docPathInRepo, reposPathInFw } from '../constants'
+import { docPathInRepo, reposPathInFw } from './constants'
 import { Stage } from './framework'
 
 export function repoExists(repoName: string, destination: string) {

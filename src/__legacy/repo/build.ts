@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import cli from 'cli-ux'
-import { fwDirName, docPathInRepo } from '../../constants'
+import { fwDirName, docPathInRepo } from '../../lib/constants'
 import execa = require('execa')
 
 export const buildRepo = (

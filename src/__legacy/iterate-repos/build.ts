@@ -1,10 +1,10 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import { buildRepo } from '../repo/build'
-import { getRepositories, Repo } from '../../common'
+import { getRepositories, Repo } from '../common'
 import Listr from 'listr'
 import { join } from 'path'
-import { docPathInRepo } from '../../constants'
+import { docPathInRepo } from '../../lib/constants'
 
 export const buildRepos = (repos: Repo[], path = './repos') => {
   return [

@@ -1,11 +1,11 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import execa from 'execa'
 import Listr from 'listr'
 import path from 'path'
 
-import { getRepositories, Repo, resolveRepoBranch } from '../../common'
-import { fwDirName, docPathInRepo } from '../../constants'
+import { getRepositories, Repo, resolveRepoBranch } from '../common'
+import { fwDirName, docPathInRepo } from '../../lib/constants'
 
 import { installRepos } from '../iterate-repos/install'
 import { buildRepos } from '../iterate-repos/build'

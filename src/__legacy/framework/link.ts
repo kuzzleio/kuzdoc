@@ -1,11 +1,11 @@
 import { flags } from '@oclif/command'
-import { BaseCommand } from '../../common'
+import { BaseCommand } from '../common'
 import cli from 'cli-ux'
 import execa from 'execa'
 import fs from 'fs'
 import path from 'path'
 
-import { fwDirName, docPathInRepo } from '../../constants'
+import { fwDirName, docPathInRepo } from '../../lib/constants'
 
 export default class FrameworkLink extends BaseCommand {
   static description =
