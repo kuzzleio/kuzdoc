@@ -1,23 +1,24 @@
 import execa from 'execa'
-import { fwDirName } from './constants'
+import path from 'path'
+import { docPathInRepo, reposPathInFw } from './constants'
 
 export const buildRepo = (
-  baseRoot: string,
-  docVersion: number,
+  name: string,
+  version: number,
   deployPath: string,
-  repoName?: string
+  docRoot: string = docPathInRepo,
 ) => {
   return execa(
-    `$(npm --prefix ${fwDirName} bin)/vuepress`,
-    ['build', '--no-cache', `${docVersion}`],
+    '$(npm bin)/vuepress',
+    ['build', path.join(reposPathInFw, name, docRoot, `${version}`)],
     {
       shell: true,
-      cwd: baseRoot,
       env: {
-        REPO_NAME: repoName,
+        REPO_NAME: name,
         SITE_BASE: deployPath.endsWith('/') ? deployPath : `${deployPath}/`, // TODO rename to DEPLOY_PATH
-        DOC_DIR: `${docVersion}` // TODO rename to LOCAL_PATH
-      }
+      },
+      stdout: 'inherit'
     }
   )
 }
+

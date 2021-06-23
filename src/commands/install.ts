@@ -1,15 +1,10 @@
+import path from 'path'
 import { flags } from '@oclif/command'
 import { BaseCommand } from '../lib/base-command'
-import { fetchRepoList, promptRepo, filterRepoList, resolveStage } from '../lib/repo'
+import { resolveRepoList, resolveStage } from '../lib/repo'
 import { assertIsFrameworkRoot, Stage } from '../lib/framework'
 import { cloneAndLinkRepos, installLocalRepository } from '../lib/install'
-import path from 'path'
-
-const ENV_REPO = 'KUZDOC_REPO'
-const ENV_REPO_BRANCH = 'KUZDOC_REPO_BRANCH'
-const ENV_STAGE = 'KUZDOC_STAGE'
-const ENV_LOCAL_PATH = 'KUZDOC_LOCAL_PATH'
-const VALUE_ALL_REPOS = '__ALL__'
+import { ENV_LOCAL_PATH, ENV_REPO, ENV_REPO_BRANCH, ENV_STAGE, VALUE_ALL_REPOS } from '../lib/constants'
 
 export default class Install extends BaseCommand {
   static description = `Installs one or multiple repos in the framework meta-repo.
@@ -65,17 +60,7 @@ Environment variable: $${ENV_LOCAL_PATH}`,
 
     const { flags } = this.parse(Install)
     const stage: Stage = flags.stage as Stage || await resolveStage(process.cwd())
-    const interactive = !flags.repo
-    const repositoriesYML = fetchRepoList()
-    let selectedRepo = []
-
-    if (interactive) {
-      selectedRepo = await promptRepo(repositoriesYML)
-    } else {
-      selectedRepo = flags.repo ? flags.repo.split(',') : []
-    }
-
-    const repoList = flags.repo === VALUE_ALL_REPOS ? repositoriesYML : filterRepoList(repositoriesYML, selectedRepo)
+    const repoList = await resolveRepoList(flags.repo)
 
     if (repoList.length === 1) {
       this.log(`Install single repo: ${repoList}`)

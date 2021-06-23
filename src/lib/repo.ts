@@ -3,6 +3,7 @@ import { join } from 'path'
 import execa from 'execa'
 import YAML from 'yaml'
 import inquirer from 'inquirer'
+import { VALUE_ALL_REPOS } from './constants'
 
 export interface RawRepo {
   url: string
@@ -198,4 +199,18 @@ export const filterRepoList = (
   return repoList.filter(
     repo => repositoryNames.includes(repo.name)
   )
+}
+
+export async function resolveRepoList(repoFlag: string | undefined) {
+  const interactive = !repoFlag
+  const repositoriesYML = fetchRepoList()
+  let selectedRepo = []
+
+  if (interactive) {
+    selectedRepo = await promptRepo(repositoriesYML)
+  } else {
+    selectedRepo = repoFlag ? repoFlag.split(',') : []
+  }
+
+  return repoFlag === VALUE_ALL_REPOS ? repositoriesYML : filterRepoList(repositoriesYML, selectedRepo)
 }
