@@ -3,7 +3,7 @@ import { existsSync, symlinkSync, unlinkSync } from 'fs'
 import execa from 'execa'
 import Listr from 'listr'
 import { Repo } from './repo'
-import { docPathInRepo, reposPathInFw } from './constants'
+import { reposPathInFw } from './constants'
 import { Stage } from './framework'
 
 export function repoExists(repoName: string, destination: string) {
@@ -33,7 +33,7 @@ export function installLocalRepository(localRepoPath: string, repo: Repo, destin
       ),
       path.join(
         localRepoPath,
-        repo.docRoot || docPathInRepo,
+        repo.docRoot,
         `${repo.version}`,
         '.vuepress'
       )
@@ -65,7 +65,7 @@ export async function linkFrameworkToRepo(
     frameworkPath,
     reposPath,
     repo.name,
-    repo.docRoot || docPathInRepo,
+    repo.docRoot,
     `${repo.version}`,
     '.vuepress'
   )

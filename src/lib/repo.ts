@@ -3,7 +3,7 @@ import { join } from 'path'
 import execa from 'execa'
 import YAML from 'yaml'
 import inquirer from 'inquirer'
-import { VALUE_ALL_REPOS } from './constants'
+import { docPathInRepo, VALUE_ALL_REPOS } from './constants'
 
 export interface RawRepo {
   url: string
@@ -54,7 +54,7 @@ export class Repo {
   /**
    * The path of the documentation sources, within the current repo
    */
-  docRoot?: string
+  docRoot: string = docPathInRepo
 
   /**
    * Whether the repository is public or privave (used to build the URL)
@@ -95,7 +95,10 @@ export class Repo {
     this.devBranch = r.dev
     this.deployPath = r.deploy_path
     this.repoName = r.repo_name
-    this.docRoot = r.doc_root
+
+    if (r.doc_root) {
+      this.docRoot = r.doc_root
+    }
 
     if (r.private) {
       this.isPrivate = r.private

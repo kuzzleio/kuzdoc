@@ -1,12 +1,12 @@
 import execa from 'execa'
 import path from 'path'
-import { docPathInRepo, reposPathInFw } from './constants'
+import { reposPathInFw } from './constants'
 
 export const buildRepo = (
   name: string,
+  docRoot: string,
   version: number,
   deployPath: string,
-  docRoot: string = docPathInRepo,
 ) => {
   return execa(
     '$(npm bin)/vuepress',
@@ -22,3 +22,46 @@ export const buildRepo = (
   )
 }
 
+export const deployRepo = (
+  name: string,
+  docRoot: string,
+  version: string,
+  deployPath: string,
+  s3BucketId: string,
+  dryRun = false
+) =>
+  execa(
+    'aws',
+    [
+      's3',
+      'sync',
+      path.join(reposPathInFw, name, docRoot, version, '.vuepress', 'dist'), // `${version}/.vuepress/dist`,
+      `s3://${s3BucketId}${deployPath}`,
+      '--delete',
+      dryRun ? '--dryRun' : ''
+    ],
+    {
+      shell: true,
+      stdout: 'inherit'
+    }
+  )
+
+export const invalidateCloudfront = (
+  deployPath: string,
+  cloudfrontDistributionId: string
+) =>
+  execa(
+    'aws',
+    [
+      'cloudfront',
+      'create-invalidation',
+      '--distribution-id',
+      cloudfrontDistributionId,
+      '--paths',
+      deployPath
+    ],
+    {
+      shell: true,
+      stdout: 'inherit'
+    }
+  )

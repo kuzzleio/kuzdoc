@@ -1,6 +1,6 @@
 import { Command, flags } from '@oclif/command'
 import Listr from 'listr'
-import { buildRepo } from '../lib/build'
+import { buildRepo, deployRepo, invalidateCloudfront } from '../lib/build'
 import { ENV_CLOUDFRONT_ID, ENV_REPO, ENV_S3_BUCKET, VALUE_ALL_REPOS } from '../lib/constants'
 import { assertIsFrameworkRoot } from '../lib/framework'
 import { resolveRepoList } from '../lib/repo'
@@ -52,27 +52,16 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
     if (!flags.dryRun && !process.env.AWS_ACCESS_KEY) {
       throw new Error('AWS_ACCESS_KEY environment variable not found.')
     }
-    const awsAccessKeyId = process.env.AWS_ACCESS_KEY_ID
-    const awsAccessKey = process.env.AWS_ACCESS_KEY
     const repoList = await resolveRepoList(flags.repo)
 
     const tasks = new Listr(repoList.map(repo => ({
       title: `Processing ${repo.name}`,
       task: () => new Listr([{
         title: 'Build repo',
-        task: () => buildRepo(repo.name, repo.version, repo.deployPath, repo.docRoot)
+        task: () => buildRepo(repo.name, repo.docRoot, repo.version, repo.deployPath)
       }, {
         title: 'Deploy repo',
-        skip: () => {
-          if (flags.dryRun) {
-            return 'Not deploying in dry-run'
-          }
-        },
-        task: () => {
-          console.log(awsAccessKeyId)
-          console.log(awsAccessKey)
-          // TODO
-        }
+        task: () => deployRepo(repo.name, repo.docRoot, `${repo.version}`, repo.deployPath, flags.s3Bucket, flags.dryRun)
       }, {
         title: 'Invalidate Cloudfront distribution',
         skip: () => {
@@ -80,14 +69,10 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
             return 'Not invalidating in dry-run'
           }
         },
-        task: () => {
-          // TODO
-        }
-      },])
+        task: () => invalidateCloudfront(repo.deployPath, flags.cloudfrontId)
+      }])
     })))
 
     await tasks.run()
-    // make a lisr looping through the repo list
-    // each repo is built, deployed and invalidated
   }
 }
