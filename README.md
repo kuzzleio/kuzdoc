@@ -34,22 +34,36 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`kuzdoc build-and-deploy [FILE]`](#kuzdoc-build-and-deploy-file)
+* [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
 * [`kuzdoc install`](#kuzdoc-install)
 
-## `kuzdoc build-and-deploy [FILE]`
+## `kuzdoc build-and-deploy`
 
-describe the command here
+Builds and deploys one or more repositories.
 
 ```
 USAGE
-  $ kuzdoc build-and-deploy [FILE]
+  $ kuzdoc build-and-deploy
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help                   show CLI help
+
+  --cloudfrontId=cloudfrontId  (required) The name of the Cloudfront distribution to invalidate after deploying each
+                               repo.
+
+                               Environment variable: $KUZDOC_CLOUDFRONT_ID
+
+  --dryRun                     Only builds the repo without deploying it
+
+  --repo=repo                  The list of repositories to build, or the value __ALL__ to build all repos.
+                               If not specified, kuzdoc will ask a prompt.
+
+                               Environment variable: $KUZDOC_REPO
+
+  --s3Bucket=s3Bucket          (required) The name of the S3 bucket to upload the repos to.
+
+                               Environment variable: $KUZDOC_S3_BUCKET
 ```
 
 _See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.0/src/commands/build-and-deploy.ts)_
