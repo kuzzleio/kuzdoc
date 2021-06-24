@@ -38,7 +38,7 @@ export const deployRepo = (
       path.join(reposPathInFw, name, docRoot, version, '.vuepress', 'dist'), // `${version}/.vuepress/dist`,
       `s3://${s3BucketId}${deployPath}`,
       '--delete',
-      dryRun ? '--dryRun' : ''
+      dryRun ? '--dryrun' : ''
     ],
     {
       shell: true,

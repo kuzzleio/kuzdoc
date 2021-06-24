@@ -11,7 +11,7 @@ export default class BuildAndDeploy extends Command {
   static flags = {
     help: flags.help({ char: 'h' }),
     repo: flags.string({
-      description: `The list of repositories to install, or the value ${VALUE_ALL_REPOS} to install all repos.
+      description: `The list of repositories to build, or the value ${VALUE_ALL_REPOS} to build all repos.
 If not specified, kuzdoc will ask a prompt.
 
 Environment variable: $${ENV_REPO}`,
