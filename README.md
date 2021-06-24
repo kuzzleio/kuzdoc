@@ -1,7 +1,5 @@
 # kuzdoc
 
-## Dummy release 2.0 (for test purposes)
-
 The CLI that helps build the Kuzzle Docs.
 
 This is an internal tool used by the Kuzzle team to build the documentation of all the Kuzzle.io projects.
