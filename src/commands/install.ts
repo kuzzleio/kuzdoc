@@ -62,6 +62,15 @@ Environment variable: $${ENV_LOCAL_PATH}`,
     const stage: Stage = flags.stage as Stage || await resolveStage(process.cwd())
     const repoList = await resolveRepoList(flags.repo)
 
+    if (repoList.length === 0) {
+      this.log(`\n  🤷‍♂️ No repo resolved from ${flags.repo}.\n`)
+      return
+    }
+
+    if (flags.repo) {
+      this.log(`\n  👉 Resolved repos ${repoList.map(r => r.name).join(', ')}\n`)
+    }
+
     if (repoList.length === 1) {
       this.log(`Install single repo: ${repoList}`)
       if (flags.localPath) {

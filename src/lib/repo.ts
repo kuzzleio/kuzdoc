@@ -1,9 +1,9 @@
-import { readFileSync } from 'fs'
+import { readdirSync, readFileSync } from 'fs'
 import { join } from 'path'
 import execa from 'execa'
 import YAML from 'yaml'
 import inquirer from 'inquirer'
-import { docPathInRepo, VALUE_ALL_REPOS } from './constants'
+import { docPathInRepo, reposPathInFw, VALUE_ALL_REPOS } from './constants'
 
 export interface RawRepo {
   url: string
@@ -173,9 +173,15 @@ export const resolveStage = async (cwd: string) => {
 }
 
 export const fetchRepoList = (): Repo[] => {
-  const fileContent = readFileSync(join(process.cwd(), '.repos', 'repositories.yml'))
+  const fileContent = readFileSync(join(process.cwd(), reposPathInFw, 'repositories.yml'))
   const YMLRepos = YAML.parse(fileContent.toString())
   return parseYMLRepos(YMLRepos)
+}
+
+export const listInstalledRepos = (): Repo[] => {
+  const dircontents = readdirSync(join(process.cwd(), reposPathInFw))
+  const repoList = fetchRepoList()
+  return repoList.filter(r => dircontents.includes(r.name))
 }
 
 export const promptRepo = async (repoList: Repo[]): Promise<string[]> => {
@@ -204,16 +210,14 @@ export const filterRepoList = (
   )
 }
 
-export async function resolveRepoList(repoFlag: string | undefined) {
-  const interactive = !repoFlag
-  const repositoriesYML = fetchRepoList()
+export async function resolveRepoList(repoFlag: string | undefined, installed = false) {
+  const repositoriesYML = installed ? listInstalledRepos() : fetchRepoList()
   let selectedRepo = []
 
-  if (interactive) {
-    selectedRepo = await promptRepo(repositoriesYML)
+  if (repoFlag) {
+    selectedRepo = repoFlag.split(',')
   } else {
-    selectedRepo = repoFlag ? repoFlag.split(',') : []
+    selectedRepo = await promptRepo(repositoriesYML)
   }
-
   return repoFlag === VALUE_ALL_REPOS ? repositoriesYML : filterRepoList(repositoriesYML, selectedRepo)
 }

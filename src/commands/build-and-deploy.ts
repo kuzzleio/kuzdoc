@@ -52,7 +52,15 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
     if (!flags.dryRun && !process.env.AWS_ACCESS_KEY) {
       throw new Error('AWS_ACCESS_KEY environment variable not found.')
     }
-    const repoList = await resolveRepoList(flags.repo)
+    const repoList = await resolveRepoList(flags.repo, true)
+    if (repoList.length === 0) {
+      this.log(`\n  🤷‍♂️ No repo resolved from ${flags.repo}.\n`)
+      return
+    }
+
+    if (flags.repo) {
+      this.log(`\n  👉 Resolved repos ${repoList.map(r => r.name).join(', ')}\n`)
+    }
 
     const tasks = new Listr(repoList.map(repo => ({
       title: `Processing ${repo.name}`,

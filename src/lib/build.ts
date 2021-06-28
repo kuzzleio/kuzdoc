@@ -2,6 +2,8 @@ import execa from 'execa'
 import path from 'path'
 import { reposPathInFw } from './constants'
 
+// TODO Detect docs both in /doc/2 and /doc/
+
 export const buildRepo = (
   name: string,
   docRoot: string,

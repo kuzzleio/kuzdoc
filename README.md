@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/2.0.0 darwin-x64 node-v12.18.3
+kuzdoc/2.0.2 darwin-x64 node-v12.18.3
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -66,7 +66,7 @@ OPTIONS
                                Environment variable: $KUZDOC_S3_BUCKET
 ```
 
-_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.0/src/commands/build-and-deploy.ts)_
+_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/build-and-deploy.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -131,5 +131,5 @@ DESCRIPTION
   present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
-_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.0/src/commands/install.ts)_
+_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/install.ts)_
 <!-- commandsstop -->
