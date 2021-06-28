@@ -14,7 +14,7 @@ The repositories to be built can be specified via the --repo flag, the KUZDOC_RE
 variable, or via the interactive prompt (only the installed repositories are listed).
 The built repositories are deployed to the S3 bucket specified via the --s3Bucket flag,
 then the Cloudfront cache (specified via --cloufrtontId) is invalidated.
-This command needs the AWS_ACCESS_KEY_ID and AWS_ACCESS_KEY environment variables to
+This command needs the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables to
 be properly set.
 `
 
@@ -59,8 +59,8 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
     if (!flags.dryRun && !process.env.AWS_ACCESS_KEY_ID) {
       throw new Error('AWS_ACCESS_KEY_ID environment variable not found.')
     }
-    if (!flags.dryRun && !process.env.AWS_ACCESS_KEY) {
-      throw new Error('AWS_ACCESS_KEY environment variable not found.')
+    if (!flags.dryRun && !process.env.AWS_SECRET_ACCESS_KEY) {
+      throw new Error('AWS_SECRET_ACCESS_KEY environment variable not found.')
     }
     const repoList = await resolveRepoList(flags.repo, true)
     if (repoList.length === 0) {

@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/2.1.0 darwin-x64 node-v12.18.3
+kuzdoc/2.1.1 darwin-x64 node-v12.18.3
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -74,11 +74,11 @@ DESCRIPTION
   variable, or via the interactive prompt (only the installed repositories are listed).
   The built repositories are deployed to the S3 bucket specified via the --s3Bucket flag,
   then the Cloudfront cache (specified via --cloufrtontId) is invalidated.
-  This command needs the AWS_ACCESS_KEY_ID and AWS_ACCESS_KEY environment variables to
+  This command needs the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables to
   be properly set.
 ```
 
-_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.0/src/commands/build-and-deploy.ts)_
+_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.1/src/commands/build-and-deploy.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -143,7 +143,7 @@ DESCRIPTION
   repository is already present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
-_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.0/src/commands/install.ts)_
+_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.1/src/commands/install.ts)_
 
 ## `kuzdoc local-deploy`
 
@@ -164,5 +164,5 @@ DESCRIPTION
   All the currently installed repositories will be built and deployed to the destination path.
 ```
 
-_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.0/src/commands/local-deploy.ts)_
+_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.1/src/commands/local-deploy.ts)_
 <!-- commandsstop -->
