@@ -10,11 +10,14 @@ export default class Install extends BaseCommand {
   static description = `Installs one or multiple repos in the framework meta-repo.
   NOTE: This command must be executed from the root of the framework meta-repo.
 
-This command will install one or multiple repos, listed in the repositories.yml file, within the .repos directory of the documentation framework.
+This command will install one or multiple repos, listed in the repositories.yml file,
+within the .repos directory of the documentation framework.
 Repositories will be either cloned from Github or symlink-ed from the local filesystem (--local-path flag).
 The repositories.yml file will be fetched from the local instance of the documentation framework.
-Repositories are either specified via the --repo flag, or the ${ENV_REPO}: if no value is specified, kuzdoc will ask it via a prompt.
-Kuzdoc will not overwrite existing repositories. If a folder with the same name of a selected repository is already present, the selected repository will be skipped and the folder will be left untouched.`
+Repositories are either specified via the --repo flag, or the ${ENV_REPO}: if no value is specified,
+kuzdoc will ask it via a prompt.
+Kuzdoc will not overwrite existing repositories. If a folder with the same name of a selected
+repository is already present, the selected repository will be skipped and the folder will be left untouched.`
 
   static flags = {
     help: flags.help({ char: 'h' }),

@@ -5,6 +5,10 @@ import YAML from 'yaml'
 import inquirer from 'inquirer'
 import { docPathInRepo, reposPathInFw, VALUE_ALL_REPOS } from './constants'
 
+/**
+ * Specifies what to expect from an element of the array
+ * contained in the repositories.yml file.
+ */
 export interface RawRepo {
   url: string
   doc_version: string
@@ -17,6 +21,9 @@ export interface RawRepo {
   private?: boolean
 }
 
+/**
+ * Represents a Repository, parsed from the repositories.yml file.
+ */
 export class Repo {
   /**
      * The name of the repository (used to build the URL)
@@ -111,6 +118,10 @@ export class Repo {
     }
   }
 
+  /**
+   * Computes the URL used to clone the Repository. Public ones are
+   * cloned via https, private ones via git@github.
+   */
   get url(): string {
     if (this.repoName) {
       if (this.isPrivate) {
@@ -126,6 +137,10 @@ export class Repo {
     throw new Error('Malformed Repo. No _url nor repoName specified.')
   }
 
+  /**
+   * The name of the Repository, depending on whether the legacy
+   * name is explicitly set.
+   */
   get name(): string {
     if (this.repoName) {
       return `${this.repoName}-${this.version}`
@@ -136,6 +151,12 @@ export class Repo {
     throw new Error('Malformed Repo. No repoName nor legacyName specified.')
   }
 
+  /**
+   * Resolves the branch name, based on the given stage.
+   *
+   * @param stage The stage (dev | stable)
+   * @returns The name of the resolved branch
+   */
   resolveBranch(stage: string): string {
     if (this.customBranch) {
       return this.customBranch
@@ -158,6 +179,11 @@ const parseYMLRepos = (YMLRepos: Array<any>): Repo[] => {
   return YMLRepos.map(r => new Repo(r))
 }
 
+/**
+ *
+ * @param cwd The path to the root of the framework meta-repo
+ * @returns [dev | stable]
+ */
 export const resolveStage = async (cwd: string) => {
   try {
     const { stdout } = await execa('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
@@ -172,18 +198,38 @@ export const resolveStage = async (cwd: string) => {
   }
 }
 
-export const fetchRepoList = (): Repo[] => {
-  const fileContent = readFileSync(join(process.cwd(), reposPathInFw, 'repositories.yml'))
+/**
+ * Fetch the list of Repos from the `repositories.yml` file
+ * located in the framework meta-repo.
+ *
+ * @param fwPath The path of the framework meta-repo
+ * @returns The list of Repos
+ */
+export const fetchRepoList = (fwPath = process.cwd()): Repo[] => {
+  const fileContent = readFileSync(join(fwPath, reposPathInFw, 'repositories.yml'))
   const YMLRepos = YAML.parse(fileContent.toString())
   return parseYMLRepos(YMLRepos)
 }
 
-export const listInstalledRepos = (): Repo[] => {
-  const dircontents = readdirSync(join(process.cwd(), reposPathInFw))
+/**
+ * Fetches a list of Repos containing only the ones that are
+ * currently installed in the framework meta-repo.
+ *
+ * @param fwPath The path of the framework meta-repo
+ * @returns The list of installed Repos
+ */
+export const listInstalledRepos = (fwPath = process.cwd()): Repo[] => {
+  const dircontents = readdirSync(join(fwPath, reposPathInFw))
   const repoList = fetchRepoList()
   return repoList.filter(r => dircontents.includes(r.name))
 }
 
+/**
+ * Prompts for a set of repos to choose among a given list.
+ *
+ * @param repoList The list of Repos to choose from
+ * @returns An array containing the names of the choosen Repos
+ */
 export const promptRepo = async (repoList: Repo[]): Promise<string[]> => {
   const choices = repoList.map(r => ({ name: r.name }))
   const answers = await inquirer.prompt([{
@@ -197,27 +243,26 @@ export const promptRepo = async (repoList: Repo[]): Promise<string[]> => {
   return answers.repos
 }
 
-export const filterRepoList = (
-  repoList: Repo[],
-  repositoryNames: string[] = []
-): Repo[] => {
-  if (repositoryNames.length === 0) {
-    return repoList
-  }
-
-  return repoList.filter(
-    repo => repositoryNames.includes(repo.name)
-  )
-}
-
-export async function resolveRepoList(repoFlag: string | undefined, installed = false) {
+/**
+ * Resolves a Repo set by filtering the origin list (all the Repos or the ones that
+ * are currently installed in the framework meta-repo) against a set of selected repos.
+ * Selected repos can be passed as arguments or interactively prompted.
+ *
+ * @param repoNames A string containing a comma-separated list of selected Repos,
+ *                 or the value __ALL__, meaning all the Repos are selected.
+ * @param installed Whether to lookup the Repos within the whole list or the installed ones.
+ * @returns The list of resolved Repos.
+ */
+export async function resolveRepoList(repoNames: string | undefined, installed = false) {
   const repositoriesYML = installed ? listInstalledRepos() : fetchRepoList()
-  let selectedRepo = []
+  let wishList: string[] = []
 
-  if (repoFlag) {
-    selectedRepo = repoFlag.split(',')
+  if (repoNames) {
+    wishList = repoNames.split(',')
   } else {
-    selectedRepo = await promptRepo(repositoriesYML)
+    wishList = await promptRepo(repositoriesYML)
   }
-  return repoFlag === VALUE_ALL_REPOS ? repositoriesYML : filterRepoList(repositoriesYML, selectedRepo)
+  return repoNames === VALUE_ALL_REPOS ?
+    repositoriesYML :
+    repositoriesYML.filter(repo => wishList.includes(repo.name))
 }

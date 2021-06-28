@@ -6,7 +6,17 @@ import { assertIsFrameworkRoot } from '../lib/framework'
 import { resolveRepoList } from '../lib/repo'
 
 export default class BuildAndDeploy extends Command {
-  static description = 'Builds and deploys one or more repositories.'
+  static description = `Builds and deploys one or more repositories.
+  NOTE: This command must be executed from the root of the framework meta-repo.
+
+The repositories must be previously installed in the framework via the "install" command.
+The repositories to be built can be specified via the --repo flag, the KUZDOC_REPO environment
+variable, or via the interactive prompt (only the installed repositories are listed).
+The built repositories are deployed to the S3 bucket specified via the --s3Bucket flag,
+then the Cloudfront cache (specified via --cloufrtontId) is invalidated.
+This command needs the AWS_ACCESS_KEY_ID and AWS_ACCESS_KEY environment variables to
+be properly set.
+`
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -66,10 +76,10 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
       title: `Processing ${repo.name}`,
       task: () => new Listr([{
         title: 'Build repo',
-        task: () => buildRepo(repo.name, repo.docRoot, repo.version, repo.deployPath)
+        task: () => buildRepo(repo)
       }, {
         title: 'Deploy repo',
-        task: () => deployRepo(repo.name, repo.docRoot, `${repo.version}`, repo.deployPath, flags.s3Bucket, flags.dryRun)
+        task: () => deployRepo(repo, flags.s3Bucket, flags.dryRun)
       }, {
         title: 'Invalidate Cloudfront distribution',
         skip: () => {

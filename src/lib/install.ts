@@ -6,10 +6,26 @@ import { Repo } from './repo'
 import { reposPathInFw } from './constants'
 import { Stage } from './framework'
 
-export function repoExists(repoName: string, destination: string) {
+/**
+ * Checks whether a Repo is already installed in a given destination.
+ *
+ * @param repoName The name of the Repo to check
+ * @param destination The path to the Repos installation directory.
+ * @returns True if the repo is installed, false if not.
+ */
+export function repoExists(repoName: string, destination = '.repos') {
   return existsSync(path.join(destination, repoName))
 }
 
+/**
+ * Installs a Repo from a local directory.
+ *
+ * @param localRepoPath The path to the Repo to install.
+ * @param repo The Repo object, representing the Repo to install.
+ * @param destination The path to the Repos installation directory.
+ * @param frameworkPath The path to the framework meta-repo.
+ * @returns A ready to run Listr instance.
+ */
 export function installLocalRepository(localRepoPath: string, repo: Repo, destination = '.repos', frameworkPath = process.cwd()) {
   return new Listr([{
     title: `Verify repo ${repo.name} is not already installed`,
@@ -41,6 +57,14 @@ export function installLocalRepository(localRepoPath: string, repo: Repo, destin
   }])
 }
 
+/**
+ * Clones one single branch of a Repo.
+ *
+ * @param url The URL to clone the Repo from.
+ * @param branch The branch of the Repo to clone.
+ * @param destination The path to the installatio directory.
+ * @returns An execa promise.
+ */
 export async function cloneRepository(url: string, branch: string, destination: string) {
   // this.debug(`${repo.url}#${branch === 'dev' ? repo.dev : repo.stable}`)
   return execa('git', [
@@ -55,6 +79,15 @@ export async function cloneRepository(url: string, branch: string, destination: 
   ])
 }
 
+/**
+ * Creates the symlink to the Vuepress framework inside an installed Repo.
+ *
+ * @param repo The Repo instance.
+ * @param localPath The local path to the Repo (leave undefined if repo was cloned from remote)
+ * @param reposPath The path to the Repos installation directory
+ * @param frameworkPath The path to the framework meta-repo.
+ * @returns Void.
+ */
 export async function linkFrameworkToRepo(
   repo: Repo,
   localPath?: string,
@@ -66,7 +99,7 @@ export async function linkFrameworkToRepo(
     reposPath,
     repo.name,
     repo.docRoot,
-    `${repo.version}`,
+    `${repo.version}`, // TODO Detect docs both in /doc/2 and /doc/
     '.vuepress'
   )
 
@@ -82,6 +115,14 @@ export async function linkFrameworkToRepo(
   )
 }
 
+/**
+ * Given a list of Repos, it clones them and links the framework inside
+ * each one of them.
+ *
+ * @param repoList The list of the Repos to clone and link
+ * @param stage The stage to resolve branches from
+ * @returns A ready to run Listr instance.
+ */
 export async function cloneAndLinkRepos(repoList: Repo[], stage: Stage) {
   return new Listr(
     repoList.map(repo => ({

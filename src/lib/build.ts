@@ -1,34 +1,41 @@
 import execa from 'execa'
 import path from 'path'
 import { reposPathInFw } from './constants'
+import { Repo } from './repo'
 
-// TODO Detect docs both in /doc/2 and /doc/
-
+/**
+ * Builds the docs of a Repo.
+ *
+ * @param repo The Repo to build
+ * @returns An execa promise.
+ */
 export const buildRepo = (
-  name: string,
-  docRoot: string,
-  version: number,
-  deployPath: string,
+  repo: Repo
 ) => {
   return execa(
     '$(npm bin)/vuepress',
-    ['build', path.join(reposPathInFw, name, docRoot, `${version}`)],
+    ['build', path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`)], // TODO Detect docs both in /doc/2 and /doc/
     {
       shell: true,
       env: {
-        REPO_NAME: name,
-        SITE_BASE: deployPath.endsWith('/') ? deployPath : `${deployPath}/`, // TODO rename to DEPLOY_PATH
+        REPO_NAME: repo.name,
+        SITE_BASE: repo.deployPath.endsWith('/') ? repo.deployPath : `${repo.deployPath}/`,
       },
       stdout: 'inherit'
     }
   )
 }
 
+/**
+ * Deploys the built docs of the Repo to a given S3 bucket.
+ *
+ * @param repo The Repo to deploy.
+ * @param s3BucketId The S3 bucket to deploy the Repo to.
+ * @param dryRun Whether to really deploy of just dry-run.
+ * @returns an execa Promise.
+ */
 export const deployRepo = (
-  name: string,
-  docRoot: string,
-  version: string,
-  deployPath: string,
+  repo: Repo,
   s3BucketId: string,
   dryRun = false
 ) =>
@@ -37,8 +44,8 @@ export const deployRepo = (
     [
       's3',
       'sync',
-      path.join(reposPathInFw, name, docRoot, version, '.vuepress', 'dist'), // `${version}/.vuepress/dist`,
-      `s3://${s3BucketId}${deployPath}`,
+      path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`, '.vuepress', 'dist'), // `${version}/.vuepress/dist`,
+      `s3://${s3BucketId}${repo.deployPath}`,
       '--delete',
       dryRun ? '--dryrun' : ''
     ],
@@ -48,6 +55,13 @@ export const deployRepo = (
     }
   )
 
+/**
+ * Invalidates a path in a given Cloudfront distribution.
+ *
+ * @param deployPath The remote path to invalidate.
+ * @param cloudfrontDistributionId The ID of the Cloufront distribution.
+ * @returns an execa promise.
+ */
 export const invalidateCloudfront = (
   deployPath: string,
   cloudfrontDistributionId: string
