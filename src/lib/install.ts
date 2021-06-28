@@ -4,7 +4,7 @@ import execa from 'execa'
 import Listr from 'listr'
 import { Repo } from './repo'
 import { reposPathInFw } from './constants'
-import { Stage } from './framework'
+import { Stage } from './assertions'
 
 /**
  * Checks whether a Repo is already installed in a given destination.
@@ -13,7 +13,7 @@ import { Stage } from './framework'
  * @param destination The path to the Repos installation directory.
  * @returns True if the repo is installed, false if not.
  */
-export function repoExists(repoName: string, destination = '.repos') {
+export function repoExists(repoName: string, destination = reposPathInFw) {
   return existsSync(path.join(destination, repoName))
 }
 

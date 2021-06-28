@@ -2,7 +2,7 @@ import path from 'path'
 import { flags } from '@oclif/command'
 import { BaseCommand } from '../lib/base-command'
 import { resolveRepoList, resolveStage } from '../lib/repo'
-import { assertIsFrameworkRoot, Stage } from '../lib/framework'
+import { assertIsFrameworkRoot, Stage } from '../lib/assertions'
 import { cloneAndLinkRepos, installLocalRepository } from '../lib/install'
 import { ENV_LOCAL_PATH, ENV_REPO, ENV_REPO_BRANCH, ENV_STAGE, VALUE_ALL_REPOS } from '../lib/constants'
 

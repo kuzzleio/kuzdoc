@@ -2,7 +2,7 @@ import { Command, flags } from '@oclif/command'
 import Listr from 'listr'
 import { buildRepo, deployRepo, invalidateCloudfront } from '../lib/build'
 import { ENV_CLOUDFRONT_ID, ENV_REPO, ENV_S3_BUCKET, VALUE_ALL_REPOS } from '../lib/constants'
-import { assertIsFrameworkRoot } from '../lib/framework'
+import { assertIsFrameworkRoot } from '../lib/assertions'
 import { resolveRepoList } from '../lib/repo'
 
 export default class BuildAndDeploy extends Command {

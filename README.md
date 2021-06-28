@@ -37,6 +37,7 @@ USAGE
 * [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
 * [`kuzdoc install`](#kuzdoc-install)
+* [`kuzdoc local-deploy [FILE]`](#kuzdoc-local-deploy-file)
 
 ## `kuzdoc build-and-deploy`
 
@@ -64,6 +65,17 @@ OPTIONS
   --s3Bucket=s3Bucket          (required) The name of the S3 bucket to upload the repos to.
 
                                Environment variable: $KUZDOC_S3_BUCKET
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+
+  The repositories must be previously installed in the framework via the "install" command.
+  The repositories to be built can be specified via the --repo flag, the KUZDOC_REPO environment
+  variable, or via the interactive prompt (only the installed repositories are listed).
+  The built repositories are deployed to the S3 bucket specified via the --s3Bucket flag,
+  then the Cloudfront cache (specified via --cloufrtontId) is invalidated.
+  This command needs the AWS_ACCESS_KEY_ID and AWS_ACCESS_KEY environment variables to
+  be properly set.
 ```
 
 _See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/build-and-deploy.ts)_
@@ -121,15 +133,31 @@ OPTIONS
 DESCRIPTION
   NOTE: This command must be executed from the root of the framework meta-repo.
 
-  This command will install one or multiple repos, listed in the repositories.yml file, within the .repos directory of 
-  the documentation framework.
+  This command will install one or multiple repos, listed in the repositories.yml file,
+  within the .repos directory of the documentation framework.
   Repositories will be either cloned from Github or symlink-ed from the local filesystem (--local-path flag).
   The repositories.yml file will be fetched from the local instance of the documentation framework.
-  Repositories are either specified via the --repo flag, or the KUZDOC_REPO: if no value is specified, kuzdoc will ask 
-  it via a prompt.
-  Kuzdoc will not overwrite existing repositories. If a folder with the same name of a selected repository is already 
-  present, the selected repository will be skipped and the folder will be left untouched.
+  Repositories are either specified via the --repo flag, or the KUZDOC_REPO: if no value is specified,
+  kuzdoc will ask it via a prompt.
+  Kuzdoc will not overwrite existing repositories. If a folder with the same name of a selected
+  repository is already present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
 _See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/install.ts)_
+
+## `kuzdoc local-deploy [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ kuzdoc local-deploy [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/local-deploy.ts)_
 <!-- commandsstop -->

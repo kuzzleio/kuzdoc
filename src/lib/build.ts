@@ -1,4 +1,5 @@
 import execa from 'execa'
+import fse from 'fs-extra'
 import path from 'path'
 import { reposPathInFw } from './constants'
 import { Repo } from './repo'
@@ -11,20 +12,36 @@ import { Repo } from './repo'
  */
 export const buildRepo = (
   repo: Repo
-) => {
-  return execa(
-    '$(npm bin)/vuepress',
-    ['build', path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`)], // TODO Detect docs both in /doc/2 and /doc/
-    {
-      shell: true,
-      env: {
-        REPO_NAME: repo.name,
-        SITE_BASE: repo.deployPath.endsWith('/') ? repo.deployPath : `${repo.deployPath}/`,
-      },
-      stdout: 'inherit'
-    }
-  )
-}
+) => execa(
+  '$(npm bin)/vuepress',
+  ['build', path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`)], // TODO Detect docs both in /doc/2 and /doc/
+  {
+    shell: true,
+    env: {
+      REPO_NAME: repo.name,
+      SITE_BASE: repo.deployPath.endsWith('/') ? repo.deployPath : `${repo.deployPath}/`,
+    },
+    stdout: 'inherit'
+  }
+)
+
+/**
+ * Builds the framework meta-repo.
+ *
+ * @param cwd The framework root (where the command is launched)
+ * @returns an execa promise
+ */
+export const buildFramework = (
+  cwd = process.cwd()
+) => execa(
+  '$(npm bin)/vuepress',
+  ['build', 'src'],
+  {
+    shell: true,
+    cwd,
+    stdout: 'inherit'
+  }
+)
 
 /**
  * Deploys the built docs of the Repo to a given S3 bucket.
@@ -38,21 +55,29 @@ export const deployRepo = (
   repo: Repo,
   s3BucketId: string,
   dryRun = false
-) =>
-  execa(
-    'aws',
-    [
-      's3',
-      'sync',
-      path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`, '.vuepress', 'dist'), // `${version}/.vuepress/dist`,
-      `s3://${s3BucketId}${repo.deployPath}`,
-      '--delete',
-      dryRun ? '--dryrun' : ''
-    ],
-    {
-      shell: true,
-      stdout: 'inherit'
-    }
+) => execa(
+  'aws',
+  [
+    's3',
+    'sync',
+    path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`, '.vuepress', 'dist'), // `${version}/.vuepress/dist`,
+    `s3://${s3BucketId}${repo.deployPath}`,
+    '--delete',
+    dryRun ? '--dryrun' : ''
+  ],
+  {
+    shell: true,
+    stdout: 'inherit'
+  }
+)
+
+export const deployFrameworkLocally = (destination: string) =>
+  fse.copy(path.join('src', '.vuepress', 'dist'), destination)
+
+export const deployRepoLocally = (repo: Repo, destination: string, source = reposPathInFw) =>
+  fse.copy(
+    path.join(source, repo.name, repo.docRoot, `${repo.version}`, '.vuepress', 'dist'),
+    path.join(destination, repo.deployPath)
   )
 
 /**
@@ -65,19 +90,18 @@ export const deployRepo = (
 export const invalidateCloudfront = (
   deployPath: string,
   cloudfrontDistributionId: string
-) =>
-  execa(
-    'aws',
-    [
-      'cloudfront',
-      'create-invalidation',
-      '--distribution-id',
-      cloudfrontDistributionId,
-      '--paths',
-      deployPath
-    ],
-    {
-      shell: true,
-      stdout: 'inherit'
-    }
-  )
+) => execa(
+  'aws',
+  [
+    'cloudfront',
+    'create-invalidation',
+    '--distribution-id',
+    cloudfrontDistributionId,
+    '--paths',
+    deployPath
+  ],
+  {
+    shell: true,
+    stdout: 'inherit'
+  }
+)
