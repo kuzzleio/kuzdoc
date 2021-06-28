@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/2.0.2 darwin-x64 node-v12.18.3
+kuzdoc/2.1.0 darwin-x64 node-v12.18.3
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -37,7 +37,7 @@ USAGE
 * [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
 * [`kuzdoc install`](#kuzdoc-install)
-* [`kuzdoc local-deploy [FILE]`](#kuzdoc-local-deploy-file)
+* [`kuzdoc local-deploy`](#kuzdoc-local-deploy)
 
 ## `kuzdoc build-and-deploy`
 
@@ -78,7 +78,7 @@ DESCRIPTION
   be properly set.
 ```
 
-_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/build-and-deploy.ts)_
+_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.0/src/commands/build-and-deploy.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -143,21 +143,26 @@ DESCRIPTION
   repository is already present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
-_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/install.ts)_
+_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.0/src/commands/install.ts)_
 
-## `kuzdoc local-deploy [FILE]`
+## `kuzdoc local-deploy`
 
-describe the command here
+Creates a local deploy of the docs containing the currently installed repos
 
 ```
 USAGE
-  $ kuzdoc local-deploy [FILE]
+  $ kuzdoc local-deploy
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help                 show CLI help
+  --destination=destination  [default: /tmp/kuzzle-docs] The path to the locally deployed docs
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+
+  The repositories must be previously installed in the framework via the "install" command.
+  All the currently installed repositories will be built and deployed to the destination path.
 ```
 
-_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.0.2/src/commands/local-deploy.ts)_
+_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.0/src/commands/local-deploy.ts)_
 <!-- commandsstop -->

@@ -57,5 +57,9 @@ All the currently installed repositories will be built and deployed to the desti
       }))
     ])
     await tasks.run()
+
+    this.log('\n  ✅ All done!')
+    this.log('  You can now browse the locally deployed docs by launching the following command:\n')
+    this.log(`   http-server ${flags.destination}\n`)
   }
 }
