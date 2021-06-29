@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/2.1.1 darwin-x64 node-v12.18.3
+kuzdoc/2.2.0 darwin-x64 node-v12.18.3
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -35,7 +35,7 @@ USAGE
 
 <!-- commands -->
 * [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
-* [`kuzdoc dead-links [FILE]`](#kuzdoc-dead-links-file)
+* [`kuzdoc dead-links`](#kuzdoc-dead-links)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
 * [`kuzdoc install`](#kuzdoc-install)
 * [`kuzdoc local-deploy`](#kuzdoc-local-deploy)
@@ -79,23 +79,36 @@ DESCRIPTION
   be properly set.
 ```
 
-_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.1/src/commands/build-and-deploy.ts)_
+_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.2.0/src/commands/build-and-deploy.ts)_
 
-## `kuzdoc dead-links [FILE]`
+## `kuzdoc dead-links`
 
-describe the command here
+Scans a given repo for dead-links and reports them.
 
 ```
 USAGE
-  $ kuzdoc dead-links [FILE]
+  $ kuzdoc dead-links
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help                    show CLI help
+
+  --dumpReport=dumpReport       The name of the JSON file to write the report to.
+                                If not set, report will be only written to stdout.
+
+  --linkType=external|internal  The link type to check.
+                                If empty, both external and internal links are checked.
+
+  --repo=repo                   The name of repository to scan. If not specified, kuzdoc will ask a prompt.
+
+                                Environment variable: $KUZDOC_REPO
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+
+  The repository must be previously installed in the framework via the "install" command.
 ```
 
-_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.1/src/commands/dead-links.ts)_
+_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.2.0/src/commands/dead-links.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -160,7 +173,7 @@ DESCRIPTION
   repository is already present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
-_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.1/src/commands/install.ts)_
+_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.2.0/src/commands/install.ts)_
 
 ## `kuzdoc local-deploy`
 
@@ -181,5 +194,5 @@ DESCRIPTION
   All the currently installed repositories will be built and deployed to the destination path.
 ```
 
-_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.1.1/src/commands/local-deploy.ts)_
+_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.2.0/src/commands/local-deploy.ts)_
 <!-- commandsstop -->
