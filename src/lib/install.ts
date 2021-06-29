@@ -48,9 +48,7 @@ export function installLocalRepository(localRepoPath: string, repo: Repo, destin
         '.vuepress'
       ),
       path.join(
-        localRepoPath,
-        repo.docRoot,
-        `${repo.version}`,
+        repo.resolveDocPath(localRepoPath),
         '.vuepress'
       )
     )
@@ -83,34 +81,34 @@ export async function cloneRepository(url: string, branch: string, destination: 
  * Creates the symlink to the Vuepress framework inside an installed Repo.
  *
  * @param repo The Repo instance.
- * @param localPath The local path to the Repo (leave undefined if repo was cloned from remote)
  * @param reposPath The path to the Repos installation directory
  * @param frameworkPath The path to the framework meta-repo.
  * @returns Void.
  */
 export async function linkFrameworkToRepo(
   repo: Repo,
-  localPath?: string,
   reposPath: string = reposPathInFw,
   frameworkPath: string = process.cwd()
 ) {
-  const lnPath = localPath ? localPath : path.join(
-    frameworkPath,
-    reposPath,
-    repo.name,
-    repo.docRoot,
-    `${repo.version}`, // TODO Detect docs both in /doc/2 and /doc/
+  /**
+   * The path where the symlink will be created, inside the
+   * docs of the repo.
+   */
+  const destinationPath = path.join(
+    repo.resolveDocPath(
+      path.join(frameworkPath, reposPath)
+    ),
     '.vuepress'
   )
 
   try {
-    unlinkSync(path.join(lnPath))
+    unlinkSync(path.join(destinationPath))
   } catch (error) {
     console.log(error.message)
   }
   symlinkSync(
     path.join(frameworkPath, 'src', '.vuepress'),
-    lnPath,
+    destinationPath,
     'dir'
   )
 }

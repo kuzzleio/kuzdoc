@@ -9,12 +9,12 @@ export const fwDirName = 'framework'
 /**
  * The root path of the docs relative to the repository root
  */
-export const docPathInRepo = 'doc/'
+export const docPathInRepo = 'doc'
 
 /**
  * The directory where the repos are cloned in the framework repo
  */
-export const reposPathInFw = '.repos/'
+export const reposPathInFw = '.repos'
 
 /**
  * The value of the --repo flag or the KUZDOC_REPO envvar

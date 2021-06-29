@@ -8,13 +8,19 @@ import { Repo } from './repo'
  * Builds the docs of a Repo.
  *
  * @param repo The Repo to build
+ * @param reposPath The path to the Repos installation directory
+ * @param frameworkPath The path to the framework meta-repo.
  * @returns An execa promise.
  */
 export const buildRepo = (
-  repo: Repo
+  repo: Repo,
+  reposPath: string = reposPathInFw,
+  frameworkPath: string = process.cwd()
 ) => execa(
   '$(npm bin)/vuepress',
-  ['build', path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`)], // TODO Detect docs both in /doc/2 and /doc/
+  ['build', repo.resolveDocPath(
+    path.join(frameworkPath, reposPath)
+  )],
   {
     shell: true,
     env: {
@@ -49,18 +55,25 @@ export const buildFramework = (
  * @param repo The Repo to deploy.
  * @param s3BucketId The S3 bucket to deploy the Repo to.
  * @param dryRun Whether to really deploy of just dry-run.
+ * @param reposPath The path to the Repos installation directory
+ * @param frameworkPath The path to the framework meta-repo.
  * @returns an execa Promise.
  */
 export const deployRepo = (
   repo: Repo,
   s3BucketId: string,
-  dryRun = false
+  dryRun = false,
+  reposPath: string = reposPathInFw,
+  frameworkPath: string = process.cwd()
+  // eslint-disable-next-line max-params
 ) => execa(
   'aws',
   [
     's3',
     'sync',
-    path.join(reposPathInFw, repo.name, repo.docRoot, `${repo.version}`, '.vuepress', 'dist'), // `${version}/.vuepress/dist`,
+    path.join(repo.resolveDocPath(
+      path.join(frameworkPath, reposPath)
+    ), '.vuepress', 'dist'),
     `s3://${s3BucketId}${repo.deployPath}`,
     '--delete',
     dryRun ? '--dryrun' : ''
@@ -74,11 +87,17 @@ export const deployRepo = (
 export const deployFrameworkLocally = (destination: string) =>
   fse.copy(path.join('src', '.vuepress', 'dist'), destination)
 
-export const deployRepoLocally = (repo: Repo, destination: string, source = reposPathInFw) =>
-  fse.copy(
-    path.join(source, repo.name, repo.docRoot, `${repo.version}`, '.vuepress', 'dist'),
-    path.join(destination, repo.deployPath)
-  )
+export const deployRepoLocally = (
+  repo: Repo,
+  destination: string,
+  reposPath: string = reposPathInFw,
+  frameworkPath: string = process.cwd()
+) => fse.copy(
+  path.join(repo.resolveDocPath(
+    path.join(frameworkPath, reposPath)
+  ), '.vuepress', 'dist'),
+  path.join(destination, repo.deployPath)
+)
 
 /**
  * Invalidates a path in a given Cloudfront distribution.

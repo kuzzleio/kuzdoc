@@ -1,5 +1,5 @@
-import { readdirSync, readFileSync } from 'fs'
-import { join } from 'path'
+import { readdirSync, readFileSync, existsSync } from 'fs'
+import path, { join } from 'path'
 import execa from 'execa'
 import YAML from 'yaml'
 import inquirer from 'inquirer'
@@ -164,6 +164,26 @@ export class Repo {
     return stage === 'dev' ? this.devBranch : this.stableBranch
   }
 
+  /**
+ * This is a compatibility function. Resolves the path to the
+ * docs in a repo. Docs can be either in $NAME/$DOC_ROOT/$VERSION
+ * (e.g. sdk-js-7/doc/7) or just $NAME/$DOC_ROOT (e.g. sdk-js-7/doc).
+ * We aim to gradually move the docs from the first case to the
+ * second, to get rid of the useless (and error-prone) subdir,
+ * named after the version.
+ *
+ * @param base The absolute path to the repo installation directory.
+ * @returns the resolved path.
+ */
+  resolveDocPath(base: string) {
+    const simplePath = path.join(base, this.name, this.docRoot)
+
+    if (existsSync(path.join(simplePath, `${this.version}`))) {
+      return path.join(simplePath, `${this.version}`)
+    }
+    return simplePath
+  }
+
   toString() {
     return `
     * ${this.name} ${this.isPrivate ? '(private)' : ''}
@@ -228,12 +248,13 @@ export const listInstalledRepos = (fwPath = process.cwd()): Repo[] => {
  * Prompts for a set of repos to choose among a given list.
  *
  * @param repoList The list of Repos to choose from
+ * @param multipleChoice Whether to show a list or a checkbox
  * @returns An array containing the names of the choosen Repos
  */
-export const promptRepo = async (repoList: Repo[]): Promise<string[]> => {
+export const promptRepo = async (repoList: Repo[], multipleChoice = true): Promise<string[]> => {
   const choices = repoList.map(r => ({ name: r.name }))
   const answers = await inquirer.prompt([{
-    type: 'checkbox',
+    type: multipleChoice ? 'checkbox' : 'list',
     message: 'Select the repositories you want',
     name: 'repos',
     pageSize: 15,
@@ -251,16 +272,20 @@ export const promptRepo = async (repoList: Repo[]): Promise<string[]> => {
  * @param repoNames A string containing a comma-separated list of selected Repos,
  *                 or the value __ALL__, meaning all the Repos are selected.
  * @param installed Whether to lookup the Repos within the whole list or the installed ones.
+ * @param multipleChoice Whether to allow multiple choices or not.
  * @returns The list of resolved Repos.
  */
-export async function resolveRepoList(repoNames: string | undefined, installed = false) {
+export async function resolveRepoList(repoNames: string | undefined, installed = false, multipleChoice = true) {
   const repositoriesYML = installed ? listInstalledRepos() : fetchRepoList()
   let wishList: string[] = []
 
   if (repoNames) {
     wishList = repoNames.split(',')
+    if (!multipleChoice && wishList.length > 1) {
+      throw new Error('Multiple repos are not allowed. Just specify one.')
+    }
   } else {
-    wishList = await promptRepo(repositoriesYML)
+    wishList = await promptRepo(repositoriesYML, multipleChoice)
   }
   return repoNames === VALUE_ALL_REPOS ?
     repositoriesYML :
