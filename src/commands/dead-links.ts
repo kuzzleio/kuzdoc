@@ -9,6 +9,7 @@ import Listr from 'listr'
 import { symlinkSync, unlinkSync, existsSync } from 'fs'
 import { ensureDir } from 'fs-extra'
 import path from 'path'
+import execa from 'execa'
 
 function stripLastSlash(path: string): string {
   if (path.endsWith('/')) {
@@ -62,7 +63,7 @@ Environment variable: $${ENV_REPO}`,
       this.log(`\n  👉 Resolved repo ${repo.name}\n`)
     }
 
-    let exitCode = 0
+    let mainExitCode = 0
     const allRepos = fetchRepoList()
     const symlinks: string[] = []
 
@@ -87,22 +88,41 @@ Environment variable: $${ENV_REPO}`,
           }
         }
       }))
-    }, {
-      title: `Run dead-link check on ${repo.name}`,
-      task: () => {
-        // TODO
-        exitCode = 0
-      }
-    }, {
+    }])
+
+    await tasks.run()
+
+    this.log(`\n  💀 Run dead-links check on ${repo.name} - ${repo.deployPath}\n`)
+
+    try {
+      await execa(
+        'ruby',
+        [path.join('.ci', 'dead-links.rb'), '-p', path.join('src', repo.deployPath)],
+        {
+          shell: true,
+          stdout: 'inherit',
+          env: {
+            HYDRA_MAX_CONCURRENCY: '20'
+          },
+
+        }
+      )
+    } catch (error) {
+      this.log(error.message)
+      mainExitCode = 1
+    }
+
+    this.log('') // Leave a pretty newline before the next listr
+    const moarTasks = new Listr([{
       title: 'Clean symlinks from framework',
+      skip: () => false,
       task: () => new Listr(symlinks.map(l => ({
         title: `Deleting ${l}`,
         skip: () => !existsSync(l),
         task: () => unlinkSync(l)
       })))
     }])
-
-    await tasks.run()
-    process.exit(exitCode)
+    await moarTasks.run()
+    process.exit(mainExitCode)
   }
 }
