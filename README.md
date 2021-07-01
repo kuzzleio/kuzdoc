@@ -36,6 +36,7 @@ USAGE
 <!-- commands -->
 * [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
 * [`kuzdoc dead-links`](#kuzdoc-dead-links)
+* [`kuzdoc dev [FILE]`](#kuzdoc-dev-file)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
 * [`kuzdoc install`](#kuzdoc-install)
 * [`kuzdoc local-deploy`](#kuzdoc-local-deploy)
@@ -109,6 +110,22 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.2.0/src/commands/dead-links.ts)_
+
+## `kuzdoc dev [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ kuzdoc dev [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.2.0/src/commands/dev.ts)_
 
 ## `kuzdoc help [COMMAND]`
 

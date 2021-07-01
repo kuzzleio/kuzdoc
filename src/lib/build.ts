@@ -32,6 +32,33 @@ export const buildRepo = (
 )
 
 /**
+ * Launches the dev server for a Repo.
+ *
+ * @param repo The Repo to dev
+ * @param reposPath The path to the Repos installation directory
+ * @param frameworkPath The path to the framework meta-repo.
+ * @returns An execa promise.
+ */
+export const devRepo = (
+  repo: Repo,
+  reposPath: string = reposPathInFw,
+  frameworkPath: string = process.cwd()
+) => execa(
+  '$(npm bin)/vuepress',
+  ['dev', repo.resolveDocPath(
+    path.join(frameworkPath, reposPath)
+  )],
+  {
+    shell: true,
+    env: {
+      REPO_NAME: repo.name,
+      SITE_BASE: repo.deployPath.endsWith('/') ? repo.deployPath : `${repo.deployPath}/`,
+    },
+    stdout: 'inherit'
+  }
+)
+
+/**
  * Builds the framework meta-repo.
  *
  * @param cwd The framework root (where the command is launched)
