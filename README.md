@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/2.3.1 darwin-x64 node-v12.18.3
+kuzdoc/2.4.0 darwin-x64 node-v12.18.3
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -34,12 +34,48 @@ USAGE
 # Commands
 
 <!-- commands -->
+* [`kuzdoc add-repo`](#kuzdoc-add-repo)
+* [`kuzdoc add-section`](#kuzdoc-add-section)
 * [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
 * [`kuzdoc dead-links`](#kuzdoc-dead-links)
 * [`kuzdoc dev`](#kuzdoc-dev)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
 * [`kuzdoc install`](#kuzdoc-install)
 * [`kuzdoc local-deploy`](#kuzdoc-local-deploy)
+
+## `kuzdoc add-repo`
+
+Wizard to add a new repo to repositories.yml.
+
+```
+USAGE
+  $ kuzdoc add-repo
+
+OPTIONS
+  -h, --help  show CLI help
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+```
+
+_See code: [src/commands/add-repo.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.0/src/commands/add-repo.ts)_
+
+## `kuzdoc add-section`
+
+Wizard to add a new section in src/.vuepress/sections.json.
+
+```
+USAGE
+  $ kuzdoc add-section
+
+OPTIONS
+  -h, --help  show CLI help
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+```
+
+_See code: [src/commands/add-section.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.0/src/commands/add-section.ts)_
 
 ## `kuzdoc build-and-deploy`
 
@@ -80,7 +116,7 @@ DESCRIPTION
   be properly set.
 ```
 
-_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.3.1/src/commands/build-and-deploy.ts)_
+_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.0/src/commands/build-and-deploy.ts)_
 
 ## `kuzdoc dead-links`
 
@@ -109,7 +145,7 @@ DESCRIPTION
   The repository must be previously installed in the framework via the "install" command.
 ```
 
-_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.3.1/src/commands/dead-links.ts)_
+_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.0/src/commands/dead-links.ts)_
 
 ## `kuzdoc dev`
 
@@ -134,7 +170,7 @@ DESCRIPTION
   variable, or via the interactive prompt (only the installed repositories are listed).
 ```
 
-_See code: [src/commands/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.3.1/src/commands/dev.ts)_
+_See code: [src/commands/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.0/src/commands/dev.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -199,7 +235,7 @@ DESCRIPTION
   repository is already present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
-_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.3.1/src/commands/install.ts)_
+_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.0/src/commands/install.ts)_
 
 ## `kuzdoc local-deploy`
 
@@ -220,5 +256,5 @@ DESCRIPTION
   All the currently installed repositories will be built and deployed to the destination path.
 ```
 
-_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.3.1/src/commands/local-deploy.ts)_
+_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.0/src/commands/local-deploy.ts)_
 <!-- commandsstop -->

@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, existsSync } from 'fs'
+import { readdirSync, readFileSync, existsSync, writeFileSync } from 'fs'
 import path, { join } from 'path'
 import execa from 'execa'
 import YAML from 'yaml'
@@ -10,7 +10,7 @@ import { docPathInRepo, reposPathInFw, VALUE_ALL_REPOS } from './constants'
  * contained in the repositories.yml file.
  */
 export interface RawRepo {
-  url: string
+  url?: string
   doc_version: string
   stable: string
   dev: string
@@ -291,4 +291,48 @@ export async function resolveRepoList(repoNames: string | undefined, installed =
   return repoNames === VALUE_ALL_REPOS ?
     repositoriesYML :
     repositoriesYML.filter(repo => wishList.includes(repo.name))
+}
+
+export async function addNewRepo(fwPath = process.cwd()) {
+  const answers = await inquirer.prompt([{
+    type: 'input',
+    name: 'repoName',
+    message: 'What is the name of the repository (e.g. sdk-dart)'
+  }, {
+    type: 'confirm',
+    name: 'private',
+    message: 'Is this repository private?',
+    default: false
+  }, {
+    message: 'What is the version of the product inside the repo? (e.g. 2)',
+    name: 'version',
+    type: 'number'
+  }, {
+    message: 'What is the path where the built docs of this repo will be deployed on the S3 bucket? (e.g. /sdk/dart/3/)',
+    type: 'input',
+    name: 'deployPath'
+  }, {
+    message: 'What is the stable branch for this version? (e.g. master or 2-stable)',
+    type: 'input',
+    name: 'stable'
+  }, {
+    message: 'What is the development branch for this version? (e.g. 2-dev)',
+    type: 'input',
+    name: 'dev'
+  }])
+
+  const repositoriesFilePath = join(fwPath, reposPathInFw, 'repositories.yml')
+
+  const fileContent = readFileSync(repositoriesFilePath)
+  const YMLRepos: RawRepo[] = YAML.parse(fileContent.toString())
+  YMLRepos.push({
+    repo_name: answers.repoName,
+    doc_version: answers.version,
+    stable: answers.stable,
+    dev: answers.dev,
+    deploy_path: answers.deployPath,
+    name: answers.repoName,
+    private: answers.private
+  })
+  writeFileSync(repositoriesFilePath, YAML.stringify(YMLRepos))
 }
