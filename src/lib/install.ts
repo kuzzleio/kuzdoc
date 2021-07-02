@@ -36,9 +36,9 @@ export function installLocalRepository(localRepoPath: string, repo: Repo, destin
     }
   }, {
     title: `Symlinking ${localRepoPath} in ${destination}...`,
-    task: () => symlinkSync(destination, path.join(
+    task: () => symlinkSync(path.join(
       localRepoPath
-    ))
+    ), path.join(destination, repo.name))
   }, {
     title: `Symlinking framework in ${localRepoPath}...`,
     task: () => symlinkSync(
@@ -96,7 +96,7 @@ export async function linkFrameworkToRepo(
    */
   const destinationPath = path.join(
     repo.resolveDocPath(
-      path.join(frameworkPath, reposPath)
+      path.join(frameworkPath, reposPath, repo.name)
     ),
     '.vuepress'
   )

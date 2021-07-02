@@ -81,7 +81,7 @@ Environment variable: $${ENV_REPO}`,
           task: async () => {
             await ensureDir(path.resolve(repoDeployPath, '..'))
             symlinkSync(
-              repo.resolveDocPath(path.join(process.cwd(), reposPathInFw)),
+              repo.resolveDocPath(path.join(process.cwd(), reposPathInFw, repo.name)),
               repoDeployPath,
               'dir'
             )

@@ -9,7 +9,7 @@ export default class Dev extends Command {
   NOTE: This command must be executed from the root of the framework meta-repo.
 
 The repository must be previously installed in the framework via the "install" command.
-The repository to be built can be specified via the --repo flag, the KUZDOC_REPO environment
+The repository can be specified via the --repo flag, the KUZDOC_REPO environment
 variable, or via the interactive prompt (only the installed repositories are listed).`
 
   static flags = {

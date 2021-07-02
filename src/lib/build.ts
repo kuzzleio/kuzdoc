@@ -19,7 +19,7 @@ export const buildRepo = (
 ) => execa(
   '$(npm bin)/vuepress',
   ['build', repo.resolveDocPath(
-    path.join(frameworkPath, reposPath)
+    path.join(frameworkPath, reposPath, repo.name)
   )],
   {
     shell: true,
@@ -46,7 +46,7 @@ export const devRepo = (
 ) => execa(
   '$(npm bin)/vuepress',
   ['dev', repo.resolveDocPath(
-    path.join(frameworkPath, reposPath)
+    path.join(frameworkPath, reposPath, repo.name)
   )],
   {
     shell: true,
@@ -99,7 +99,7 @@ export const deployRepo = (
     's3',
     'sync',
     path.join(repo.resolveDocPath(
-      path.join(frameworkPath, reposPath)
+      path.join(frameworkPath, reposPath, repo.name)
     ), '.vuepress', 'dist'),
     `s3://${s3BucketId}${repo.deployPath}`,
     '--delete',
@@ -121,7 +121,7 @@ export const deployRepoLocally = (
   frameworkPath: string = process.cwd()
 ) => fse.copy(
   path.join(repo.resolveDocPath(
-    path.join(frameworkPath, reposPath)
+    path.join(frameworkPath, reposPath, repo.name)
   ), '.vuepress', 'dist'),
   path.join(destination, repo.deployPath)
 )

@@ -172,11 +172,12 @@ export class Repo {
  * second, to get rid of the useless (and error-prone) subdir,
  * named after the version.
  *
- * @param base The absolute path to the repo installation directory.
+ * @param base The absolute path to the repo installation directory
+ *             (e.g. /home/user/sdk-js-7/).
  * @returns the resolved path.
  */
   resolveDocPath(base: string) {
-    const simplePath = path.join(base, this.name, this.docRoot)
+    const simplePath = path.join(base, this.docRoot)
 
     if (existsSync(path.join(simplePath, `${this.version}`))) {
       return path.join(simplePath, `${this.version}`)

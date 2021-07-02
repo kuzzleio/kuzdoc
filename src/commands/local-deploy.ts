@@ -32,7 +32,7 @@ All the currently installed repositories will be built and deployed to the desti
 
     const installedRepos = listInstalledRepos()
 
-    this.log(`\n  👉 Deploying framework with repos ${installedRepos.map(r => r.name).join(', ')}\n`)
+    this.log(`\n  👉 Deploying framework with repos ${installedRepos.map(r => r.name).join(', ')} to ${flags.destination}\n`)
 
     const tasks = new Listr([
       {

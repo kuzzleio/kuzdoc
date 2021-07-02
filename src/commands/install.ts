@@ -75,7 +75,6 @@ Environment variable: $${ENV_LOCAL_PATH}`,
     }
 
     if (repoList.length === 1) {
-      this.log(`Install single repo: ${repoList}`)
       if (flags.localPath) {
         const absoluteLocalPath = path.join(process.cwd(), flags.localPath)
         return installLocalRepository(absoluteLocalPath, repoList[0]).run()
