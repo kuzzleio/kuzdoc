@@ -73,7 +73,7 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
     }
 
     const tasks = new Listr(repoList.map(repo => ({
-      title: `Processing ${repo.name}`,
+      title: `Build & deploy ${repo.name}`,
       task: () => new Listr([{
         title: 'Build repo',
         task: () => buildRepo(repo)
