@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/1.5.0 darwin-x64 node-v12.18.3
+kuzdoc/2.4.2 darwin-x64 node-v12.18.3
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -34,76 +34,143 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`kuzdoc framework:install`](#kuzdoc-frameworkinstall)
-* [`kuzdoc framework:link`](#kuzdoc-frameworklink)
-* [`kuzdoc framework:local-deploy`](#kuzdoc-frameworklocal-deploy)
+* [`kuzdoc add-repo`](#kuzdoc-add-repo)
+* [`kuzdoc add-section`](#kuzdoc-add-section)
+* [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
+* [`kuzdoc dead-links`](#kuzdoc-dead-links)
+* [`kuzdoc dev`](#kuzdoc-dev)
 * [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
-* [`kuzdoc iterate-repos:build`](#kuzdoc-iterate-reposbuild)
-* [`kuzdoc iterate-repos:cloudfront`](#kuzdoc-iterate-reposcloudfront)
-* [`kuzdoc iterate-repos:deploy`](#kuzdoc-iterate-reposdeploy)
-* [`kuzdoc iterate-repos:execute COMMAND`](#kuzdoc-iterate-reposexecute-command)
-* [`kuzdoc iterate-repos:install`](#kuzdoc-iterate-reposinstall)
-* [`kuzdoc repo:build`](#kuzdoc-repobuild)
-* [`kuzdoc repo:cloudfront`](#kuzdoc-repocloudfront)
-* [`kuzdoc repo:deploy`](#kuzdoc-repodeploy)
-* [`kuzdoc repo:dev`](#kuzdoc-repodev)
-* [`kuzdoc repo:serve`](#kuzdoc-reposerve)
+* [`kuzdoc install`](#kuzdoc-install)
+* [`kuzdoc local-deploy`](#kuzdoc-local-deploy)
 
-## `kuzdoc framework:install`
+## `kuzdoc add-repo`
 
-Install the documentation framework inside a repo
+Wizard to add a new repo to repositories.yml.
 
 ```
 USAGE
-  $ kuzdoc framework:install
+  $ kuzdoc add-repo
 
 OPTIONS
-  -b, --branch=branch            The framework branch that should be checked out
-  -d, --destination=destination  [default: doc/] The path where the framework should be installed
-  -h, --help                     show CLI help
+  -h, --help  show CLI help
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
 ```
 
-_See code: [src/commands/framework/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/framework/install.ts)_
+_See code: [src/commands/add-repo.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.2/src/commands/add-repo.ts)_
 
-## `kuzdoc framework:link`
+## `kuzdoc add-section`
 
-Links a local version of the docs to the installed framework
+Wizard to add a new section in src/.vuepress/sections.json.
 
 ```
 USAGE
-  $ kuzdoc framework:link
+  $ kuzdoc add-section
 
 OPTIONS
-  -b, --base_root=base_root      [default: doc/] The local root of the docs
+  -h, --help  show CLI help
 
-  -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
-                                 /sdk/js/6/) - env: $DEPLOY_PATH
-
-  -h, --help                     show CLI help
-
-  -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
-                                 (e.g. 6/) - env: $DOC_VERSION
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
 ```
 
-_See code: [src/commands/framework/link.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/framework/link.ts)_
+_See code: [src/commands/add-section.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.2/src/commands/add-section.ts)_
 
-## `kuzdoc framework:local-deploy`
+## `kuzdoc build-and-deploy`
 
-Creates a local deployment of the docs
+Builds and deploys one or more repositories.
 
 ```
 USAGE
-  $ kuzdoc framework:local-deploy
+  $ kuzdoc build-and-deploy
 
 OPTIONS
-  -b, --branch=stable|dev            The branch type to checkout - env: $BRANCH
-  -d, --destination=destination      [default: /tmp] The destination path to deploy to - env: $DESTINATION
-  -f, --frameworkPath=frameworkPath  [default: .] The path to the framework
-  -h, --help                         show CLI help
-  -r, --repositories=repositories    The list of repositories to deploy - env: $REPOSITORIES
+  -h, --help                   show CLI help
+
+  --cloudfrontId=cloudfrontId  (required) The name of the Cloudfront distribution to invalidate after deploying each
+                               repo.
+
+                               Environment variable: $KUZDOC_CLOUDFRONT_ID
+
+  --dryRun                     Only builds the repo without deploying it
+
+  --repo=repo                  The list of repositories to build, or the value __ALL__ to build all repos.
+                               If not specified, kuzdoc will ask a prompt.
+
+                               Environment variable: $KUZDOC_REPO
+
+  --s3Bucket=s3Bucket          (required) The name of the S3 bucket to upload the repos to.
+
+                               Environment variable: $KUZDOC_S3_BUCKET
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+
+  The repositories must be previously installed in the framework via the "install" command.
+  The repositories to be built can be specified via the --repo flag, the KUZDOC_REPO environment
+  variable, or via the interactive prompt (only the installed repositories are listed).
+  The built repositories are deployed to the S3 bucket specified via the --s3Bucket flag,
+  then the Cloudfront cache (specified via --cloufrtontId) is invalidated.
+  This command needs the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables to
+  be properly set.
 ```
 
-_See code: [src/commands/framework/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/framework/local-deploy.ts)_
+_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.2/src/commands/build-and-deploy.ts)_
+
+## `kuzdoc dead-links`
+
+Scans a given repo for dead-links and reports them.
+
+```
+USAGE
+  $ kuzdoc dead-links
+
+OPTIONS
+  -h, --help                    show CLI help
+
+  --dumpReport=dumpReport       The name of the JSON file to write the report to.
+                                If not set, report will be only written to stdout.
+
+  --linkType=external|internal  The link type to check.
+                                If empty, both external and internal links are checked.
+
+  --repo=repo                   The name of repository to scan. If not specified, kuzdoc will ask a prompt.
+
+                                Environment variable: $KUZDOC_REPO
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+
+  The repository must be previously installed in the framework via the "install" command.
+```
+
+_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.2/src/commands/dead-links.ts)_
+
+## `kuzdoc dev`
+
+Launches the dev server for the documentation of a repo.
+
+```
+USAGE
+  $ kuzdoc dev
+
+OPTIONS
+  -h, --help   show CLI help
+
+  --repo=repo  The name of repository to scan. If not specified, kuzdoc will ask a prompt.
+
+               Environment variable: $KUZDOC_REPO
+
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
+
+  The repository must be previously installed in the framework via the "install" command.
+  The repository can be specified via the --repo flag, the KUZDOC_REPO environment
+  variable, or via the interactive prompt (only the installed repositories are listed).
+```
+
+_See code: [src/commands/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.2/src/commands/dev.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -122,231 +189,72 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
-## `kuzdoc iterate-repos:build`
+## `kuzdoc install`
 
-Build a list of repositories
-
-```
-USAGE
-  $ kuzdoc iterate-repos:build
-
-OPTIONS
-  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed - env: $REPOS_PATH
-  -h, --help                       show CLI help
-  -r, --repositories=repositories  The list of repositories to build - env: $REPOSITORIES
-```
-
-_See code: [src/commands/iterate-repos/build.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/iterate-repos/build.ts)_
-
-## `kuzdoc iterate-repos:cloudfront`
-
-Invalidates the Cloudfront cache of a list of repositories
+Installs one or multiple repos in the framework meta-repo.
 
 ```
 USAGE
-  $ kuzdoc iterate-repos:cloudfront
+  $ kuzdoc install
 
 OPTIONS
-  -c, --cloudfront_distribution_id=cloudfront_distribution_id  (required) The Cloudfront distribution ID where the
-                                                               invalidation will be created - env:
-                                                               $CLOUDFRONT_DISTRIBUTION_ID
+  -h, --help               show CLI help
 
-  -d, --repos_path=repos_path                                  [default: .repos] The path where the repositories are
-                                                               installed - env: $REPOS_PATH
+  --localPath=localPath    Installs the repo from a local path instead of cloning it from Github. Handy for testing
+                           locally developed features.
+                           This option is valid if only 1 repo is specified. Overrides --repoBranch.
 
-  -h, --help                                                   show CLI help
+                           Environment variable: $KUZDOC_LOCAL_PATH
 
-  -r, --repositories=repositories                              The list of repositories to deploy - env: $REPOSITORIES
-```
+  --repo=repo              The list of repositories to install, or the value __ALL__ to install all repos.
+                           If not specified, kuzdoc will ask a prompt.
 
-_See code: [src/commands/iterate-repos/cloudfront.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/iterate-repos/cloudfront.ts)_
+                           Environment variable: $KUZDOC_REPO
 
-## `kuzdoc iterate-repos:deploy`
+  --repoBranch=repoBranch  The branch to checkout from the repo to install.
+                           This option is valid if only 1 repo is specified.
 
-Deploy a list of sub-repositories (or all) to an S3 bucket
+                           Environment variable: $KUZDOC_REPO_BRANCH
 
-```
-USAGE
-  $ kuzdoc iterate-repos:deploy
+  --stage=stable|dev       The branch type to checkout.
+                           If this option is not specified, kuzdoc will try to infer it based on the current branch of
+                           the framework meta-repo.
 
-OPTIONS
-  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed - env: $REPOS_PATH
-  -h, --help                       show CLI help
-  -r, --repositories=repositories  The list of repositories to deploy - env: $REPOSITORIES
-  --s3_bucket=s3_bucket            (required) The ID of the S3 bucket to deploy the docs to
-```
-
-_See code: [src/commands/iterate-repos/deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/iterate-repos/deploy.ts)_
-
-## `kuzdoc iterate-repos:execute COMMAND`
-
-execute a command or shell script upon a set of repos (missing repos will not be installed)
-
-```
-USAGE
-  $ kuzdoc iterate-repos:execute COMMAND
-
-ARGUMENTS
-  COMMAND  the command or script to execute
-
-OPTIONS
-  -d, --repos_path=repos_path      [default: .repos] The path where the repositories are installed - env: $REPOS_PATH
-  -h, --help                       show CLI help
-  -r, --repositories=repositories  The list of repositories to build - env: $REPOSITORIES
+                           Environment variable: $KUZDOC_STAGE
 
 DESCRIPTION
-  EXAMPLES
+  NOTE: This command must be executed from the root of the framework meta-repo.
 
-  $ kuzdoc iterate-repos:execute "echo I haz never been here > iwazhere"
-
-  Executes two inline commands upon the list of repos.
-
-  $ kuzdoc iterate-repos:execute /tmp/my-test-script
-
-  Executes a shell script upon the list of repos
+  This command will install one or multiple repos, listed in the repositories.yml file,
+  within the .repos directory of the documentation framework.
+  Repositories will be either cloned from Github or symlink-ed from the local filesystem (--local-path flag).
+  The repositories.yml file will be fetched from the local instance of the documentation framework.
+  Repositories are either specified via the --repo flag, or the KUZDOC_REPO: if no value is specified,
+  kuzdoc will ask it via a prompt.
+  Kuzdoc will not overwrite existing repositories. If a folder with the same name of a selected
+  repository is already present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
-_See code: [src/commands/iterate-repos/execute.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/iterate-repos/execute.ts)_
+_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.2/src/commands/install.ts)_
 
-## `kuzdoc iterate-repos:install`
+## `kuzdoc local-deploy`
 
-Install a list of sub-repositories (or all) to a given destination
-
-```
-USAGE
-  $ kuzdoc iterate-repos:install
-
-OPTIONS
-  -b, --branch=stable|dev          The branch type to checkout - env: $BRANCH
-
-  -d, --repos_path=repos_path      [default: .repos] The path where the repositories will be installed - env:
-                                   $REPOS_PATH
-
-  -h, --help                       show CLI help
-
-  -r, --repositories=repositories  The list of repositories to install - env: $REPOSITORIES
-
-  --framework_path=framework_path  [default: .] The path to the framework
-
-  --link_framework                 Whether to link the doc framework to the repositories or not
-```
-
-_See code: [src/commands/iterate-repos/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/iterate-repos/install.ts)_
-
-## `kuzdoc repo:build`
-
-Build the documentation for the current repository
+Creates a local deploy of the docs containing the currently installed repos
 
 ```
 USAGE
-  $ kuzdoc repo:build
+  $ kuzdoc local-deploy
 
 OPTIONS
-  -b, --doc_root=doc_root        [default: doc/] The local root of the docs
+  -h, --help                 show CLI help
+  --destination=destination  [default: /tmp/kuzzle-docs] The path to the locally deployed docs
 
-  -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
-                                 /sdk/js/6/) - env: $DEPLOY_PATH
+DESCRIPTION
+  NOTE: This command must be executed from the root of the framework meta-repo.
 
-  -h, --help                     show CLI help
-
-  -n, --repo_name=repo_name      The name of the repo (used by Algolia)
-
-  -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
-                                 (e.g. 6/) - env: $DOC_VERSION
+  The repositories must be previously installed in the framework via the "install" command.
+  All the currently installed repositories will be built and deployed to the destination path.
 ```
 
-_See code: [src/commands/repo/build.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/repo/build.ts)_
-
-## `kuzdoc repo:cloudfront`
-
-Invalidate the Cloudfront docs cache for the current repository
-
-```
-USAGE
-  $ kuzdoc repo:cloudfront
-
-OPTIONS
-  -c, --cloudfront_distribution_id=cloudfront_distribution_id  (required) The Cloudfront distribution ID where the
-                                                               invalidation will be created - env:
-                                                               $CLOUDFRONT_DISTRIBUTION_ID
-
-  -d, --deploy_path=deploy_path                                (required) The path where the local version of the docs
-                                                               will be deployed (e.g. /sdk/js/6/) - env: $DEPLOY_PATH
-
-  -h, --help                                                   show CLI help
-```
-
-_See code: [src/commands/repo/cloudfront.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/repo/cloudfront.ts)_
-
-## `kuzdoc repo:deploy`
-
-Deploy the docs of the current repository to the AWS S3 bucket
-
-```
-USAGE
-  $ kuzdoc repo:deploy
-
-OPTIONS
-  -b, --base_root=base_root      [default: doc/] The local root of the docs
-
-  -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
-                                 /sdk/js/6/) - env: $DEPLOY_PATH
-
-  -h, --help                     show CLI help
-
-  -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
-                                 (e.g. 6/) - env: $DOC_VERSION
-
-  --s3_bucket=s3_bucket          (required) The ID of the S3 bucket to deploy the docs to  - env: $S3_BUCKET
-```
-
-_See code: [src/commands/repo/deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/repo/deploy.ts)_
-
-## `kuzdoc repo:dev`
-
-Build the documentation for the current repository
-
-```
-USAGE
-  $ kuzdoc repo:dev
-
-OPTIONS
-  -b, --doc_root=doc_root        [default: doc/] The local root of the docs
-
-  -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
-                                 /sdk/js/6/) - env: $DEPLOY_PATH
-
-  -h, --help                     show CLI help
-
-  -n, --repo_name=repo_name      The name of the repo (used by Algolia)
-
-  -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
-                                 (e.g. 6/) - env: $DOC_VERSION
-```
-
-_See code: [src/commands/repo/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/repo/dev.ts)_
-
-## `kuzdoc repo:serve`
-
-Serve the docs build of the current repository via a local static http server
-
-```
-USAGE
-  $ kuzdoc repo:serve
-
-OPTIONS
-  -b, --base_root=base_root      [default: doc/] The local root of the docs
-
-  -d, --deploy_path=deploy_path  (required) The path where the local version of the docs will be deployed (e.g.
-                                 /sdk/js/6/) - env: $DEPLOY_PATH
-
-  -h, --help                     show CLI help
-
-  -p, --port=port                [default: 3000] The port to open to the static file server
-
-  -v, --doc_version=doc_version  (required) The local version of the docs to be linked, relative to the base doc root
-                                 (e.g. 6/) - env: $DOC_VERSION
-```
-
-_See code: [src/commands/repo/serve.ts](https://github.com/kuzzleio/kuzdoc/blob/v1.5.0/src/commands/repo/serve.ts)_
+_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.4.2/src/commands/local-deploy.ts)_
 <!-- commandsstop -->
