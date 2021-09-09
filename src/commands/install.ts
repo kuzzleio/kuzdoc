@@ -57,7 +57,7 @@ Environment variable: $${ENV_LOCAL_PATH}`,
       assertIsFrameworkRoot(process.cwd())
     } catch (error) {
       this.log('⛔️ Aborting.')
-      this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${error.message}`)
+      this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${(error as Error).message}`)
       return
     }
 
@@ -66,7 +66,11 @@ Environment variable: $${ENV_LOCAL_PATH}`,
     const repoList = await resolveRepoList(flags.repo, false, !flags.localPath)
 
     if (repoList.length === 0) {
-      this.log(`\n  🤷‍♂️ No repo resolved from ${flags.repo}.\n`)
+      if (flags.repo) {
+        this.log(`\n  🤷‍♂️ No repo resolved from list ${flags.repo}.\n`)
+      } else {
+        this.log('\n  🤷‍♂️ No repo selected.\n')
+      }
       return
     }
 

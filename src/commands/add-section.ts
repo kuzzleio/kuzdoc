@@ -19,7 +19,7 @@ export default class AddSection extends Command {
       assertIsFrameworkRoot(process.cwd())
     } catch (error) {
       this.log('⛔️ Aborting.')
-      this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${error.message}`)
+      this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${(error as Error).message}`)
       return
     }
 
