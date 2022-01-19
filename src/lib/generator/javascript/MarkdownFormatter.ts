@@ -28,14 +28,23 @@ function contextualizeKeys(context: string, values: Record<string, any>) {
   return obj;
 }
 
-export class MarkdownFormatter {
-  private outputDir: string;
-  private templateDir: string;
-  private baseDir: string | null = null;
+/**
+ * "You who enter here, abandon all hope"
+ *
+ * If you really want to be completely disgusted about Typescript then I can advise you to start a project with Oclif.
+ * The typescript compiler is so strict, it's keeping bothering you with complete useless nonsense.
+ *
+ * Additionally, it's simply bugged and will throw error when there is none, like here.
+ * If I try to declare those as class attribute Oclif is complaining :)
+ */
+let outputDir: any;
+let templateDir: any;
+let baseDir: any;
 
-  constructor(outputDir: string, templateDir: string) {
-    this.outputDir = outputDir;
-    this.templateDir = templateDir;
+export class MarkdownFormatter {
+  constructor(outputDirArg: string, templateDirArg: string) {
+    outputDir = outputDirArg;
+    templateDir = templateDirArg;
   }
 
   onClass(classInfo: InfoClass) {
@@ -43,7 +52,7 @@ export class MarkdownFormatter {
       return;
     }
 
-    this.baseDir = path.join(this.outputDir, kebabCase(classInfo.name));
+    baseDir = path.join(outputDir, kebabCase(classInfo.name));
 
     const rootIndex = this.renderTemplate(
       ['class', 'index.tpl.md'],
@@ -78,7 +87,7 @@ export class MarkdownFormatter {
   }
 
   private writeFile(paths: string[], content: string) {
-    const fullPath = path.join(this.baseDir as string, ...paths.map(p => kebabCase(p)));
+    const fullPath = path.join(baseDir as string, ...paths.map(p => kebabCase(p)));
 
     mkdirSync(path.dirname(fullPath), { recursive: true });
 
@@ -86,7 +95,7 @@ export class MarkdownFormatter {
   }
 
   private renderTemplate(paths: string[], values: Record<string, any> = {}): string {
-    const fullPath = path.join(this.templateDir, ...paths);
+    const fullPath = path.join(templateDir, ...paths);
 
     const compiled = _.template(readFileSync(fullPath, { encoding: 'utf-8' }));
 

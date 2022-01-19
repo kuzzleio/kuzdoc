@@ -1,6 +1,6 @@
 import { EventEmitter } from 'stream';
 
-import { ClassDeclaration, JSDoc, Project, SyntaxKind } from 'ts-morph';
+import { ClassDeclaration, JSDoc, MethodDeclaration, Project, SyntaxKind } from 'ts-morph';
 
 export type InfoMethod = {
   name: string;
@@ -50,38 +50,44 @@ export class ClassExtractor extends EventEmitter {
   }
 
   private extractClass(classDeclaration: ClassDeclaration) {
-    const name = classDeclaration.getName() as string;
+    try {
+      const name = classDeclaration.getName() as string;
 
+      const { description, internal } = this.extractClassProperties(classDeclaration);
+
+      const methods = this.extractMethods(classDeclaration);
+
+      this.info = { name, description, internal, methods };
+
+      this.emit('class', this.info);
+    }
+    catch (error) {
+      throw new Error(`Cannot extract class "${classDeclaration.getName()}": ${error.message}${error.stack}`);
+    }
+  }
+
+  private extractClassProperties(classDeclaration: ClassDeclaration) {
     const jsDoc = classDeclaration.getChildrenOfKind(SyntaxKind.JSDocComment)[0];
 
-    const description = this.formatText(jsDoc.getComment());
+    if (!jsDoc) {
+      console.log(`[warn] Class "${classDeclaration.getName()}" does not have js doc comment`);
+      return { internal: false, description: '' }
+    }
 
     const internal = Boolean(jsDoc.getTags().find(tag => tag.getTagName() === 'internal'));
 
-    const methods = this.extractMethods(classDeclaration);
+    const description = this.formatText(jsDoc.getComment());
 
-    this.info = { name, description, internal, methods };
-
-    this.emit('class', this.info);
+    return { internal, description }
   }
 
   private extractMethods(classDeclaration: ClassDeclaration): InfoMethod[] {
     const methods: InfoMethod[] = [];
 
     for (const method of classDeclaration.getMethods()) {
-      const jsDoc = method.getChildrenOfKind(SyntaxKind.JSDocComment)[0];
-
-      if (!jsDoc) {
-        continue;
-      }
+      const { description, args, internal } = this.extractMethodProperties(classDeclaration, method)
 
       const name = method.getName();
-
-      const description = this.formatText(jsDoc.getComment());
-
-      const args = this.getMethodArgs(jsDoc);
-
-      const internal = Boolean(jsDoc.getTags().find(tag => tag.getTagName() === 'internal'));
 
       const scope = method.getScope();
 
@@ -97,6 +103,23 @@ export class ClassExtractor extends EventEmitter {
     }
 
     return methods;
+  }
+
+  private extractMethodProperties(classDeclaration: ClassDeclaration, method: MethodDeclaration) {
+    const jsDoc = method.getChildrenOfKind(SyntaxKind.JSDocComment)[0];
+
+    if (!jsDoc) {
+      console.log(`[warn] Method "${classDeclaration.getName()}.${method.getName()}" does not have js doc comment`);
+      return { description: '', args: [], internal: false }
+    }
+
+    const description = this.formatText(jsDoc.getComment());
+
+    const args = this.getMethodArgs(jsDoc);
+
+    const internal = Boolean(jsDoc.getTags().find(tag => tag.getTagName() === 'internal'));
+
+    return { description, args, internal }
   }
 
   private getMethodArgs(jsDoc: JSDoc): InfoMethodArgs[] {

@@ -1,9 +1,11 @@
+import path from 'path'
 import { Command, flags } from '@oclif/command'
 import 'ts-node/register'
 
 import { ClassExtractor } from '../../lib/generator/javascript/ClassExtractor'
 import { MarkdownFormatter } from '../../lib/generator/javascript/MarkdownFormatter'
 
+const TEMPLATES_DIR = path.join(__dirname, '..', '..', 'lib', 'generator', 'javascript', 'templates')
 export default class GenerateJs extends Command {
   static description = `Generate the documentation of a class written in Typescript.`
 
@@ -24,7 +26,7 @@ export default class GenerateJs extends Command {
 
     this.log(`Generating documentation for the class defined in "${args.filePath}"`)
 
-    const formatter = new MarkdownFormatter(flags.path, '../../lib/generator/javascript/templates')
+    const formatter = new MarkdownFormatter(flags.path, TEMPLATES_DIR)
 
     const extractor = new ClassExtractor(args.filePath)
 
