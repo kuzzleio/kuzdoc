@@ -85,21 +85,30 @@ export class ClassExtractor extends EventEmitter {
     const methods: InfoMethod[] = [];
 
     for (const method of classDeclaration.getMethods()) {
-      const { description, args, internal } = this.extractMethodProperties(classDeclaration, method)
+      try {
+        const scope = method.getScope();
 
-      const name = method.getName();
+        if (scope === 'private') {
+          continue;
+        }
 
-      const scope = method.getScope();
+        const { description, args, internal } = this.extractMethodProperties(classDeclaration, method)
 
-      const returnTypeRaw = method.getReturnType().getText();
-      const returnType = returnTypeRaw.replace(/import\(.*\)\./, '');
-      const signature = `${scope === 'public' ? '' : `${scope} `}${name} (${args.map(arg => `${arg.name}${arg.optional ? '?' : ''}: ${arg.type}`).join(', ')}): ${returnType}`;
+        const name = method.getName();
 
-      const methodInfo = { name, signature, description, args, internal, scope, returnType, returnTypeRaw };
+        const returnTypeRaw = method.getReturnType().getText();
+        const returnType = returnTypeRaw ? returnTypeRaw.replace(/import\(.*\)\./, '') : '<missing return type>';
+        const signature = `${scope === 'public' ? '' : `${scope} `}${name} (${args.map(arg => `${arg.name}${arg.optional ? '?' : ''}: ${arg.type}`).join(', ')}): ${returnType}`;
 
-      methods.push(methodInfo);
+        const methodInfo = { name, signature, description, args, internal, scope, returnType, returnTypeRaw };
 
-      this.emit('method', methodInfo);
+        methods.push(methodInfo);
+
+        this.emit('method', methodInfo);
+      }
+      catch (error) {
+        console.log(`[error] Cannot extract method "${classDeclaration.getName()}.${method.getName()}": ${error}${error.stack}`)
+      }
     }
 
     return methods;
@@ -126,18 +135,25 @@ export class ClassExtractor extends EventEmitter {
     const args: InfoMethodArgs[] = jsDoc.getTags()
       .filter(tag => tag.getTagName() === 'param')
       .map((tag: any) => {
-        const typeRaw = tag.getSymbol().getValueDeclaration().getType().getText();
+        const tagSymbol = tag.getSymbol()
+        const typeRaw = tagSymbol ? tag.getSymbol().getValueDeclaration().getType().getText() : '<missing type>';
         const type = typeRaw.replace(/import\(.*\)\./, '');
 
+        let optional = false
+        try {
+          // If someone find better than this ugly hack I'm in!
+          optional =  Boolean(
+            tag.getSymbol().getValueDeclaration()['_compilerNode']['questionToken']
+            || tag.getSymbol().getValueDeclaration()['_compilerNode']['initalizer'])
+        }
+        catch (e) {}
+
         return {
-          name: tag.getSymbol().getEscapedName(),
+          name: tagSymbol ? tagSymbol.getEscapedName() : '<missing name>',
           description: this.formatText(tag.getComment()),
           type,
           typeRaw,
-          // If someone find better than this ugly hack I'm in!
-          optional: Boolean(
-            tag.getSymbol().getValueDeclaration()['_compilerNode']['questionToken']
-            || tag.getSymbol().getValueDeclaration()['_compilerNode']['initalizer']),
+          optional,
         };
       });
 
@@ -145,6 +161,6 @@ export class ClassExtractor extends EventEmitter {
   }
 
   private formatText(text: any) {
-    return text.replace('\n\n', '\n') as string;
+    return text ? text.replace('\n\n', '\n') : '' as string;
   }
 }
