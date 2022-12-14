@@ -44,6 +44,10 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
     dryRun: flags.boolean({
       description: 'Only builds the repo without deploying it',
       default: false
+    }),
+    noInvalidation: flags.boolean({
+      description: 'Do not invalidate the Cloudfront distribution',
+      default: false
     })
   }
 
@@ -87,7 +91,12 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
             return 'Not invalidating in dry-run'
           }
         },
-        task: () => invalidateCloudfront(repo.deployPath, flags.cloudfrontId)
+        task: () => {
+          if (flags.noInvalidation) {
+            return
+          }
+          invalidateCloudfront(repo.deployPath, flags.cloudfrontId)
+        }
       }])
     })))
 
