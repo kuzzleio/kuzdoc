@@ -3,7 +3,7 @@ import { assertIsFrameworkRoot } from '../lib/assertions'
 import { addNewRepo } from '../lib/repo'
 
 export default class AddRepo extends Command {
-  static description = `Wizard to add a new repo to repositories.yml.
+  static description = `Wizard to add a new repo to repositories.json.
   NOTE: This command must be executed from the root of the framework meta-repo.`
 
   static flags = {
@@ -11,7 +11,7 @@ export default class AddRepo extends Command {
   }
 
   async run() {
-    this.log('\n  📦 Add new repo to repositories.yml\n')
+    this.log('\n  📦 Add new repo to repositories.json\n')
 
     try {
       assertIsFrameworkRoot(process.cwd())
@@ -24,6 +24,6 @@ export default class AddRepo extends Command {
     await addNewRepo(process.cwd())
 
     this.log('\n  ✅ All done!')
-    this.log('  The new repo item has been added to the list in repositories.yml\n')
+    this.log('  The new repo item has been added to the list in repositories.json\n')
   }
 }
