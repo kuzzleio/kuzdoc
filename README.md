@@ -10,14 +10,16 @@ This is an internal tool used by the Kuzzle team to build the documentation of a
 [![License](https://img.shields.io/npm/l/kdoc.svg)](https://github.com/kuzzleio/kdoc/blob/master/package.json)
 
 <!-- toc -->
-* [kuzdoc](#kuzdoc)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [kuzdoc](#kuzdoc)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g kuzdoc
 $ kuzdoc COMMAND
@@ -29,24 +31,26 @@ USAGE
   $ kuzdoc COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`kuzdoc add-repo`](#kuzdoc-add-repo)
-* [`kuzdoc add-section`](#kuzdoc-add-section)
-* [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
-* [`kuzdoc dead-links`](#kuzdoc-dead-links)
-* [`kuzdoc dev`](#kuzdoc-dev)
-* [`kuzdoc generate:js FILEPATH`](#kuzdoc-generatejs-filepath)
-* [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
-* [`kuzdoc install`](#kuzdoc-install)
-* [`kuzdoc local-deploy`](#kuzdoc-local-deploy)
+
+- [`kuzdoc add-repo`](#kuzdoc-add-repo)
+- [`kuzdoc add-section`](#kuzdoc-add-section)
+- [`kuzdoc build-and-deploy`](#kuzdoc-build-and-deploy)
+- [`kuzdoc dead-links`](#kuzdoc-dead-links)
+- [`kuzdoc dev`](#kuzdoc-dev)
+- [`kuzdoc generate:js FILEPATH`](#kuzdoc-generatejs-filepath)
+- [`kuzdoc help [COMMAND]`](#kuzdoc-help-command)
+- [`kuzdoc install`](#kuzdoc-install)
+- [`kuzdoc local-deploy`](#kuzdoc-local-deploy)
 
 ## `kuzdoc add-repo`
 
-Wizard to add a new repo to repositories.yml.
+Wizard to add a new repo to repositories.json.
 
 ```
 USAGE
@@ -244,10 +248,10 @@ OPTIONS
 DESCRIPTION
   NOTE: This command must be executed from the root of the framework meta-repo.
 
-  This command will install one or multiple repos, listed in the repositories.yml file,
+  This command will install one or multiple repos, listed in the repositories.json file,
   within the .repos directory of the documentation framework.
   Repositories will be either cloned from Github or symlink-ed from the local filesystem (--local-path flag).
-  The repositories.yml file will be fetched from the local instance of the documentation framework.
+  The repositories.json file will be fetched from the local instance of the documentation framework.
   Repositories are either specified via the --repo flag, or the KUZDOC_REPO: if no value is specified,
   kuzdoc will ask it via a prompt.
   Kuzdoc will not overwrite existing repositories. If a folder with the same name of a selected
@@ -276,4 +280,5 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.5.1/src/commands/local-deploy.ts)_
+
 <!-- commandsstop -->

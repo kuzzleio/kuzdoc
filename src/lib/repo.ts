@@ -1,13 +1,12 @@
 import { readdirSync, readFileSync, existsSync, writeFileSync } from 'fs'
 import path, { join } from 'path'
 import execa from 'execa'
-import YAML from 'yaml'
 import inquirer from 'inquirer'
 import { docPathInRepo, reposPathInFw, VALUE_ALL_REPOS } from './constants'
 
 /**
  * Specifies what to expect from an element of the array
- * contained in the repositories.yml file.
+ * contained in the repositories.json file.
  */
 export interface RawRepo {
   url?: string
@@ -22,7 +21,7 @@ export interface RawRepo {
 }
 
 /**
- * Represents a Repository, parsed from the repositories.yml file.
+ * Represents a Repository, parsed from the repositories.json file.
  */
 export class Repo {
   /**
@@ -196,8 +195,8 @@ export class Repo {
   }
 }
 
-const parseYMLRepos = (YMLRepos: Array<any>): Repo[] => {
-  return YMLRepos.map(r => new Repo(r))
+const parseRepos = (repos: Array<any>): Repo[] => {
+  return repos.map(r => new Repo(r))
 }
 
 /**
@@ -220,16 +219,16 @@ export const resolveStage = async (cwd: string) => {
 }
 
 /**
- * Fetch the list of Repos from the `repositories.yml` file
+ * Fetch the list of Repos from the `repositories.json` file
  * located in the framework meta-repo.
  *
  * @param fwPath The path of the framework meta-repo
  * @returns The list of Repos
  */
 export const fetchRepoList = (fwPath = process.cwd()): Repo[] => {
-  const fileContent = readFileSync(join(fwPath, reposPathInFw, 'repositories.yml'))
-  const YMLRepos = YAML.parse(fileContent.toString())
-  return parseYMLRepos(YMLRepos)
+  const fileContent = readFileSync(join(fwPath, reposPathInFw, 'repositories.json'))
+  const repos = JSON.parse(fileContent.toString())
+  return parseRepos(repos)
 }
 
 /**
@@ -321,11 +320,11 @@ export async function addNewRepo(fwPath = process.cwd()) {
     name: 'dev'
   }])
 
-  const repositoriesFilePath = join(fwPath, reposPathInFw, 'repositories.yml')
+  const repositoriesFilePath = join(fwPath, reposPathInFw, 'repositories.json')
 
-  const fileContent = readFileSync(repositoriesFilePath)
-  const YMLRepos: RawRepo[] = YAML.parse(fileContent.toString())
-  YMLRepos.push({
+  const fileContent = readFileSync(repositoriesFilePath, 'utf8');
+  const repos = JSON.parse(fileContent);
+  repos.push({
     repo_name: answers.repoName,
     doc_version: answers.version,
     stable: answers.stable,
@@ -334,5 +333,5 @@ export async function addNewRepo(fwPath = process.cwd()) {
     name: answers.repoName,
     private: answers.private
   })
-  writeFileSync(repositoriesFilePath, YAML.stringify(YMLRepos))
+  writeFileSync(repositoriesFilePath, JSON.stringify(repos, null, 2))
 }
