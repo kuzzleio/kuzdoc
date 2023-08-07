@@ -1,3 +1,10 @@
+# [2.6.0-beta.2](https://github.com/kuzzleio/kuzdoc/compare/v2.6.0-beta.1...v2.6.0-beta.2) (2023-08-07)
+
+
+### Bug Fixes
+
+* **actions:** remove old workflow to deploy kuzdoc ([f67d6f2](https://github.com/kuzzleio/kuzdoc/commit/f67d6f2602dff495c32857dd6f384e2755d8bcd3))
+
 # 1.0.0-beta.1 (2023-08-07)
 
 
