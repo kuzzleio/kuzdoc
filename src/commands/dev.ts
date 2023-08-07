@@ -30,14 +30,14 @@ Environment variable: $${ENV_REPO}`,
       this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${error.message}`)
       return
     }
-    const { flags } = this.parse(Dev)
-    const repoList = await resolveRepoList(flags.repo, true, false)
+    const { flags: _flags } = this.parse(Dev)
+    const repoList = await resolveRepoList(_flags.repo, true, false)
     if (repoList.length === 0) {
-      this.log(`\n  🤷‍♂️ No repo resolved from ${flags.repo}.\n`)
+      this.log(`\n  🤷‍♂️ No repo resolved from ${_flags.repo}.\n`)
       return
     }
     const repo = repoList[0]
-    if (flags.repo) {
+    if (_flags.repo) {
       this.log(`\n  👉 Resolved repo ${repo.name}\n`)
     }
 

@@ -2,6 +2,14 @@ import { EventEmitter } from 'stream';
 
 import { ClassDeclaration, JSDoc, MethodDeclaration, Project, SyntaxKind } from 'ts-morph';
 
+export type InfoMethodArgs = {
+  name: string;
+  description: string;
+  type: string;
+  typeRaw: string;
+  optional: boolean;
+}
+
 export type InfoMethod = {
   name: string;
   signature: string;
@@ -11,14 +19,6 @@ export type InfoMethod = {
   returnType: string;
   returnTypeRaw: string;
   scope: 'public' | 'private' | 'protected';
-}
-
-export type InfoMethodArgs = {
-  name: string;
-  description: string;
-  type: string;
-  typeRaw: string;
-  optional: boolean;
 }
 
 export type InfoClass = {
@@ -60,8 +60,7 @@ export class ClassExtractor extends EventEmitter {
       this.info = { name, description, internal, methods };
 
       this.emit('class', this.info);
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error(`Cannot extract class "${classDeclaration.getName()}": ${error.message}${error.stack}`);
     }
   }
@@ -105,8 +104,7 @@ export class ClassExtractor extends EventEmitter {
         methods.push(methodInfo);
 
         this.emit('method', methodInfo);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(`[error] Cannot extract method "${classDeclaration.getName()}.${method.getName()}": ${error}${error.stack}`)
       }
     }
@@ -142,11 +140,10 @@ export class ClassExtractor extends EventEmitter {
         let optional = false
         try {
           // If someone find better than this ugly hack I'm in!
-          optional =  Boolean(
-            tag.getSymbol().getValueDeclaration()['_compilerNode']['questionToken']
-            || tag.getSymbol().getValueDeclaration()['_compilerNode']['initalizer'])
-        }
-        catch (e) {}
+          optional = Boolean(
+            tag.getSymbol().getValueDeclaration()._compilerNode.questionToken ||
+            tag.getSymbol().getValueDeclaration()._compilerNode.initalizer)
+        } catch (error) { }
 
         return {
           name: tagSymbol ? tagSymbol.getEscapedName() : '<missing name>',

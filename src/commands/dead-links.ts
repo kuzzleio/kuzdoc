@@ -11,11 +11,11 @@ import { ensureDir } from 'fs-extra'
 import path from 'path'
 import execa from 'execa'
 
-function stripLastSlash(path: string): string {
-  if (path.endsWith('/')) {
-    return path.slice(0, -1)
+function stripLastSlash(p: string): string {
+  if (p.endsWith('/')) {
+    return p.slice(0, -1)
   }
-  return path
+  return p
 }
 
 export default class DeadLinks extends Command {
@@ -51,15 +51,15 @@ Environment variable: $${ENV_REPO}`,
       this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${error.message}`)
       return
     }
-    const { flags } = this.parse(DeadLinks)
+    const { flags: _flags } = this.parse(DeadLinks)
     const stage: Stage = await resolveStage(process.cwd())
-    const repoList = await resolveRepoList(flags.repo, true, false)
+    const repoList = await resolveRepoList(_flags.repo, true, false)
     if (repoList.length === 0) {
-      this.log(`\n  🤷‍♂️ No repo resolved from ${flags.repo}.\n`)
+      this.log(`\n  🤷‍♂️ No repo resolved from ${_flags.repo}.\n`)
       return
     }
     const repo = repoList[0]
-    if (flags.repo) {
+    if (_flags.repo) {
       this.log(`\n  👉 Resolved repo ${repo.name}\n`)
     }
 
@@ -72,16 +72,16 @@ Environment variable: $${ENV_REPO}`,
       task: () => cloneAndLinkRepos(allRepos, stage)
     }, {
       title: 'Create symlinks in framework',
-      task: () => new Listr(allRepos.map(repo => {
-        const repoDeployPath = path.join(process.cwd(), 'src', stripLastSlash(repo.deployPath))
+      task: () => new Listr(allRepos.map(repository => {
+        const repoDeployPath = path.join(process.cwd(), 'src', stripLastSlash(repository.deployPath))
         symlinks.push(repoDeployPath)
         return {
-          title: `Creating symlink for ${repo.name}`,
+          title: `Creating symlink for ${repository.name}`,
           skip: () => existsSync(repoDeployPath),
           task: async () => {
             await ensureDir(path.resolve(repoDeployPath, '..'))
             symlinkSync(
-              repo.resolveDocPath(path.join(process.cwd(), reposPathInFw, repo.name)),
+              repository.resolveDocPath(path.join(process.cwd(), reposPathInFw, repo.name)),
               repoDeployPath,
               'dir'
             )

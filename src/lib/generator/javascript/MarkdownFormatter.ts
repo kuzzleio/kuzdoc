@@ -15,7 +15,7 @@ function kebabCase(string: string): string {
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     // replace all spaces and low dash
     .replace(/[\s_]+/g, '-')
-    .toLowerCase();
+    .toLowerCase()
 }
 
 function contextualizeKeys(context: string, values: Record<string, any>) {

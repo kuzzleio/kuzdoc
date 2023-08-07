@@ -1,0 +1,31 @@
+{
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "oclif",
+    "oclif-typescript"
+  ],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-shadow": "error",
+    "no-empty": [
+      "error",
+      {
+        "allowEmptyCatch": true
+      }
+    ],
+    "unicorn/filename-case": "off",
+    "no-shadow": "off",
+    "object-curly-spacing": "off",
+    "comma-dangle": "off",
+    "camelcase": "off",
+    "semi": "off",
+    "indent": "off"
+  }
+}

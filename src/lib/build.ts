@@ -17,7 +17,7 @@ export const buildRepo = (
   reposPath: string = reposPathInFw,
   frameworkPath: string = process.cwd()
 ) => execa(
-  '$(npm bin)/vuepress',
+  'npm run vuepress --',
   ['build', repo.resolveDocPath(
     path.join(frameworkPath, reposPath, repo.name)
   ), '--no-cache'],
@@ -44,7 +44,7 @@ export const devRepo = (
   reposPath: string = reposPathInFw,
   frameworkPath: string = process.cwd()
 ) => execa(
-  '$(npm bin)/vuepress',
+  'npm run vuepress --',
   ['dev', repo.resolveDocPath(
     path.join(frameworkPath, reposPath, repo.name)
   ), '--no-cache'],
@@ -67,7 +67,7 @@ export const devRepo = (
 export const buildFramework = (
   cwd = process.cwd()
 ) => execa(
-  '$(npm bin)/vuepress',
+  'npm run vuepress --',
   ['build', 'src'],
   {
     shell: true,

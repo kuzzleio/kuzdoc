@@ -28,11 +28,11 @@ All the currently installed repositories will be built and deployed to the desti
       this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${error.message}`)
       return
     }
-    const { flags } = this.parse(LocalDeploy)
+    const { flags: _flags } = this.parse(LocalDeploy)
 
     const installedRepos = listInstalledRepos()
 
-    this.log(`\n  👉 Deploying framework with repos ${installedRepos.map(r => r.name).join(', ')} to ${flags.destination}\n`)
+    this.log(`\n  👉 Deploying framework with repos ${installedRepos.map(r => r.name).join(', ')} to ${_flags.destination}\n`)
 
     const tasks = new Listr([
       {
@@ -41,8 +41,8 @@ All the currently installed repositories will be built and deployed to the desti
           title: 'Build',
           task: () => buildFramework()
         }, {
-          title: `Deploy to ${flags.destination}`,
-          task: () => deployFrameworkLocally(flags.destination)
+          title: `Deploy to ${_flags.destination}`,
+          task: () => deployFrameworkLocally(_flags.destination)
         }])
       },
       ...installedRepos.map(repo => ({
@@ -51,8 +51,8 @@ All the currently installed repositories will be built and deployed to the desti
           title: 'Build',
           task: () => buildRepo(repo)
         }, {
-          title: `Deploy to ${path.join(flags.destination, repo.deployPath)}`,
-          task: () => deployRepoLocally(repo, flags.destination)
+          title: `Deploy to ${path.join(_flags.destination, repo.deployPath)}`,
+          task: () => deployRepoLocally(repo, _flags.destination)
         }])
       }))
     ])
@@ -60,6 +60,6 @@ All the currently installed repositories will be built and deployed to the desti
 
     this.log('\n  ✅ All done!')
     this.log('  You can now browse the locally deployed docs by launching the following command:\n')
-    this.log(`   http-server ${flags.destination}\n`)
+    this.log(`   http-server ${_flags.destination}\n`)
   }
 }

@@ -52,7 +52,7 @@ export default class AddSection extends Command {
     }, {
       message: 'Then what is the name of the parent section? (e.g. "sdk")',
       type: 'input',
-      when: answers => answers.hasParent === true,
+      when: answer => answer.hasParent === true,
       name: 'parentSection'
     }, {
       message: 'Does this section have an icon? (to be shown in index pages or dropdown menus)',
@@ -62,7 +62,7 @@ export default class AddSection extends Command {
       message: 'Then, what is the path to the icon? (e.g. /logos/dart.svg)',
       type: 'input',
       name: 'icon',
-      when: answers => answers.hasIcon === true
+      when: answer => answer.hasIcon === true
     }, {
       message: 'Do you want to release this section? (if not, the section will be created but will not be added to the docs indexes)',
       type: 'confirm',
