@@ -59,20 +59,20 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
       this.log(`It doesn't seem that you are executing this command from the root of the framework repo ${process.cwd()}: ${error.message}`)
       return
     }
-    const { flags } = this.parse(BuildAndDeploy)
-    if (!flags.dryRun && !process.env.AWS_ACCESS_KEY_ID) {
+    const { flags: _flags } = this.parse(BuildAndDeploy)
+    if (!_flags.dryRun && !process.env.AWS_ACCESS_KEY_ID) {
       throw new Error('AWS_ACCESS_KEY_ID environment variable not found.')
     }
-    if (!flags.dryRun && !process.env.AWS_SECRET_ACCESS_KEY) {
+    if (!_flags.dryRun && !process.env.AWS_SECRET_ACCESS_KEY) {
       throw new Error('AWS_SECRET_ACCESS_KEY environment variable not found.')
     }
-    const repoList = await resolveRepoList(flags.repo, true)
+    const repoList = await resolveRepoList(_flags.repo, true)
     if (repoList.length === 0) {
-      this.log(`\n  🤷‍♂️ No repo resolved from ${flags.repo}.\n`)
+      this.log(`\n  🤷‍♂️ No repo resolved from ${_flags.repo}.\n`)
       return
     }
 
-    if (flags.repo) {
+    if (_flags.repo) {
       this.log(`\n  👉 Resolved repos ${repoList.map(r => r.name).join(', ')}\n`)
     }
 
@@ -83,19 +83,19 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
         task: () => buildRepo(repo)
       }, {
         title: 'Deploy repo',
-        task: () => deployRepo(repo, flags.s3Bucket, flags.dryRun)
+        task: () => deployRepo(repo, _flags.s3Bucket, _flags.dryRun)
       }, {
         title: 'Invalidate Cloudfront distribution',
         skip: () => {
-          if (flags.dryRun) {
+          if (_flags.dryRun) {
             return 'Not invalidating in dry-run'
           }
         },
         task: () => {
-          if (flags.noInvalidation) {
+          if (_flags.noInvalidation) {
             return
           }
-          invalidateCloudfront(repo.deployPath, flags.cloudfrontId)
+          invalidateCloudfront(repo.deployPath, _flags.cloudfrontId)
         }
       }])
     })))

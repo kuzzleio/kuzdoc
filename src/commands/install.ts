@@ -61,32 +61,32 @@ Environment variable: $${ENV_LOCAL_PATH}`,
       return
     }
 
-    const { flags } = this.parse(Install)
-    const stage: Stage = flags.stage as Stage || await resolveStage(process.cwd())
-    const repoList = await resolveRepoList(flags.repo, false, !flags.localPath)
+    const { flags: _flags } = this.parse(Install)
+    const stage: Stage = _flags.stage as Stage || await resolveStage(process.cwd())
+    const repoList = await resolveRepoList(_flags.repo, false, !_flags.localPath)
 
     if (repoList.length === 0) {
-      this.log(`\n  🤷‍♂️ No repo resolved from ${flags.repo}.\n`)
+      this.log(`\n  🤷‍♂️ No repo resolved from ${_flags.repo}.\n`)
       return
     }
 
-    if (flags.repo) {
+    if (_flags.repo) {
       this.log(`\n  👉 Resolved repos ${repoList.map(r => r.name).join(', ')}\n`)
     }
 
     if (repoList.length === 1) {
-      if (flags.localPath) {
-        const absoluteLocalPath = path.join(process.cwd(), flags.localPath)
+      if (_flags.localPath) {
+        const absoluteLocalPath = path.join(process.cwd(), _flags.localPath)
         return installLocalRepository(absoluteLocalPath, repoList[0]).run()
       }
-      if (flags.repoBranch) {
-        repoList[0].customBranch = flags.repoBranch
+      if (_flags.repoBranch) {
+        repoList[0].customBranch = _flags.repoBranch
       }
     } else {
-      if (flags.repoBranch) {
+      if (_flags.repoBranch) {
         throw new Error('ABORT: cannot use --repoBranch flag with multiple repos')
       }
-      if (flags.localPath) {
+      if (_flags.localPath) {
         throw new Error('ABORT: cannot use --localPath flag with multiple repos')
       }
     }

@@ -7,7 +7,7 @@ import { MarkdownFormatter } from '../../lib/generator/javascript/MarkdownFormat
 
 const TEMPLATES_DIR = path.join(__dirname, '..', '..', 'lib', 'generator', 'javascript', 'templates')
 export default class GenerateJs extends Command {
-  static description = `Generate the documentation of a class written in Typescript.`
+  static description = 'Generate the documentation of a class written in Typescript.'
 
   static flags = {
     path: flags.string({
@@ -22,11 +22,11 @@ export default class GenerateJs extends Command {
   ]
 
   async run() {
-    const { args, flags } = this.parse(GenerateJs)
+    const { args, flags: _flags } = this.parse(GenerateJs)
 
     this.log(`Generating documentation for the class defined in "${args.filePath}"`)
 
-    const formatter = new MarkdownFormatter(flags.path, TEMPLATES_DIR)
+    const formatter = new MarkdownFormatter(_flags.path, TEMPLATES_DIR)
 
     const extractor = new ClassExtractor(args.filePath)
 
