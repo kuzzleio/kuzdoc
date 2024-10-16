@@ -9,7 +9,7 @@ DOC_PATH=/sdk/js/6
 export DOC_DIR=$DOC_VERSION
 export SITE_BASE=$DOC_PATH/
 
-# Used to specify --no-cache for example
+# Used to specify --clean-cache for example
 ARGS=${2:-""}
 
 if [ ! -d "./$DOC_DIR" ]
