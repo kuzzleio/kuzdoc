@@ -23,7 +23,7 @@ $ npm install -g kuzdoc
 $ kuzdoc COMMAND
 running command...
 $ kuzdoc (-v|--version|version)
-kuzdoc/2.6.0 linux-x64 node-v18.17.1
+kuzdoc/2.7.0-beta.1 linux-x64 node-v20.17.0
 $ kuzdoc --help [COMMAND]
 USAGE
   $ kuzdoc COMMAND
@@ -59,11 +59,7 @@ DESCRIPTION
   NOTE: This command must be executed from the root of the framework meta-repo.
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/add-repo.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/add-repo.ts)_
-=======
-_See code: [src/commands/add-repo.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/add-repo.ts)_
->>>>>>> master
+_See code: [src/commands/add-repo.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/add-repo.ts)_
 
 ## `kuzdoc add-section`
 
@@ -80,11 +76,7 @@ DESCRIPTION
   NOTE: This command must be executed from the root of the framework meta-repo.
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/add-section.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/add-section.ts)_
-=======
-_See code: [src/commands/add-section.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/add-section.ts)_
->>>>>>> master
+_See code: [src/commands/add-section.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/add-section.ts)_
 
 ## `kuzdoc build-and-deploy`
 
@@ -127,11 +119,7 @@ DESCRIPTION
   be properly set.
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/build-and-deploy.ts)_
-=======
-_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/build-and-deploy.ts)_
->>>>>>> master
+_See code: [src/commands/build-and-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/build-and-deploy.ts)_
 
 ## `kuzdoc dead-links`
 
@@ -160,11 +148,7 @@ DESCRIPTION
   The repository must be previously installed in the framework via the "install" command.
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/dead-links.ts)_
-=======
-_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/dead-links.ts)_
->>>>>>> master
+_See code: [src/commands/dead-links.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/dead-links.ts)_
 
 ## `kuzdoc dev`
 
@@ -189,11 +173,7 @@ DESCRIPTION
   variable, or via the interactive prompt (only the installed repositories are listed).
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/dev.ts)_
-=======
-_See code: [src/commands/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/dev.ts)_
->>>>>>> master
+_See code: [src/commands/dev.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/dev.ts)_
 
 ## `kuzdoc generate:js FILEPATH`
 
@@ -211,11 +191,7 @@ OPTIONS
   --path=path  [default: generated] Directory to write the doc
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/generate/js.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/generate/js.ts)_
-=======
-_See code: [src/commands/generate/js.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/generate/js.ts)_
->>>>>>> master
+_See code: [src/commands/generate/js.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/generate/js.ts)_
 
 ## `kuzdoc help [COMMAND]`
 
@@ -280,11 +256,7 @@ DESCRIPTION
   repository is already present, the selected repository will be skipped and the folder will be left untouched.
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/install.ts)_
-=======
-_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/install.ts)_
->>>>>>> master
+_See code: [src/commands/install.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/install.ts)_
 
 ## `kuzdoc local-deploy`
 
@@ -305,9 +277,5 @@ DESCRIPTION
   All the currently installed repositories will be built and deployed to the destination path.
 ```
 
-<<<<<<< HEAD
-_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0-beta.3/src/commands/local-deploy.ts)_
-=======
-_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.6.0/src/commands/local-deploy.ts)_
->>>>>>> master
+_See code: [src/commands/local-deploy.ts](https://github.com/kuzzleio/kuzdoc/blob/v2.7.0-beta.1/src/commands/local-deploy.ts)_
 <!-- commandsstop -->

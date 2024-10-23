@@ -1,3 +1,15 @@
+# [2.7.0-beta.1](https://github.com/kuzzleio/kuzdoc/compare/v2.6.0...v2.7.0-beta.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* **release:** we failed to merge back ([075f476](https://github.com/kuzzleio/kuzdoc/commit/075f4767d902ae228b7396351cdca6b60855a317))
+
+
+### Features
+
+* **vuepress:** upgrade to vuepress 2, realease trigger ([9246d00](https://github.com/kuzzleio/kuzdoc/commit/9246d002efe60f27178b97a01e4b62472bfd0fca))
+
 # [2.6.0](https://github.com/kuzzleio/kuzdoc/compare/v2.5.4...v2.6.0) (2023-08-28)
 
 ### Bug Fixes
