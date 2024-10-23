@@ -20,7 +20,7 @@ export const buildRepo = (
   'npm run vuepress --',
   ['build', repo.resolveDocPath(
     path.join(frameworkPath, reposPath, repo.name)
-  ), '--no-cache'],
+  ), '--clean-cache'],
   {
     shell: true,
     env: {
@@ -47,7 +47,7 @@ export const devRepo = (
   'npm run vuepress --',
   ['dev', repo.resolveDocPath(
     path.join(frameworkPath, reposPath, repo.name)
-  ), '--no-cache'],
+  ), '--clean-cache'],
   {
     shell: true,
     env: {
