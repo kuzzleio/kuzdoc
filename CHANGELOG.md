@@ -1,3 +1,10 @@
+# [2.6.0-beta.3](https://github.com/kuzzleio/kuzdoc/compare/v2.6.0-beta.2...v2.6.0-beta.3) (2024-10-23)
+
+
+### Features
+
+* **vuepress:** upgrade to vuepress 2, realease trigger ([9246d00](https://github.com/kuzzleio/kuzdoc/commit/9246d002efe60f27178b97a01e4b62472bfd0fca))
+
 # [2.6.0-beta.2](https://github.com/kuzzleio/kuzdoc/compare/v2.6.0-beta.1...v2.6.0-beta.2) (2023-08-07)
 
 
