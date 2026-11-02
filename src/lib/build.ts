@@ -127,7 +127,11 @@ export const deployRepoLocally = (
 )
 
 /**
- * Invalidates a path in a given Cloudfront distribution.
+ * Invalidates every object under a path in a given Cloudfront distribution.
+ *
+ * The wildcard is required: without it, only the object at the path itself is
+ * invalidated, so the sub-pages and the pages referencing deleted chunks stay
+ * cached.
  *
  * @param deployPath The remote path to invalidate.
  * @param cloudfrontDistributionId The ID of the Cloufront distribution.
@@ -144,7 +148,8 @@ export const invalidateCloudfront = (
     '--distribution-id',
     cloudfrontDistributionId,
     '--paths',
-    deployPath
+    // Quoted: the command runs in a shell, which would expand the wildcard
+    `"${deployPath.endsWith('/') ? deployPath : `${deployPath}/`}*"`
   ],
   {
     shell: true,

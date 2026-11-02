@@ -95,7 +95,7 @@ Environment variable: $${ENV_CLOUDFRONT_ID}`,
           if (_flags.noInvalidation) {
             return
           }
-          invalidateCloudfront(repo.deployPath, _flags.cloudfrontId)
+          return invalidateCloudfront(repo.deployPath, _flags.cloudfrontId)
         }
       }])
     })))
